@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 import psycopg2
 from psycopg2 import pool
 from contextlib import contextmanager
+from config import init_db
+
+init_db()
 
 load_dotenv()
 
@@ -23,14 +26,28 @@ DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "30"))
 
 db_pool = None
 
-def init_db():
+# def init_db():
+#     global db_pool
+#     if db_pool is None:
+#         db_pool = pool.ThreadedConnectionPool(
+#             minconn=1,
+#             maxconn=10,
+#             dsn=DATABASE_URL
+#         )
+
+@contextmanager
+def get_db():
     global db_pool
+
     if db_pool is None:
-        db_pool = pool.ThreadedConnectionPool(
-            minconn=1,
-            maxconn=10,
-            dsn=DATABASE_URL
-        )
+        init_db()
+
+    conn = db_pool.getconn()
+    conn.autocommit = True
+    try:
+        yield conn
+    finally:
+        db_pool.putconn(conn)
 
 @contextmanager
 def get_db():
