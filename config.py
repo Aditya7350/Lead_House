@@ -3,9 +3,6 @@ from dotenv import load_dotenv
 import psycopg2
 from psycopg2 import pool
 from contextlib import contextmanager
-from config import init_db
-
-init_db()
 
 load_dotenv()
 
@@ -44,6 +41,7 @@ def get_db():
 
     conn = db_pool.getconn()
     conn.autocommit = True
+
     try:
         yield conn
     finally:
