@@ -6,7 +6,7 @@ Run: uvicorn main:app --host 0.0.0.0 --port 3000 --reload
 import json
 import threading
 from fastapi import FastAPI, BackgroundTasks, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -60,10 +60,10 @@ def serve_dashboard():
     with open("public/index.html", "r", encoding="utf-8") as f:
         return f.read()
 
-@app.get("/login", response_class=HTMLResponse)
+@app.get("/login")
 def serve_login():
-    with open("public/login.html", "r", encoding="utf-8") as f:
-        return f.read()
+    # Single login lives in the React app at /app; redirect any old /login links there.
+    return RedirectResponse(url="/app")
 
 @app.get("/checkout", response_class=HTMLResponse)
 def serve_checkout():
