@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LeadEmpire — Turn Local Businesses Into Paying Clients</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ── */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#F5F6F8;
+  --navy2:#FFFFFF;
+  --navy3:#EEF0F4;
+  --orange:#F97316;
+  --orange2:#EA580C;
+  --blue:#0EA5E9;
+  --green:#10B981;
+  --white:#0F172A;
+  --muted:#64748B;
+  --border:#E2E8F0;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--navy);color:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);background:rgba(245,246,248,.88);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--orange),var(--orange2));display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:15px;color:#fff;box-shadow:0 0 20px rgba(249,115,22,.3)}
+.nav-brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;color:#0F172A;letter-spacing:-.01em}
+.nav-links{display:flex;gap:28px;font-size:13px;color:var(--muted)}
+.nav-links a:hover{color:#0F172A;transition:.2s}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.btn-ghost{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;color:#475569;background:transparent;border:1px solid var(--border);cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn-primary{padding:9px 20px;border-radius:8px;font-size:13px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--orange),var(--orange2));border:none;cursor:pointer;box-shadow:0 0 20px rgba(249,115,22,.25);transition:all .2s}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(249,115,22,.4)}
+
+/* ── DOT GRID BACKGROUND ── */
+.dot-grid{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.06) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
+.hero-glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:900px;height:600px;background:radial-gradient(ellipse at center top,rgba(249,115,22,.07) 0%,transparent 65%);pointer-events:none}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 5% 80px;position:relative;overflow:hidden}
+.hero-inner{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.hero-left{position:relative;z-index:2}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);font-size:12px;font-weight:600;color:var(--orange);letter-spacing:.06em;margin-bottom:24px}
+.hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+.hero-h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(36px,4.8vw,64px);font-weight:800;line-height:1.15;letter-spacing:-.02em;margin-bottom:24px;opacity:0;animation:fadeUp .7s ease .1s forwards}
+.hero-h1 .accent{color:var(--orange)}
+.hero-h1 .blue{color:#0EA5E9;background:none;-webkit-text-fill-color:initial}
+
+
+.hero-sub{font-size:16px;line-height:1.7;color:var(--muted);max-width:460px;margin-bottom:36px;opacity:0;animation:fadeUp .6s ease .8s forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:fadeUp .6s ease 1s forwards}
+.hero-cta-main{display:inline-flex;align-items:center;gap:8px;padding:15px 30px;border-radius:12px;font-size:15px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--orange),var(--orange2));border:none;cursor:pointer;box-shadow:0 0 40px rgba(249,115,22,.3);transition:all .25s;font-family:'Inter',sans-serif}
+.hero-cta-main:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(249,115,22,.45)}
+.hero-cta-main svg{transition:transform .25s}
+.hero-cta-main:hover svg{transform:translateX(4px)}
+.hero-cta-watch{display:inline-flex;align-items:center;gap:8px;padding:14px 24px;border-radius:12px;font-size:14px;font-weight:600;color:#475569;background:#FFFFFF;border:1px solid var(--border);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:all .25s}
+.hero-cta-watch:hover{background:#F8FAFC;border-color:#CBD5E1;color:#0F172A}
+
+.hero-stats{display:flex;gap:28px;margin-top:44px;opacity:0;animation:fadeUp .6s ease 1.2s forwards}
+.hero-stat{border-left:2px solid #E2E8F0;padding-left:14px}
+.hero-stat-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:700;color:#0F172A;line-height:1.2}
+.hero-stat-num span{color:var(--orange)}
+.hero-stat-lbl{font-size:11px;color:var(--muted);letter-spacing:.05em;margin-top:2px}
+
+/* ── LIVE DEMO CARD (hero right) ── */
+.hero-right{position:relative;z-index:2;opacity:0;animation:fadeUp .7s ease .5s forwards}
+.demo-window{background:#FFFFFF;border-radius:20px;border:1px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,.1),0 4px 16px rgba(0,0,0,.06);overflow:hidden}
+.demo-titlebar{display:flex;align-items:center;gap:7px;padding:14px 18px;border-bottom:1px solid var(--border);background:#F8FAFC}
+.demo-dot{width:10px;height:10px;border-radius:50%}
+.demo-url{flex:1;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);background:#FFFFFF;padding:4px 12px;border-radius:6px;border:1px solid var(--border)}
+.demo-body{padding:18px}
+.demo-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.demo-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;color:#0F172A;letter-spacing:0}
+.demo-live{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--green);font-weight:600}
+.demo-live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:live-pulse 1.5s infinite}
+@keyframes live-pulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.4)}50%{box-shadow:0 0 0 5px rgba(52,211,153,0)}}
+
+.lead-card-demo{background:#F8FAFC;border-radius:12px;border:1px solid var(--border);padding:14px;margin-bottom:10px;transition:all .3s}
+.lead-card-demo.active{border-color:rgba(249,115,22,.4);box-shadow:0 0 20px rgba(249,115,22,.1)}
+.lcd-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.lcd-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;color:#0F172A;margin-bottom:2px;letter-spacing:0}
+.lcd-cat{font-size:10px;color:var(--muted)}
+.lcd-badge{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700}
+.lcd-bar-wrap{background:#E2E8F0;border-radius:4px;height:4px;margin-bottom:8px;overflow:hidden}
+.lcd-bar{height:100%;border-radius:4px;transition:width 1.2s cubic-bezier(.34,1.56,.64,1)}
+.lcd-footer{display:flex;justify-content:space-between;align-items:center}
+.lcd-score{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500}
+.lcd-action{font-size:10px;padding:4px 10px;border-radius:6px;font-weight:600;background:rgba(249,115,22,.15);color:var(--orange);border:1px solid rgba(249,115,22,.3);cursor:pointer}
+
+.scanning-bar{height:2px;background:linear-gradient(90deg,transparent,#0EA5E9,transparent);animation:scan 2s linear infinite;margin-bottom:12px;border-radius:1px}
+@keyframes scan{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
+
+/* ── TICKER ── */
+.ticker-wrap{background:rgba(249,115,22,.06);border-top:1px solid rgba(249,115,22,.15);border-bottom:1px solid rgba(249,115,22,.15);padding:12px 0;overflow:hidden;white-space:nowrap}
+.ticker-inner{display:inline-flex;gap:0;animation:ticker 28s linear infinite}
+.ticker-item{padding:0 36px;font-size:12px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:8px;letter-spacing:.04em}
+.ticker-item span{color:var(--orange)}
+.ticker-sep{color:#CBD5E1;font-size:18px}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── HOW IT WORKS ── */
+.section{padding:96px 5%;max-width:1200px;margin:0 auto}
+.section-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin-bottom:12px}
+.section-h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(26px,3.5vw,44px);font-weight:800;line-height:1.15;letter-spacing:-.015em;color:#0F172A;margin-bottom:16px}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:520px}
+
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:52px;position:relative}
+.step{background:#FFFFFF;padding:28px 24px;border:1px solid var(--border);position:relative;transition:all .3s;cursor:default}
+.step:first-child{border-radius:14px 0 0 14px}
+.step:last-child{border-radius:0 14px 14px 0}
+.step:hover{background:#FFF7ED;border-color:rgba(249,115,22,.3);z-index:1;transform:translateY(-4px);box-shadow:0 12px 32px rgba(249,115,22,.1)}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--orange);letter-spacing:.1em;margin-bottom:16px}
+.step-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.step-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#0F172A;margin-bottom:6px}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.step-connector{position:absolute;right:-2px;top:50%;transform:translateY(-50%);width:4px;height:4px;border-radius:50%;background:var(--orange);z-index:2}
+
+/* ── FEATURES BENTO ── */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:auto auto;gap:12px;margin-top:52px}
+.bento-card{background:#FFFFFF;border-radius:16px;border:1px solid var(--border);padding:28px;overflow:hidden;position:relative;transition:all .3s}
+.bento-card:hover{border-color:rgba(249,115,22,.3);transform:translateY(-3px);box-shadow:0 12px 32px rgba(249,115,22,.1)}
+.bc-1{grid-column:span 3}
+.bc-2{grid-column:span 3}
+.bc-3{grid-column:span 2}
+.bc-4{grid-column:span 2}
+.bc-5{grid-column:span 2}
+.bento-tag{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--orange);text-transform:uppercase;margin-bottom:10px}
+.bento-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:17px;color:#0F172A;margin-bottom:6px}
+.bento-desc{font-size:12px;color:var(--muted);line-height:1.65}
+.bento-glow{position:absolute;width:180px;height:180px;border-radius:50%;pointer-events:none;opacity:.35;filter:blur(50px)}
+
+/* ── SOCIAL PROOF ── */
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:52px}
+.proof-card{background:#FFFFFF;border-radius:16px;border:1px solid var(--border);padding:28px;transition:all .3s;display:flex;flex-direction:column}
+.proof-card:hover{border-color:var(--border);transform:translateY(-2px)}
+.proof-stars{color:var(--orange);font-size:14px;margin-bottom:14px;letter-spacing:2px}
+.proof-text{font-size:14px;color:#64748B;line-height:1.75;margin-bottom:20px;font-style:italic;flex:1}
+.proof-author{display:flex;align-items:center;gap:10px;margin-top:auto}
+.proof-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:14px;color:#fff;flex-shrink:0}
+.proof-name{font-size:13px;font-weight:600;color:#0F172A;white-space:nowrap;line-height:1.3}
+.proof-role{font-size:11px;color:var(--muted);white-space:nowrap;line-height:1.3}
+
+/* ── PRICING TEASER ── */
+.pricing-strip{background:linear-gradient(135deg,#FFFFFF,#F5F6F8);border-radius:24px;border:1px solid var(--border);padding:52px;margin:0 5%;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.06)}
+.pricing-strip::before{content:'';position:absolute;top:-60px;right:-40px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,.1) 0%,transparent 70%)}
+.pricing-left h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:36px;font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:8px;color:#0F172A}
+.pricing-left p{font-size:14px;color:var(--muted);max-width:380px;line-height:1.6}
+.pricing-badges{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.price-badge{padding:5px 14px;border-radius:8px;font-size:11px;font-weight:700;border:1px solid}
+
+/* ── FINAL CTA ── */
+.final-cta{text-align:center;padding:96px 5% 120px;position:relative}
+.cta-blob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(249,115,22,.08) 0%,transparent 70%);pointer-events:none}
+.cta-h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(30px,4.5vw,56px);font-weight:800;line-height:1.12;letter-spacing:-.02em;margin-bottom:16px;color:#0F172A}
+.cta-sub{font-size:16px;color:var(--muted);max-width:440px;margin:0 auto 36px;line-height:1.7}
+.cta-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:32px 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-left{display:flex;align-items:center;gap:10px}
+.footer-links{display:flex;gap:20px;font-size:12px;color:var(--muted)}
+.footer-links a:hover{color:#0F172A}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr;gap:48px}
+  .hero-right{display:none}
+  .nav-links{display:none}
+  .steps-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .step:first-child{border-radius:14px 0 0 0}
+  .step:last-child{border-radius:0 0 14px 0}
+  .bento{grid-template-columns:1fr;gap:8px}
+  .bc-1,.bc-2,.bc-3,.bc-4,.bc-5{grid-column:span 1}
+  .proof-grid{grid-template-columns:1fr}
+  .pricing-strip{padding:36px 24px;flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">
+    <img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style="width:34px;height:34px;border-radius:9px;object-fit:contain;">
+    <span class="nav-brand">LeadEmpire</span>
+  </div>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#proof">Results</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+  <div class="nav-cta">
+    <a href="/login" class="btn-ghost">Sign in</a>
+    <a href="/login" class="btn-primary">Start free →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="dot-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        AI-Powered Lead Generation
+      </div>
+
+      <h1 class="hero-h1">
+        Find local <span class="accent">businesses</span><br>
+        that need <span class="blue">your help.</span>
+      </h1>
+
+      <p class="hero-sub">LeadEmpire scrapes Google Maps, scores every lead with AI, builds demo websites automatically, then sends cold emails on your behalf. You just close deals.</p>
+
+      <div class="hero-actions">
+        <a href="/app" class="hero-cta-main">
+          Start for free
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+        <a href="#how" class="hero-cta-watch">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="8" cy="8" r="7"/><path d="M6 5.5l5 2.5-5 2.5V5.5z" fill="currentColor" stroke="none"/></svg>
+          See how it works
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">40<span>+</span></div>
+          <div class="hero-stat-lbl">LEADS IN MINUTES</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">9<span>/10</span></div>
+          <div class="hero-stat-lbl">AI ACCURACY SCORE</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">3<span>x</span></div>
+          <div class="hero-stat-lbl">FASTER OUTREACH</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE DEMO WINDOW -->
+    <div class="hero-right">
+      <div class="demo-window">
+        <div class="demo-titlebar">
+          <div class="demo-dot" style="background:#FF5F57"></div>
+          <div class="demo-dot" style="background:#FFBD2E"></div>
+          <div class="demo-dot" style="background:#28C840"></div>
+          <div class="demo-url">LeadEmpire · My Leads</div>
+        </div>
+        <div class="demo-body">
+          <div class="demo-header">
+            <div class="demo-title">Live Lead Scanner</div>
+            <div class="demo-live"><span class="demo-live-dot"></span>SCANNING</div>
+          </div>
+          <div class="scanning-bar"></div>
+
+          <!-- Lead cards — animated via JS -->
+          <div id="lead-1" class="lead-card-demo active">
+            <div class="lcd-top">
+              <div>
+                <div class="lcd-name" id="l1-name">MyFitMantra Gym</div>
+                <div class="lcd-cat">Gym · Pune, IN</div>
+              </div>
+              <div class="lcd-badge" id="l1-badge" style="background:#FEF2F2;color:#EF4444">Hot Lead</div>
+            </div>
+            <div class="lcd-bar-wrap"><div class="lcd-bar" id="l1-bar" style="width:90%;background:linear-gradient(90deg,#EF4444,#F97316)"></div></div>
+            <div class="lcd-footer">
+              <span class="lcd-score" style="color:#EF4444">9.0 / 10 · No website</span>
+              <span class="lcd-action">Build Demo ↗</span>
+            </div>
+          </div>
+
+          <div id="lead-2" class="lead-card-demo">
+            <div class="lcd-top">
+              <div>
+                <div class="lcd-name" id="l2-name">Green Dental Clinic</div>
+                <div class="lcd-cat">Dentist · Mumbai, IN</div>
+              </div>
+              <div class="lcd-badge" id="l2-badge" style="background:#FFFBEB;color:#F59E0B">Warm Lead</div>
+            </div>
+            <div class="lcd-bar-wrap"><div class="lcd-bar" id="l2-bar" style="width:0%;background:linear-gradient(90deg,#F59E0B,#F97316)"></div></div>
+            <div class="lcd-footer">
+              <span class="lcd-score" style="color:#F59E0B" id="l2-score">Scoring...</span>
+              <span class="lcd-action">View Report</span>
+            </div>
+          </div>
+
+          <div id="lead-3" class="lead-card-demo">
+            <div class="lcd-top">
+              <div>
+                <div class="lcd-name">Sunrise Auto Repair</div>
+                <div class="lcd-cat">Auto · Delhi, IN</div>
+              </div>
+              <div class="lcd-badge" style="background:#EFF6FF;color:#3B82F6">Cool Lead</div>
+            </div>
+            <div class="lcd-bar-wrap"><div class="lcd-bar" id="l3-bar" style="width:0%;background:linear-gradient(90deg,#3B82F6,#38BDF8)"></div></div>
+            <div class="lcd-footer">
+              <span class="lcd-score" style="color:#94A3B8" id="l3-score">Queued...</span>
+              <span class="lcd-action">Analyze</span>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:6px;margin-top:12px">
+            <div style="flex:1;padding:8px 10px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;text-align:center;font-size:10px;font-weight:700;color:#C2410C">🏗️ Build Demos</div>
+            <div style="flex:1;padding:8px 10px;background:#EFF6FF;border:1px solid #BAE6FD;border-radius:8px;text-align:center;font-size:10px;font-weight:700;color:#0369A1">📧 Send Outreach</div>
+            <div style="flex:1;padding:8px 10px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;text-align:center;font-size:10px;font-weight:700;color:#15803D">📊 AI Report</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item">Google Maps Scraping <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">AI Lead Scoring <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Demo Site Builder <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Cold Email Outreach <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Scout AI Assistant <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Audit Reports <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Client Portal <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Campaign Manager <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item">Google Maps Scraping <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">AI Lead Scoring <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Demo Site Builder <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Cold Email Outreach <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Scout AI Assistant <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Audit Reports <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Client Portal <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+    <span class="ticker-item">Campaign Manager <span>✓</span></span>
+    <span class="ticker-sep">·</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div id="how" style="padding:96px 5% 0">
+  <div style="max-width:1200px;margin:0 auto" class="reveal">
+    <div class="section-eyebrow">How LeadEmpire Works</div>
+    <h2 class="section-h2">From zero to booked client<br>in 4 steps.</h2>
+    <p class="section-sub">No manual prospecting. No cold-calling lists. No agency middleman. Just your target niche, a city, and our AI.</p>
+  </div>
+  <div style="max-width:1200px;margin:0 auto" class="reveal">
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon" style="background:rgba(249,115,22,.12)">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#F97316" strokeWidth="1.8" strokeLinecap="round"><circle cx="8" cy="8" r="6"/><path d="M13 13l5 5"/></svg>
+        </div>
+        <div class="step-title">Scrape Google Maps</div>
+        <div class="step-desc">Pick a niche and city. LeadEmpire pulls every local business name, phone, rating, website, address in seconds.</div>
+        <div class="step-connector"></div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon" style="background:rgba(56,189,248,.1)">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#38BDF8" strokeWidth="1.8" strokeLinecap="round"><path d="M10 2l2.4 4.8L18 7.6l-4 3.9 1 5.5L10 14.4l-5 2.6 1-5.5-4-3.9 5.6-.8z"/></svg>
+        </div>
+        <div class="step-title">AI Scores Each Lead</div>
+        <div class="step-desc">Scout AI visits every website, grades it 1–10 on how urgently they need help, and labels it Hot / Warm / Cool.</div>
+        <div class="step-connector"></div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon" style="background:rgba(139,92,246,.1)">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#8B5CF6" strokeWidth="1.8" strokeLinecap="round"><rect x="2" y="3" width="16" height="11" rx="2"/><path d="M7 18h6M10 14v4"/><path d="M5 7l3 3 6-6"/></svg>
+        </div>
+        <div class="step-title">Build Demo Sites</div>
+        <div class="step-desc">One click generates a full, custom demo website for any lead. A tangible proof-of-value before you even send an email.</div>
+        <div class="step-connector"></div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-icon" style="background:rgba(52,211,153,.1)">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#34D399" strokeWidth="1.8" strokeLinecap="round"><path d="M18 3L8 13l-5-5"/><path d="M17 3l1 8"/></svg>
+        </div>
+        <div class="step-title">Send & Close</div>
+        <div class="step-desc">Automated personalized emails go out with the demo link attached. Track opens, replies, and convert leads into paying clients.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BENTO FEATURES -->
+<div id="features" style="padding:96px 5%">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="reveal">
+      <div class="section-eyebrow">Everything You Need</div>
+      <h2 class="section-h2">Your whole agency pipeline,<br>in one dashboard.</h2>
+    </div>
+    <div class="bento reveal">
+      <div class="bento-card bc-1" style="background:linear-gradient(135deg,#FFF7ED,#FFF4EE)">
+        <div class="bento-glow" style="background:#F97316;top:-40px;right:-40px"></div>
+        <div class="bento-tag">Scout AI</div>
+        <div class="bento-title">Your AI sales coach, built in</div>
+        <div class="bento-desc">Ask Scout anything "Who's my hottest lead?", "Draft a cold email for this gym" and get instant, data-driven answers backed by your actual lead pipeline.</div>
+        <div style="margin-top:18px;display:flex;gap:6px;flex-wrap:wrap">
+          <span style="padding:4px 10px;border-radius:6px;background:#FFF7ED;border:1px solid #FED7AA;font-size:10px;font-weight:600;color:#C2410C">Lead analysis</span>
+          <span style="padding:4px 10px;border-radius:6px;background:#FFF7ED;border:1px solid #FED7AA;font-size:10px;font-weight:600;color:#C2410C">Email drafting</span>
+          <span style="padding:4px 10px;border-radius:6px;background:#FFF7ED;border:1px solid #FED7AA;font-size:10px;font-weight:600;color:#C2410C">Strategy tips</span>
+        </div>
+      </div>
+      <div class="bento-card bc-2">
+        <div class="bento-tag">Audit Reports</div>
+        <div class="bento-title">Shareable branded PDF reports</div>
+        <div class="bento-desc">Generate a professional website audit for any lead, complete with AI analysis, profile strength score, and site health metrics. Share the link or download as PDF.</div>
+        <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div style="padding:8px;background:#F8FAFC;border-radius:8px;border:1px solid var(--border);font-size:10px;color:#64748B">Site Health <span style="color:#10B981;font-weight:700;display:block;font-size:18px;font-family:'Plus Jakarta Sans',sans-serif;margin-top:2px">79%</span></div>
+          <div style="padding:8px;background:#F8FAFC;border-radius:8px;border:1px solid var(--border);font-size:10px;color:#64748B">AI Score <span style="color:var(--orange);font-weight:700;display:block;font-size:18px;font-family:'Plus Jakarta Sans',sans-serif;margin-top:2px">9/10</span></div>
+        </div>
+      </div>
+      <div class="bento-card bc-3">
+        <div class="bento-glow" style="background:#38BDF8;bottom:-40px;left:-20px"></div>
+        <div class="bento-tag">Scraper</div>
+        <div class="bento-title">Any niche.<br>Any city.</div>
+        <div class="bento-desc">Dentists in Dubai, IT firms in Bangalore, gyms in Miami 40+ leads in under a minute.</div>
+      </div>
+      <div class="bento-card bc-4" style="background:linear-gradient(135deg,#F5F6FF,#F0F0FF)">
+        <div class="bento-tag">Demo Builder</div>
+        <div class="bento-title">Show, don't tell.</div>
+        <div class="bento-desc">AI generates a full demo website for a lead before you even reach out. It's the most powerful cold email hook you've ever had.</div>
+      </div>
+      <div class="bento-card bc-5">
+        <div class="bento-tag">Outreach</div>
+        <div class="bento-title">Automated.<br>Personalized.</div>
+        <div class="bento-desc">Sequence emails go out automatically. Track opens, clicks, and replies from one dashboard.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOCIAL PROOF -->
+<div id="proof" style="padding:0 5% 96px">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="reveal" style="text-align:center;margin-bottom:0">
+      <div class="section-eyebrow" style="justify-content:center;display:flex">Real Results</div>
+      <h2 class="section-h2" style="text-align:center">Agencies closing deals<br>with LeadEmpire</h2>
+    </div>
+    <div class="proof-grid reveal">
+      <div class="proof-card">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-text">"I scraped 40 gyms in Pune, Scout AI scored them, I built demos for the top 5, and closed 2 clients in the same week. Nothing like this existed before."</p>
+        <div class="proof-author">
+          <div class="proof-avatar" style="background:linear-gradient(135deg,#F97316,#EA580C)">A</div>
+          <div><div class="proof-name">Aditya S.</div><div class="proof-role">Freelance Web Developer · Pune</div></div>
+        </div>
+      </div>
+      <div class="proof-card" style="border-color:#FED7AA;background:#FFFBF5">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-text">"The demo site feature is a game-changer. I send a personalised website mockup in the cold email and my reply rate tripled. Clients are shocked."</p>
+        <div class="proof-author">
+          <div class="proof-avatar" style="background:linear-gradient(135deg,#38BDF8,#6366F1)">R</div>
+          <div><div class="proof-name">Rahul M.</div><div class="proof-role">Agency Owner · Mumbai</div></div>
+        </div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-text">"Used to spend 3 hours a day prospecting. Now it takes me 10 minutes. LeadEmpire does the scraping, the scoring, and even writes the emails. I just reply."</p>
+        <div class="proof-author">
+          <div class="proof-avatar" style="background:linear-gradient(135deg,#34D399,#059669)">D</div>
+          <div><div class="proof-name">Danny K.</div><div class="proof-role">Solo Freelancer · Bangalore</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING CARDS -->
+<div id="pricing" style="padding:0 5% 96px">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="reveal" style="text-align:center;margin-bottom:52px">
+      <div class="section-eyebrow" style="justify-content:center;display:flex">Pricing</div>
+      <h2 class="section-h2" style="text-align:center">Simple pricing.<br>No surprises.</h2>
+      <p style="font-size:15px;color:var(--muted);margin-top:10px">Start free. Upgrade when you need more power.</p>
+    </div>
+
+    <!-- Plan cards wrapper — white bg island -->
+    <div class="reveal" style="background:#fff;border-radius:28px;padding:40px;box-shadow:0 8px 40px rgba(0,0,0,.08);border:1px solid var(--border)">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;align-items:start">
+
+        <!-- STARTER -->
+        <div style="padding:32px 28px;border-right:1px solid #F1F5F9">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#94A3B8;text-transform:uppercase;margin-bottom:20px">STARTER</div>
+          <div style="display:flex;align-items:flex-end;gap:3px;margin-bottom:6px">
+            <span style="font-size:56px;font-weight:800;font-family:'Space Grotesk',sans-serif;color:#0F172A;line-height:1">Free</span>
+          </div>
+          <div style="font-size:13px;color:#94A3B8;margin-bottom:28px">Free forever</div>
+          <a href="/login" style="display:block;text-align:center;padding:13px;border-radius:10px;font-size:14px;font-weight:700;color:#0F172A;border:1.5px solid #E2E8F0;text-decoration:none;margin-bottom:28px;transition:all .2s"
+            onmouseover="this.style.borderColor='#F97316';this.style.color='#F97316'"
+            onmouseout="this.style.borderColor='#E2E8F0';this.style.color='#0F172A'">
+            Start Free
+          </a>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>50 leads/month
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>2 AI scores (try it free)
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>2 demo sites
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>10 outreach emails
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Basic dashboard
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Email support
+            </div>
+          </div>
+        </div>
+
+        <!-- PRO (featured) -->
+        <div style="padding:32px 28px;background:linear-gradient(160deg,#FFF7ED 0%,#fff 60%);border-radius:16px;border:2px solid #F97316;position:relative;box-shadow:0 16px 48px rgba(249,115,22,.15);margin:-8px -4px;z-index:1">
+          <!-- Badge -->
+          <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#F97316,#EA580C);color:#fff;font-size:11px;font-weight:800;padding:5px 18px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 14px rgba(249,115,22,.35);letter-spacing:.06em">🔥 FOUNDING MEMBER</div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#F97316;text-transform:uppercase;margin-bottom:20px;margin-top:8px">PRO</div>
+          <div style="display:flex;align-items:flex-end;gap:3px;margin-bottom:6px">
+            <span style="font-size:56px;font-weight:800;font-family:'Space Grotesk',sans-serif;color:#0F172A;line-height:1">₹4,999</span>
+            <span style="font-size:15px;color:#94A3B8;margin-bottom:12px;font-weight:500">/mo</span>
+          </div>
+          <div style="font-size:13px;color:#94A3B8;margin-bottom:10px">Billed monthly · Cancel anytime</div>
+          <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:8px;background:#ECFDF5;border:1px solid #6EE7B7;font-size:12px;font-weight:600;color:#065F46;margin-bottom:20px">Most Popular</div>
+          <a href="/checkout?plan=growth" style="display:block;text-align:center;padding:14px;border-radius:10px;font-size:14px;font-weight:700;color:#fff;background:linear-gradient(135deg,#F97316,#EA580C);text-decoration:none;margin-bottom:28px;box-shadow:0 8px 24px rgba(249,115,22,.3);transition:all .2s"
+            onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 12px 32px rgba(249,115,22,.4)'"
+            onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 24px rgba(249,115,22,.3)'">
+            Start Free Trial →
+          </a>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#334155"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>500 leads/month</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#334155"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>50 demo sites</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#334155"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>200 outreach emails</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#334155"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>Scout AI assistant</strong></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#334155"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>AI scoring & qualification</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#334155"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Client portals</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#334155"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Priority support</div>
+          </div>
+        </div>
+
+        <!-- AGENCY -->
+        <div style="padding:32px 28px;border-left:1px solid #F1F5F9">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;color:#94A3B8;text-transform:uppercase;margin-bottom:20px">AGENCY</div>
+          <div style="display:flex;align-items:flex-end;gap:3px;margin-bottom:6px">
+            <span style="font-size:56px;font-weight:800;font-family:'Space Grotesk',sans-serif;color:#0F172A;line-height:1">₹9,999</span>
+            <span style="font-size:15px;color:#94A3B8;margin-bottom:12px;font-weight:500">Lifetime</span>
+          </div>
+          <div style="font-size:13px;color:#94A3B8;margin-bottom:28px">One-time payment · Use forever</div>
+          <a href="/checkout?plan=agency" style="display:block;text-align:center;padding:13px;border-radius:10px;font-size:14px;font-weight:700;color:#0F172A;border:1.5px solid #E2E8F0;text-decoration:none;margin-bottom:28px;transition:all .2s"
+            onmouseover="this.style.borderColor='#F97316';this.style.color='#F97316'"
+            onmouseout="this.style.borderColor='#E2E8F0';this.style.color='#0F172A'">
+            Get Started
+          </a>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited leads</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited demo sites</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited emails</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>Scout AI assistant</strong></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Team seats (up to 5)</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>White-label branding</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>API access</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#475569"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#FFF7ED"/><path d="M4.5 8l2.5 2.5 4-4" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Dedicated support</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom note -->
+      <div style="text-align:center;padding-top:24px;margin-top:24px;border-top:1px solid #F1F5F9;font-size:12px;color:#94A3B8">
+        Starter is free forever · Pro &amp; Agency billed monthly, cancel anytime ·
+        <a href="mailto:sales@ioweb3.io" style="color:#F97316;font-weight:600;text-decoration:none">Contact us</a> for questions
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="final-cta reveal">
+  <div class="cta-blob"></div>
+  <div style="position:relative;z-index:1">
+    <div class="section-eyebrow" style="display:flex;justify-content:center;margin-bottom:16px">No credit card required</div>
+    <h2 class="cta-h2">Your next client is<br>already on Google Maps.</h2>
+    <p class="cta-sub">Stop searching manually. Start in 60 seconds pick a niche, pick a city, and let LeadEmpire do the rest.</p>
+    <div class="cta-actions">
+      <a href="/app" class="hero-cta-main" style="font-size:15px;padding:16px 36px">
+        Find leads now
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+    </div>
+    <p style="margin-top:16px;font-size:12px;color:#94A3B8">Free tier · No credit card · 7-day trial on Pro</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style="width:34px;height:34px;border-radius:9px;object-fit:contain;">
+    <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;color:#0F172A">LeadEmpire</span>
+    <span style="font-size:12px;color:#94A3B8">by IOWEB3 Technologies</span>
+  </div>
+  <div class="footer-links">
+    <a href="mailto:sales@ioweb3.io">sales@ioweb3.io</a>
+    <a href="/app">Dashboard</a>
+    <a href="/login">Login</a>
+  </div>
+  <div style="font-size:11px;color:#94A3B8">© 2026 IOWEB3 Technologies. All rights reserved.</div>
+</footer>
+
+<script>
+// ── Scroll reveal ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target) } })
+}, {threshold:.12})
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+
+// ── Nav scroll behavior ──
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav')
+  nav.style.background = window.scrollY > 40 ? 'rgba(245,246,248,.97)' : 'rgba(245,246,248,.88)'
+})
+
+// ── Live lead card demo animation ──
+const leads = [
+  {nameEl:'l1-name', barEl:'l1-bar', scoreEl:null, barW:'90', done:true},
+  {nameEl:'l2-name', barEl:'l2-bar', scoreEl:'l2-score', barW:'70'},
+  {nameEl:null,      barEl:'l3-bar', scoreEl:'l3-score', barW:'45'},
+]
+
+setTimeout(() => {
+  // Animate lead 2 bar
+  const b2 = document.getElementById('l2-bar')
+  if(b2) b2.style.width = '70%'
+  const s2 = document.getElementById('l2-score')
+  if(s2) {
+    let n = 0; const target = 7.0
+    const iv = setInterval(() => {
+      n += 0.2; s2.textContent = n.toFixed(1) + ' / 10 · Outdated site'
+      if(n >= target) clearInterval(iv)
+    }, 80)
+  }
+}, 1200)
+
+setTimeout(() => {
+  // Animate lead 3
+  const b3 = document.getElementById('l3-bar')
+  if(b3) b3.style.width = '45%'
+  const s3 = document.getElementById('l3-score')
+  if(s3) s3.textContent = '4.5 / 10 · Decent site'
+}, 2800)
+
+// ── Dot grid parallax ──
+document.addEventListener('mousemove', e => {
+  const grid = document.querySelector('.dot-grid')
+  if(!grid) return
+  const x = (e.clientX / window.innerWidth - .5) * 12
+  const y = (e.clientY / window.innerHeight - .5) * 12
+  grid.style.transform = `translate(${x}px, ${y}px)`
+})
+
+// ── Stagger bento reveal ──
+const bentoCads = document.querySelectorAll('.bento-card')
+bentoCads.forEach((card, i) => {
+  card.style.opacity = '0'
+  card.style.transform = 'translateY(24px)'
+  card.style.transition = `opacity .5s ease ${i * .08}s, transform .5s ease ${i * .08}s, border-color .3s, box-shadow .3s`
+  const cardObs = new IntersectionObserver(entries => {
+    if(entries[0].isIntersecting){
+      card.style.opacity = '1'
+      card.style.transform = 'translateY(0)'
+      cardObs.unobserve(card)
+    }
+  }, {threshold:.1})
+  cardObs.observe(card)
+})
+</script>
+</body>
+</html>

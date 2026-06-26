@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LeadEmpire — Complete Your Order</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#F8FAFC;color:#0F172A;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* ── NAV ── */
+nav{background:#fff;border-bottom:1px solid #E2E8F0;padding:14px 5%;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.nav-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#F97316,#EA580C);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:15px;color:#fff}
+.nav-brand{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#0F172A}
+.nav-back{font-size:13px;color:#64748B;text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .15s}
+.nav-back:hover{color:#F97316}
+
+/* ── LAYOUT ── */
+.page{max-width:1000px;margin:0 auto;padding:40px 20px 80px;display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:start}
+@media(max-width:760px){.page{grid-template-columns:1fr;padding:24px 16px 60px}}
+
+/* ── ORDER SUMMARY (right) ── */
+.summary-card{background:#fff;border-radius:16px;border:1px solid #E2E8F0;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.04);position:sticky;top:24px}
+.summary-plan-name{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:#0F172A;margin-bottom:2px}
+.summary-plan-tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px}
+.summary-price-row{display:flex;align-items:baseline;gap:4px;margin-bottom:4px}
+.summary-price{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:800;color:#0F172A;line-height:1}
+.summary-period{font-size:15px;color:#94A3B8;font-weight:500}
+.summary-billing{font-size:12px;color:#94A3B8;margin-bottom:24px}
+.summary-divider{height:1px;background:#F1F5F9;margin:20px 0}
+.feature-list{display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
+.feature-row{display:flex;align-items:center;gap:9px;font-size:13px;color:#334155}
+.f-check{width:18px;height:18px;border-radius:50%;background:#FFF7ED;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.guarantee{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:10px;font-size:12px;color:#065F46;line-height:1.5}
+
+/* ── FORM (left) ── */
+.form-card{background:#fff;border-radius:16px;border:1px solid #E2E8F0;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.form-section-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#0F172A;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.form-section-title span{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#F97316,#EA580C);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.field-group{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.field-group.full{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:600;color:#64748B;letter-spacing:.03em}
+.field input{padding:11px 13px;border-radius:9px;border:1.5px solid #E2E8F0;font-size:13px;color:#0F172A;outline:none;transition:border-color .15s;font-family:'Inter',sans-serif;background:#fff}
+.field input:focus{border-color:#F97316;box-shadow:0 0 0 3px rgba(249,115,22,.08)}
+.field input::placeholder{color:#CBD5E1}
+.field-hint{font-size:10px;color:#94A3B8;margin-top:2px}
+
+.section-sep{height:1px;background:#F8FAFC;margin:24px 0;position:relative}
+.section-sep::before{content:attr(data-label);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;padding:0 12px;font-size:11px;font-weight:600;color:#94A3B8;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+
+.pay-btn{width:100%;padding:16px;border-radius:12px;border:none;font-size:15px;font-weight:700;color:#fff;background:linear-gradient(135deg,#F97316,#EA580C);cursor:pointer;box-shadow:0 8px 24px rgba(249,115,22,.28);transition:all .25s;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:24px}
+.pay-btn:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(249,115,22,.38)}
+.pay-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.pay-btn svg{transition:transform .2s}
+.pay-btn:hover svg{transform:translateX(3px)}
+
+.trust-row{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px}
+.trust-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#94A3B8;font-weight:500}
+.trust-item svg{color:#10B981}
+
+.starter-note{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:20px 24px;text-align:center}
+.starter-note p{font-size:14px;color:#065F46;margin-bottom:14px;line-height:1.6}
+.starter-btn{display:inline-flex;align-items:center;gap:6px;padding:12px 28px;border-radius:10px;font-size:14px;font-weight:700;color:#fff;background:linear-gradient(135deg,#10B981,#059669);text-decoration:none;box-shadow:0 4px 14px rgba(16,185,129,.25)}
+
+/* ── PLAN SWITCHER ── */
+.plan-tabs{display:flex;background:#F8FAFC;border-radius:10px;padding:4px;gap:3px;margin-bottom:28px;border:1px solid #E2E8F0}
+.plan-tab{flex:1;padding:8px 10px;border-radius:7px;font-size:12px;font-weight:600;color:#64748B;border:none;background:transparent;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+.plan-tab.active{background:#fff;color:#F97316;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+/* ── SPINNER ── */
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style="width:32px;height:32px;border-radius:8px;">
+    <span class="nav-brand">LeadEmpire</span>
+  </a>
+  <a href="/#pricing" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4L6 8l4 4"/></svg>
+    Back to plans
+  </a>
+</nav>
+
+<div class="page" id="page">
+
+  <!-- LEFT: Form -->
+  <div>
+    <!-- Plan switcher (lets user change plan) -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:13px;font-weight:600;color:#64748B;margin-bottom:10px">Selected plan — change anytime:</div>
+      <div class="plan-tabs">
+        <button class="plan-tab" id="tab-starter" onclick="switchPlan('starter')">Starter · Free</button>
+        <button class="plan-tab" id="tab-growth" onclick="switchPlan('growth')">Pro · ₹4,999/mo</button>
+        <button class="plan-tab" id="tab-agency" onclick="switchPlan('agency')">Agency · ₹9,999 Lifetime</button>
+      </div>
+    </div>
+
+    <!-- Starter — no payment needed -->
+    <div id="form-starter" style="display:none">
+      <div class="form-card">
+        <div class="form-section-title"><span>1</span> Create your free account</div>
+        <div class="field-group full"><div class="field"><label>Full Name</label><input type="text" id="s-name" placeholder="Your full name" /></div></div>
+        <div class="field-group full"><div class="field"><label>Email Address</label><input type="email" id="s-email" placeholder="you@email.com" /></div></div>
+        <div class="field-group full"><div class="field"><label>Password</label><input type="password" id="s-pass" placeholder="At least 8 characters" /></div></div>
+        <button class="pay-btn" onclick="registerStarter()" id="starter-btn" style="background:linear-gradient(135deg,#10B981,#059669);box-shadow:0 8px 24px rgba(16,185,129,.25)">
+          Create Free Account
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+        <div id="starter-err" style="display:none;margin-top:12px;padding:10px 14px;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;font-size:13px;color:#DC2626"></div>
+      </div>
+    </div>
+
+    <!-- Pro / Agency — with payment -->
+    <div id="form-paid" style="display:none">
+      <div class="form-card">
+        <div class="form-section-title"><span>1</span> Create your account</div>
+        <div class="field-group"><div class="field"><label>First Name</label><input type="text" id="p-fname" placeholder="First name" /></div><div class="field"><label>Last Name</label><input type="text" id="p-lname" placeholder="Last name" /></div></div>
+        <div class="field-group full"><div class="field"><label>Email Address</label><input type="email" id="p-email" placeholder="you@email.com" /></div></div>
+        <div class="field-group full"><div class="field"><label>Password</label><input type="password" id="p-pass" placeholder="Create a password" /></div></div>
+
+        <div class="section-sep" data-label="Payment Details"></div>
+
+        <div class="form-section-title"><span>2</span> Payment</div>
+
+        <!-- Razorpay / payment note -->
+        <div style="padding:16px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:10px;font-size:13px;color:#92400E;line-height:1.6;margin-bottom:20px">
+          <strong>Secure Checkout:</strong> After clicking the button below, you'll be taken to our secure Razorpay payment page. Your card details are never stored on our servers.
+        </div>
+
+        <div class="field-group full"><div class="field"><label>Coupon Code (optional)</label><input type="text" id="p-coupon" placeholder="Enter coupon code" /></div></div>
+
+        <button class="pay-btn" onclick="handlePaidSignup()" id="pay-btn">
+          <span id="pay-btn-text">Complete Order</span>
+          <svg id="pay-btn-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+
+        <div id="paid-err" style="display:none;margin-top:12px;padding:10px 14px;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;font-size:13px;color:#DC2626"></div>
+
+        <div class="trust-row">
+          <div class="trust-item">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 1l1.5 3 3.5.5-2.5 2.5.5 3.5L7 9l-3 1.5.5-3.5L2 4.5 5.5 4z"/></svg>
+            SSL Encrypted
+          </div>
+          <div class="trust-item">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="5" width="10" height="8" rx="1.5"/><path d="M5 5V3.5a2 2 0 0 1 4 0V5"/></svg>
+            Secure Payment
+          </div>
+          <div class="trust-item">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 7l3 3 7-7"/></svg>
+            Cancel Anytime
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Order summary -->
+  <div>
+    <div class="summary-card" id="summary-card">
+      <div id="summary-badge" style="display:none;margin-bottom:14px">
+        <span style="background:linear-gradient(135deg,#F97316,#EA580C);color:#fff;font-size:11px;font-weight:800;padding:4px 14px;border-radius:20px;letter-spacing:.06em">🔥 FOUNDING MEMBER</span>
+      </div>
+      <div class="summary-plan-name" id="sum-name">Pro</div>
+      <div class="summary-plan-tag" id="sum-tag" style="color:#F97316">PRO PLAN</div>
+      <div class="summary-price-row">
+        <span class="summary-price" id="sum-price">₹4,999</span>
+        <span class="summary-period" id="sum-period">/mo</span>
+      </div>
+      <div class="summary-billing" id="sum-billing">Billed monthly · Cancel anytime</div>
+      <div class="summary-divider"></div>
+      <div class="feature-list" id="sum-features">
+        <!-- filled by JS -->
+      </div>
+      <div class="summary-divider"></div>
+      <div class="guarantee">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#10B981" stroke-width="1.6" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><path d="M9 1l2 5h5l-4 3 1.5 5L9 11 4.5 14 6 9 2 6h5z"/></svg>
+        <span>7-day free trial on Pro. Cancel within 7 days and pay nothing. Agency — one-time payment, use forever.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const PLANS = {
+  starter: {
+    name: 'Starter', tag: 'FREE PLAN', tagColor: '#94A3B8',
+    price: 'Free', period: '', billing: 'Free forever',
+    badge: false,
+    features: ['50 leads/month','2 demo sites','10 outreach emails','2 AI scores (try free)','5 AI chats','Basic dashboard','Email support']
+  },
+  growth: {
+    name: 'Pro', tag: 'PRO PLAN', tagColor: '#F97316',
+    price: '₹4,999', period: '/mo', billing: 'Billed monthly · Cancel anytime',
+    badge: true,
+    features: ['500 leads/month','50 demo sites','200 outreach emails','100 AI chats','Scout AI assistant','AI scoring & qualification','Client portals','Priority support']
+  },
+  agency: {
+    name: 'Agency', tag: 'AGENCY PLAN', tagColor: '#8B5CF6',
+    price: '₹9,999', period: ' Lifetime', billing: 'One-time payment · Use forever',
+    badge: false,
+    features: ['Unlimited leads','Unlimited demo sites','Unlimited emails','Unlimited AI chats','Scout AI assistant','Team seats (up to 5)','White-label branding','API access','Dedicated support']
+  }
+}
+
+const API = window.location.port === '5173' ? 'http://localhost:3000' : ''
+let currentPlan = 'growth'
+
+function switchPlan(planId) {
+  try {
+    currentPlan = planId
+    const p = PLANS[planId]
+    if (!p) return
+
+    // Update tabs
+    document.querySelectorAll('.plan-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.id === 'tab-' + planId)
+    })
+
+    // Show/hide form sections
+    const fs = document.getElementById('form-starter')
+    const fp = document.getElementById('form-paid')
+    if (fs) fs.style.display = planId === 'starter' ? 'block' : 'none'
+    if (fp) fp.style.display = planId !== 'starter' ? 'block' : 'none'
+
+    // Update summary card
+    const el = (id) => document.getElementById(id)
+    if (el('sum-name')) el('sum-name').textContent = p.name
+    if (el('sum-tag')) { el('sum-tag').textContent = p.tag; el('sum-tag').style.color = p.tagColor }
+    if (el('sum-price')) el('sum-price').textContent = p.price
+    if (el('sum-period')) el('sum-period').textContent = p.period
+    if (el('sum-billing')) el('sum-billing').textContent = p.billing
+    if (el('summary-badge')) el('summary-badge').style.display = p.badge ? 'block' : 'none'
+
+    // Features
+    const fl = el('sum-features')
+    if (fl) {
+      fl.innerHTML = p.features.map(f => '<div class="feature-row"><span class="f-check"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#F97316" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' + f + '</div>').join('')
+    }
+
+    // Pay button text
+    const btn = el('pay-btn-text')
+    if (btn) btn.textContent = planId === 'agency' ? 'Get Lifetime Access' : planId === 'starter' ? 'Create Free Account' : 'Start Free Trial'
+  } catch(e) { console.error('switchPlan error:', e) }
+}
+
+// Read plan from URL
+const urlPlan = new URLSearchParams(window.location.search).get('plan') || 'growth'
+switchPlan(['starter','growth','agency'].includes(urlPlan) ? urlPlan : 'growth')
+
+// ── Register Starter (free) ──
+async function registerStarter() {
+  const name = document.getElementById('s-name').value.trim()
+  const email = document.getElementById('s-email').value.trim()
+  const pass = document.getElementById('s-pass').value.trim()
+  const errEl = document.getElementById('starter-err')
+  const btn = document.getElementById('starter-btn')
+
+  if (!name || !email || !pass) { showErr(errEl, 'Please fill in all fields.'); return }
+  if (pass.length < 6) { showErr(errEl, 'Password must be at least 6 characters.'); return }
+
+  btn.disabled = true
+  btn.innerHTML = '<span class="spinner"></span> Creating account...'
+
+  try {
+    const res = await fetch(API + '/api/auth/register', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({name, email, password: pass})
+    })
+    const data = await res.json()
+    if (!res.ok) { showErr(errEl, data.detail || 'Registration failed.'); btn.disabled = false; btn.innerHTML = 'Create Free Account <svg .../>'; return }
+    localStorage.setItem('token', data.token)
+    localStorage.setItem('user', JSON.stringify(data.user))
+    window.location.href = '/app'
+  } catch(e) {
+    showErr(errEl, 'Network error. Please try again.')
+    btn.disabled = false
+    btn.innerHTML = 'Create Free Account'
+  }
+}
+
+// ── Register + Pay (Pro / Agency) ──
+async function handlePaidSignup() {
+  const fname = document.getElementById('p-fname').value.trim()
+  const lname = document.getElementById('p-lname').value.trim()
+  const email = document.getElementById('p-email').value.trim()
+  const pass  = document.getElementById('p-pass').value.trim()
+  const errEl = document.getElementById('paid-err')
+  const btn   = document.getElementById('pay-btn')
+
+  if (!fname || !email || !pass) { showErr(errEl, 'Please fill in all required fields.'); return }
+  if (pass.length < 6) { showErr(errEl, 'Password must be at least 6 characters.'); return }
+
+  btn.disabled = true
+  document.getElementById('pay-btn-text').textContent = 'Creating account...'
+  document.getElementById('pay-btn-arrow').style.display = 'none'
+  btn.insertAdjacentHTML('afterbegin', '<span class="spinner" id="pay-spinner"></span>')
+
+  try {
+    // Step 1: Register
+    const regRes = await fetch(API + '/api/auth/register', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({name: fname + ' ' + lname, email, password: pass})
+    })
+    const regData = await regRes.json()
+    if (!regRes.ok) { showErr(errEl, regData.detail || 'Registration failed.'); resetBtn(); return }
+
+    const token = regData.token
+    localStorage.setItem('token', token)
+    localStorage.setItem('user', JSON.stringify(regData.user))
+
+    // Step 2: Create payment order
+    document.getElementById('pay-btn-text').textContent = 'Opening payment...'
+    const orderRes = await fetch(API + '/api/payments/create-order', {
+      method:'POST', headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
+      body: JSON.stringify({plan: currentPlan})
+    })
+    const orderData = await orderRes.json()
+
+    // Manual fallback (no Razorpay configured)
+    if (orderData.manual) {
+      window.open(`mailto:sales@ioweb3.io?subject=LeadEmpire Upgrade — ${currentPlan}&body=Hi, I just registered with ${email} and want to activate the ${currentPlan} plan.`, '_blank')
+      window.location.href = '/app'
+      return
+    }
+
+    // Step 3: Open Razorpay
+    if (!window.Razorpay) {
+      await loadScript('https://checkout.razorpay.com/v1/checkout.js')
+    }
+
+    const rzp = new window.Razorpay({
+      key: orderData.key_id,
+      amount: orderData.amount,
+      currency: orderData.currency,
+      name: 'LeadEmpire',
+      description: orderData.plan_name,
+      order_id: orderData.order_id,
+      prefill: { email, name: fname + ' ' + lname },
+      theme: { color: '#F97316' },
+      handler: async function(response) {
+        // Verify payment
+        const vRes = await fetch(API + '/api/payments/verify', {
+          method:'POST', headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
+          body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            plan: currentPlan
+          })
+        })
+        if (vRes.ok) { window.location.href = '/app' }
+        else { showErr(errEl, 'Payment verified but plan upgrade failed. Contact sales@ioweb3.io'); window.location.href = '/app' }
+      },
+      modal: { ondismiss: () => { resetBtn(); showErr(errEl, 'Payment cancelled. You can try again.') } }
+    })
+    rzp.open()
+  } catch(e) {
+    showErr(errEl, 'Something went wrong. Please try again or contact sales@ioweb3.io')
+    resetBtn()
+  }
+}
+
+function showErr(el, msg) { el.textContent = msg; el.style.display = 'block' }
+function resetBtn() {
+  const btn = document.getElementById('pay-btn')
+  btn.disabled = false
+  const sp = document.getElementById('pay-spinner')
+  if(sp) sp.remove()
+  document.getElementById('pay-btn-text').textContent = currentPlan === 'agency' ? 'Complete Purchase' : 'Start Free Trial'
+  document.getElementById('pay-btn-arrow').style.display = ''
+}
+function loadScript(src) {
+  return new Promise((res,rej) => {
+    const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s)
+  })
+}
+// ── Already logged in? Skip signup, go straight to payment ──
+const existingToken = localStorage.getItem('token')
+const existingUser = localStorage.getItem('user')
+if (existingToken && existingUser && currentPlan !== 'starter') {
+  // Show a simplified "Confirm & Pay" instead of full signup
+  const formPaid = document.getElementById('form-paid')
+  if (formPaid) {
+    try {
+      const u = JSON.parse(existingUser)
+      formPaid.innerHTML = `
+        <div style="text-align:center;padding:20px 0">
+          <div style="font-size:14px;color:#475569;margin-bottom:8px">Logged in as</div>
+          <div style="font-size:16px;font-weight:700;color:#0F172A;margin-bottom:4px">${u.name || u.email}</div>
+          <div style="font-size:13px;color:#94A3B8;margin-bottom:24px">${u.email}</div>
+          <div class="err" id="paid-err" style="display:none;margin-bottom:16px"></div>
+          <button class="pay-btn" id="pay-btn" onclick="payExistingUser()">
+            <span id="pay-btn-text">Subscribe Now</span>
+            <svg id="pay-btn-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="trust-row">
+            <span class="trust-item"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Secure payment</span>
+            <span class="trust-item"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Cancel anytime</span>
+          </div>
+          <div style="margin-top:16px"><a href="#" onclick="localStorage.clear();location.reload();return false" style="font-size:12px;color:#94A3B8">Not you? Sign out</a></div>
+        </div>
+      `
+    } catch(e) {}
+  }
+} else if (existingToken && existingUser && currentPlan === 'starter') {
+  // Already logged in + free plan = just go to app
+  window.location.href = '/app'
+}
+
+async function payExistingUser() {
+  const token = localStorage.getItem('token')
+  const errEl = document.getElementById('paid-err')
+  const btn = document.getElementById('pay-btn')
+  btn.disabled = true
+  document.getElementById('pay-btn-text').textContent = 'Opening payment...'
+
+  try {
+    const orderRes = await fetch(API + '/api/payments/create-order', {
+      method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer '+token},
+      body: JSON.stringify({plan: currentPlan})
+    })
+    const orderData = await orderRes.json()
+    if (orderData.manual) {
+      window.open('mailto:sales@ioweb3.io?subject=LeadEmpire Upgrade — '+currentPlan, '_blank')
+      window.location.href = '/app'
+      return
+    }
+    if (!window.Razorpay) await loadScript('https://checkout.razorpay.com/v1/checkout.js')
+    const u = JSON.parse(localStorage.getItem('user') || '{}')
+    const rzp = new window.Razorpay({
+      key: orderData.key_id, amount: orderData.amount, currency: orderData.currency,
+      name: 'LeadEmpire', description: orderData.plan_name, order_id: orderData.order_id,
+      prefill: { email: u.email || '' },
+      theme: { color: '#F97316' },
+      method: { upi: true, card: true, netbanking: true, wallet: true },
+      handler: async function(response) {
+        const vRes = await fetch(API + '/api/payments/verify', {
+          method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer '+token},
+          body: JSON.stringify({ razorpay_order_id: response.razorpay_order_id, razorpay_payment_id: response.razorpay_payment_id, razorpay_signature: response.razorpay_signature, plan: currentPlan })
+        })
+        if (vRes.ok) { window.location.href = '/app' }
+        else { showErr(errEl, 'Payment verified but plan upgrade failed. Contact sales@ioweb3.io'); window.location.href = '/app' }
+      },
+      modal: { ondismiss: () => { btn.disabled = false; document.getElementById('pay-btn-text').textContent = 'Subscribe Now' } }
+    })
+    rzp.open()
+  } catch(e) {
+    showErr(errEl, 'Something went wrong. Please try again.')
+    btn.disabled = false
+    document.getElementById('pay-btn-text').textContent = 'Subscribe Now'
+  }
+}
+</script>
+</body>
+</html>
