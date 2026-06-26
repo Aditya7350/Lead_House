@@ -4,8 +4,8 @@ import psycopg2
 from psycopg2 import pool
 from contextlib import contextmanager
 
-load_dotenv()
 
+load_dotenv()
 # --- Environment ---
 # DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/ai_lead_machine")
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -22,7 +22,7 @@ DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "30"))
 # db_pool = pool.ThreadedConnectionPool(1, 10, DATABASE_URL)
 
 db_pool = None
-
+ 
 def init_db():
     global db_pool
     if db_pool is None:
@@ -34,42 +34,28 @@ def init_db():
 @contextmanager
 def get_db():
     global db_pool
-
+ 
     if db_pool is None:
         init_db()
-
+ 
     conn = db_pool.getconn()
     conn.autocommit = True
-
+ 
     try:
         yield conn
     finally:
         db_pool.putconn(conn)
 
+
 # @contextmanager
 # def get_db():
-#     global db_pool
-
-#     if db_pool is None:
-#         init_db()
-
+#     """Get a database connection from the pool."""
 #     conn = db_pool.getconn()
 #     conn.autocommit = True
-
 #     try:
 #         yield conn
 #     finally:
 #         db_pool.putconn(conn)
-
-@contextmanager
-def get_db():
-    """Get a database connection from the pool."""
-    conn = db_pool.getconn()
-    conn.autocommit = True
-    try:
-        yield conn
-    finally:
-        db_pool.putconn(conn)
 
 
 def query(sql, params=None):
