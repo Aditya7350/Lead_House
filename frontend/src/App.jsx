@@ -2,6 +2,13 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 
 const API = window.location.origin.includes('5173') ? 'http://localhost:3000' : ''
 
+// Format display name: "AdityaSarode197" → "Aditya Sarode"
+const formatName = (n) => {
+  if (!n) return 'User'
+  return n.replace(/\d+$/g, '').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' ').trim() || n
+}
+
+
 const NICHES = [
   {value:"dentists",label:"Dentists / Dental",keywords:["dentist","dental clinic","dental office","family dentist","cosmetic dentist"]},
   {value:"plumbers",label:"Plumbers / HVAC",keywords:["plumber","plumbing services","emergency plumber"]},
@@ -626,7 +633,7 @@ export default function App({ onReady }) {
   
   const [profile, setProfile] = useState(
   JSON.parse(localStorage.getItem("leadhouse_profile")) || {
-    name: user?.name || "",
+    name: formatName(user?.name || ""),
     email: user?.email || "",
     company: "LeadEmpire"
   }
@@ -662,6 +669,7 @@ export default function App({ onReady }) {
   };
 
   const [page, setPage] = useState('dashboard')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [pageKey, setPageKey] = useState(0)
   const [stats, setStats] = useState({total_leads:0,qualified:0,demos_built:0,contacted:0,replied:0,emails_today:0})
   const [leads, setLeads] = useState([])
@@ -755,7 +763,7 @@ const authHeaders = {
     }
   }, [leads.length, scrapeActive, scrapeInfo.prevCount])
 
-  const navigateTo = (id) => { setPage(id); setPageKey(k => k + 1) }
+  const navigateTo = (id) => { setPage(id); setPageKey(k => k + 1); setSidebarOpen(false) }
 
   // if (!token || !user) return <LoginPage onLogin={setUser} />
   if (!token || !user) return <LoginPage onLogin={setUser} />
@@ -1003,7 +1011,12 @@ const authHeaders = {
   return (
     <div className="app-layout">
       {/* SIDEBAR */}
-      <aside className={`sidebar${collapsed?' collapsed':''}`}>
+      {/* Mobile hamburger */}
+      <button className="mobile-menu-btn" onClick={()=>setSidebarOpen(!sidebarOpen)}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F172A" strokeWidth="2" strokeLinecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      {sidebarOpen && <div className="sidebar-overlay show" onClick={()=>setSidebarOpen(false)} />}
+      <aside className={`sidebar${collapsed?' collapsed':''}${sidebarOpen?' open':''}`}>
         <div className="sidebar-logo"><img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style={{width:38,height:38,borderRadius:10,boxShadow:'0 4px 12px rgba(249,115,22,.25)'}} /><div><h1>LeadEmpire</h1><span className="sub">Build Your Empire, One Lead at a Time</span></div></div>
         <nav className="sidebar-nav">
           {NAV.map(group => (
@@ -1028,7 +1041,7 @@ const authHeaders = {
           ))}
         </nav>
         <div className="sidebar-footer">
-          <div className="sidebar-user"><div className="avatar">{(user.name||user.email||'A')[0].toUpperCase()}</div><div><div className="uname">{user.name||'Admin'}</div><div className="uemail">{user.email}</div></div></div>
+          <div className="sidebar-user"><div className="avatar">{(user.name||user.email||'A')[0].toUpperCase()}</div><div><div className="uname">{formatName(user.name||'Admin')}</div><div className="uemail">{user.email}</div></div></div>
           <button className="logout-btn" onClick={logout}>Sign Out</button>
           <button className="collapse-btn" onClick={()=>setCollapsed(!collapsed)}>{collapsed?'▶':'◀'} {collapsed?'':'Collapse'}</button>
         </div>
@@ -1142,7 +1155,7 @@ const authHeaders = {
               <span style={{fontSize:13,fontWeight:700,color:'#0F172A',fontFamily:"'Space Grotesk',sans-serif"}}>Search Configuration</span>
             </div>
 
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:16}}>
+            <div className="resp-grid-2" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:16}}>
               <div>
                 <label style={{fontSize:11,fontWeight:600,color:'#64748B',display:'block',marginBottom:6,letterSpacing:'.03em'}}>CITY / AREA *</label>
                 <input className="input" placeholder="e.g. Pune, Miami, London..." value={city} onChange={e=>setCity(e.target.value)} style={{fontSize:14}} />
@@ -1153,7 +1166,7 @@ const authHeaders = {
               </div>
             </div>
 
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:16}}>
+            <div className="resp-grid-2" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:16}}>
               <div>
                 <label style={{fontSize:11,fontWeight:600,color:'#64748B',display:'block',marginBottom:6,letterSpacing:'.03em'}}>
                   {page==='custom_search' ? 'BUSINESS TYPE' : 'NICHE'}
@@ -1406,7 +1419,7 @@ const authHeaders = {
         </div>} */}
         {/* SETTINGS */}
         {page==='settings' &&
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:24,alignItems:'start'}}>
+          <div className="resp-grid-2" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:24,alignItems:'start'}}>
 
           {/* ── Profile ── */}
           <div className="settings-card">

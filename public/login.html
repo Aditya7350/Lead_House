@@ -2,212 +2,123 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sign in — LeadEmpire</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LeadEmpire — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#F5F6F8; --card:#FFFFFF; --border:#E2E8F0;
-  --orange:#F97316; --orange2:#EA580C;
-  --navy:#0F172A; --muted:#64748B; --muted2:#475569;
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F5F6F8;color:#0F172A;min-height:100vh;overflow:hidden}
+.split{display:flex;min-height:100vh}
+.brand-side{flex:0 0 55%;position:relative;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;overflow:hidden;background:linear-gradient(160deg,#FFF7ED 0%,#fff 60%)}
+.brand-side canvas{position:absolute;inset:0;width:100%;height:100%}
+.brand-content{position:relative;z-index:2}
+.brand-logo{display:flex;align-items:center;gap:14px;margin-bottom:48px}
+.brand-logo .icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#F97316,#EA580C);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(249,115,22,.28)}
+.brand-logo h1{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.02em;color:#0F172A}
+.brand-logo span{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#94A3B8;margin-top:2px}
+.brand-headline{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:700;line-height:1.15;letter-spacing:-.03em;margin-bottom:20px;color:#0F172A}
+.brand-headline em{font-style:normal;background:linear-gradient(135deg,#F97316,#EA580C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.brand-sub{font-size:16px;color:#64748B;line-height:1.7;max-width:440px;margin-bottom:48px}
+.brand-stats{display:flex;gap:40px}
+.brand-stat .num{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:#0F172A}
+.brand-stat .label{font-size:12px;color:#94A3B8;margin-top:2px}
+.form-side{flex:0 0 45%;display:flex;align-items:center;justify-content:center;padding:60px;background:#FFFFFF;border-left:1px solid #E2E8F0}
+.form-card{width:100%;max-width:380px}
+.form-card h2{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:600;margin-bottom:8px;color:#0F172A}
+.form-card .subtitle{color:#64748B;font-size:14px;margin-bottom:36px}
+.field{position:relative;margin-bottom:22px}
+.field label{display:block;font-size:12px;font-weight:500;color:#64748B;margin-bottom:6px;letter-spacing:.02em}
+.field input{width:100%;padding:14px 16px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;color:#0F172A;font-size:14px;font-family:inherit;outline:none;transition:border .2s,box-shadow .2s}
+.field input:focus{border-color:#F97316;box-shadow:0 0 0 3px rgba(249,115,22,.15);background:#fff}
+.field input::placeholder{color:#94A3B8}
+.field .toggle-pw{position:absolute;right:14px;top:34px;background:none;border:none;color:#94A3B8;cursor:pointer;font-size:13px;font-family:inherit}
+.field .toggle-pw:hover{color:#64748B}
+.options{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.remember{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#64748B}
+.remember input{width:16px;height:16px;accent-color:#F97316}
+.forgot{font-size:13px;color:#F97316;text-decoration:none;transition:color .2s}
+.forgot:hover{color:#EA580C}
+.login-btn{width:100%;padding:15px;background:linear-gradient(135deg,#F97316,#EA580C);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(249,115,22,.3)}
+.login-btn:active{transform:translateY(0)}
+.login-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.error-msg{background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:16px;display:none}
+.divider{text-align:center;margin:28px 0;position:relative}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:calc(50% - 20px);height:1px;background:#E2E8F0}
+.divider::before{left:0}.divider::after{right:0}
+.divider span{font-size:12px;color:#94A3B8;padding:0 12px;background:#fff}
+.alt-action{text-align:center;font-size:13px;color:#64748B}
+.alt-action a{color:#F97316;text-decoration:none;font-weight:500}
+.alt-action a:hover{color:#EA580C}
+@media(max-width:900px){
+  .split{flex-direction:column}
+  .brand-side{flex:none;padding:40px 28px 32px;min-height:auto}
+  .brand-headline{font-size:28px}
+  .brand-sub{display:none}
+  .brand-stats{gap:24px}
+  .brand-stat .num{font-size:20px}
+  .form-side{flex:1;padding:32px 28px;border-left:none;border-top:1px solid #E2E8F0}
 }
-body{
-  font-family:'Inter',sans-serif; color:var(--navy);
-  background:var(--bg); min-height:100vh;
-  display:flex; align-items:center; justify-content:center; padding:24px;
-  position:relative; overflow:hidden;
-}
-/* subtle background glow + dot grid, matching landing */
-.dot-grid{position:fixed;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.05) 1px,transparent 1px);background-size:32px 32px;pointer-events:none}
-.glow{position:fixed;top:-10%;left:50%;transform:translateX(-50%);width:900px;height:600px;background:radial-gradient(ellipse at center top,rgba(249,115,22,.10) 0%,transparent 65%);pointer-events:none}
-
-.wrap{position:relative;z-index:2;width:100%;max-width:420px}
-
-.brand{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:28px}
-.brand img{width:38px;height:38px;border-radius:10px;object-fit:contain}
-.brand-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;letter-spacing:-.02em}
-
-.card{
-  background:var(--card); border:1px solid var(--border); border-radius:18px;
-  padding:36px 32px; box-shadow:0 12px 40px rgba(15,23,42,.06);
-}
-.title{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.02em}
-.subtitle{font-size:14px;color:var(--muted);margin-top:6px;margin-bottom:26px}
-
-.field{margin-bottom:16px}
-.field label{display:block;font-size:12px;font-weight:600;color:var(--muted2);margin-bottom:7px}
-.field input{
-  width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid var(--border);
-  font-size:14px;font-family:'Inter',sans-serif;color:var(--navy);background:#fff;
-  transition:border-color .15s, box-shadow .15s;
-}
-.field input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(249,115,22,.12)}
-
-.pw-wrap{position:relative}
-.pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);padding:4px 8px}
-.pw-toggle:hover{color:var(--orange)}
-
-.error{
-  display:none;background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c;
-  padding:10px 14px;border-radius:9px;font-size:13px;margin-bottom:16px;
-}
-.error.show{display:block}
-
-.submit{
-  width:100%;padding:13px;border-radius:10px;border:none;cursor:pointer;
-  font-size:14px;font-weight:700;color:#fff;font-family:'Inter',sans-serif;
-  background:linear-gradient(135deg,var(--orange),var(--orange2));
-  box-shadow:0 8px 24px rgba(249,115,22,.28);transition:transform .15s, box-shadow .15s;
-  margin-top:6px;
-}
-.submit:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 10px 30px rgba(249,115,22,.4)}
-.submit:disabled{opacity:.65;cursor:not-allowed}
-
-.toggle-line{text-align:center;font-size:13px;color:var(--muted);margin-top:22px}
-.toggle-line button{background:none;border:none;cursor:pointer;color:var(--orange);font-weight:700;font-size:13px;font-family:'Inter',sans-serif}
-.toggle-line button:hover{text-decoration:underline}
-
-.back{display:block;text-align:center;margin-top:22px;font-size:13px;color:var(--muted);text-decoration:none}
-.back:hover{color:var(--navy)}
+@media(prefers-reduced-motion:reduce){canvas{display:none}}
 </style>
 </head>
 <body>
-<div class="dot-grid"></div>
-<div class="glow"></div>
-
-<div class="wrap">
-  <div class="brand">
-    <img src="/ai-lead-machine-logo.svg" alt="LeadEmpire">
-    <span class="brand-name">LeadEmpire</span>
-  </div>
-
-  <div class="card">
-    <div class="title" id="title">Welcome back</div>
-    <div class="subtitle" id="subtitle">Sign in to your dashboard</div>
-
-    <div class="error" id="error"></div>
-
-    <div class="field" id="name-field" style="display:none">
-      <label for="name">Full name</label>
-      <input id="name" type="text" autocomplete="name" placeholder="Jane Doe">
-    </div>
-
-    <div class="field">
-      <label for="email">Email</label>
-      <input id="email" type="email" autocomplete="email" placeholder="you@company.com">
-    </div>
-
-    <div class="field">
-      <label for="password">Password</label>
-      <div class="pw-wrap">
-        <input id="password" type="password" autocomplete="current-password" placeholder="••••••••">
-        <button type="button" class="pw-toggle" id="pw-toggle">Show</button>
+<div class="split">
+  <div class="brand-side">
+    <canvas id="network"></canvas>
+    <div class="brand-content">
+      <div class="brand-logo">
+        <img class="icon" src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style="width:48px;height:48px;border-radius:14px;" />
+        <div><h1>LeadEmpire</h1><span>Build Your Empire, One Lead at a Time</span></div>
+      </div>
+      <h2 class="brand-headline">Find leads.<br>Build demos.<br><em>Close clients.</em></h2>
+      <p class="brand-sub">AI discovers local businesses, qualifies them, builds demo websites, and sends personalized outreach — all on autopilot.</p>
+      <div class="brand-stats">
+        <div class="brand-stat"><div class="num" id="stat1">0</div><div class="label">Leads found</div></div>
+        <div class="brand-stat"><div class="num" id="stat2">0</div><div class="label">Sites built</div></div>
+        <div class="brand-stat"><div class="num" id="stat3">0</div><div class="label">Emails sent</div></div>
       </div>
     </div>
-
-    <button class="submit" id="submit">Sign in</button>
-
-    <div class="toggle-line">
-      <span id="toggle-text">Don't have an account?</span>
-      <button id="toggle-mode">Create one</button>
+  </div>
+  <div class="form-side">
+    <div class="form-card">
+      <h2>Welcome back</h2>
+      <p class="subtitle">Sign in to your LeadEmpire dashboard</p>
+      <div class="error-msg" id="error"></div>
+      <div class="field">
+        <label>Email address</label>
+        <input type="email" id="email" placeholder="you@agency.com" autocomplete="email" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" />
+        <button class="toggle-pw" onclick="togglePw()" type="button">Show</button>
+      </div>
+      <div class="options">
+        <label class="remember"><input type="checkbox" id="remember" checked /> Remember me</label>
+        <a href="#" class="forgot">Forgot password?</a>
+      </div>
+      <button class="login-btn" id="loginBtn" onclick="handleLogin()">Sign in</button>
+      <div class="divider"><span>or</span></div>
+      <p class="alt-action">New here? <a href="/checkout?plan=starter">Create an account</a></p>
     </div>
   </div>
-
-  <a class="back" href="/">← Back to home</a>
 </div>
-
 <script>
-// Same-origin: login.html is served by FastAPI, so the API base is "".
-const API = window.location.origin.includes('5173') ? 'http://localhost:3000' : '';
-
-let isSignUp = false;
-
-const els = {
-  title:    document.getElementById('title'),
-  subtitle: document.getElementById('subtitle'),
-  error:    document.getElementById('error'),
-  nameField:document.getElementById('name-field'),
-  name:     document.getElementById('name'),
-  email:    document.getElementById('email'),
-  password: document.getElementById('password'),
-  submit:   document.getElementById('submit'),
-  toggleText:document.getElementById('toggle-text'),
-  toggleMode:document.getElementById('toggle-mode'),
-  pwToggle: document.getElementById('pw-toggle'),
-};
-
-// Allow ?signup=1 or #signup to open directly in register mode
-if (location.search.includes('signup') || location.hash.includes('signup')) setMode(true);
-
-function showError(msg){ els.error.textContent = msg; els.error.classList.add('show'); }
-function clearError(){ els.error.classList.remove('show'); els.error.textContent = ''; }
-
-function setMode(signup){
-  isSignUp = signup;
-  els.title.textContent    = signup ? 'Create account' : 'Welcome back';
-  els.subtitle.textContent = signup ? 'Start your free trial today' : 'Sign in to your dashboard';
-  els.submit.textContent   = signup ? 'Create account' : 'Sign in';
-  els.nameField.style.display = signup ? 'block' : 'none';
-  els.password.autocomplete = signup ? 'new-password' : 'current-password';
-  els.toggleText.textContent = signup ? 'Already have an account?' : "Don't have an account?";
-  els.toggleMode.textContent = signup ? 'Sign in' : 'Create one';
-  clearError();
-}
-
-els.toggleMode.addEventListener('click', () => setMode(!isSignUp));
-
-els.pwToggle.addEventListener('click', () => {
-  const showing = els.password.type === 'text';
-  els.password.type = showing ? 'password' : 'text';
-  els.pwToggle.textContent = showing ? 'Show' : 'Hide';
-});
-
-async function handleSubmit(){
-  clearError();
-  const email = els.email.value.trim();
-  const password = els.password.value;
-  const name = els.name.value.trim();
-
-  if (!email || !password){ showError('Enter email and password'); return; }
-  if (isSignUp && !name){ showError('Enter your name'); return; }
-
-  els.submit.disabled = true;
-  const original = els.submit.textContent;
-  els.submit.textContent = isSignUp ? 'Creating account…' : 'Signing in…';
-
-  try {
-    const endpoint = isSignUp ? '/api/auth/register' : '/api/auth/login';
-    const body = isSignUp ? { email, password, name } : { email, password };
-    const res = await fetch(API + endpoint, {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json' },
-      body: JSON.stringify(body),
-    });
-    const data = await res.json();
-
-    if (res.ok && data.token){
-      // Match what the dashboard reads on load (App.jsx).
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      window.location.href = '/app';
-      return;
-    }
-    showError(data.detail || (isSignUp ? 'Registration failed' : 'Invalid email or password'));
-  } catch (e) {
-    showError('Cannot connect to server. Please try again.');
-  }
-
-  els.submit.disabled = false;
-  els.submit.textContent = original;
-}
-
-els.submit.addEventListener('click', handleSubmit);
-// Enter key submits from any field
-['email','password','name'].forEach(id => {
-  document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit(); });
-});
+const canvas=document.getElementById('network'),ctx=canvas.getContext('2d');let nodes=[],W,H;
+function resize(){W=canvas.width=canvas.parentElement.offsetWidth;H=canvas.height=canvas.parentElement.offsetHeight}
+resize();window.addEventListener('resize',resize);
+for(let i=0;i<18;i++)nodes.push({x:Math.random()*2000,y:Math.random()*1200,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*2+1.5,pulse:0,pulseSpeed:0});
+setInterval(()=>{const n=nodes[Math.floor(Math.random()*nodes.length)];n.pulse=1;n.pulseSpeed=.015},2000);
+function draw(){ctx.clearRect(0,0,W,H);for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<150){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(249,115,22,${(1-d/150)*.18})`;ctx.lineWidth=.5;ctx.stroke()}}for(const n of nodes){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;if(n.pulse>0){n.pulse-=n.pulseSpeed;ctx.beginPath();ctx.arc(n.x,n.y,n.r+n.pulse*16,0,Math.PI*2);ctx.fillStyle=`rgba(234,88,12,${n.pulse*.22})`;ctx.fill()}ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=n.pulse>.5?'#EA580C':'#F97316';ctx.fill()}requestAnimationFrame(draw)}draw();
+const API=window.location.origin;
+function togglePw(){const i=document.getElementById('password'),b=document.querySelector('.toggle-pw');if(i.type==='password'){i.type='text';b.textContent='Hide'}else{i.type='password';b.textContent='Show'}}
+async function handleLogin(){const email=document.getElementById('email').value.trim(),pass=document.getElementById('password').value,err=document.getElementById('error'),btn=document.getElementById('loginBtn');if(!email||!pass){err.style.display='block';err.textContent='Please enter your email and password.';return}btn.disabled=true;btn.textContent='Signing in...';err.style.display='none';try{const res=await fetch(API+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});const data=await res.json();if(data.token){localStorage.setItem('token',data.token);localStorage.setItem('user',JSON.stringify(data.user));window.location.href='/app'}else{err.style.display='block';err.textContent=data.detail||'Invalid credentials. Please try again.'}}catch(e){err.style.display='block';err.textContent='Cannot connect to server.'}btn.disabled=false;btn.textContent='Sign in'}
+document.getElementById('password').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
+async function loadStats(){try{const r=await fetch(API+'/api/stats');const s=await r.json();animateNum('stat1',s.total_leads||0);animateNum('stat2',s.demos_built||0);animateNum('stat3',s.contacted||0)}catch{}}
+function animateNum(id,target){const el=document.getElementById(id);let c=0;const step=Math.ceil(target/30)||1;const t=setInterval(()=>{c+=step;if(c>=target){c=target;clearInterval(t)}el.textContent=c.toLocaleString()},30)}
+loadStats();
+if(localStorage.getItem('token'))window.location.href='/app';
 </script>
 </body>
 </html>

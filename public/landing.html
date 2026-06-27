@@ -177,16 +177,33 @@ footer{border-top:1px solid var(--border);padding:32px 5%;display:flex;align-ite
 
 /* ── MOBILE ── */
 @media(max-width:768px){
-  .hero-inner{grid-template-columns:1fr;gap:48px}
+  .hero-inner{grid-template-columns:1fr;gap:48px;padding:0 20px}
   .hero-right{display:none}
   .nav-links{display:none}
+  .nav-cta .btn-ghost{display:none}
+  .hero h1{font-size:36px!important}
+  .hero-sub{font-size:14px!important}
+  .hero-ctas{flex-direction:column;gap:12px}
+  .hero-ctas a{width:100%;text-align:center}
   .steps-grid{grid-template-columns:1fr 1fr;gap:8px}
   .step:first-child{border-radius:14px 0 0 0}
   .step:last-child{border-radius:0 0 14px 0}
   .bento{grid-template-columns:1fr;gap:8px}
   .bc-1,.bc-2,.bc-3,.bc-4,.bc-5{grid-column:span 1}
   .proof-grid{grid-template-columns:1fr}
-  .pricing-strip{padding:36px 24px;flex-direction:column}
+  .pricing-strip{padding:36px 20px;flex-direction:column;gap:20px}
+  .pricing-strip>div{min-width:100%!important}
+  section{padding:40px 20px!important}
+  .section-tag{font-size:11px!important}
+  .section-title{font-size:28px!important}
+  .section-sub{font-size:13px!important;max-width:100%!important}
+  footer{padding:32px 20px!important}
+  footer .footer-grid{grid-template-columns:1fr!important;gap:24px!important}
+}
+@media(max-width:480px){
+  .hero h1{font-size:28px!important}
+  .steps-grid{grid-template-columns:1fr}
+  .pricing-strip>div{padding:24px 20px!important}
 }
 </style>
 </head>
@@ -205,8 +222,8 @@ footer{border-top:1px solid var(--border);padding:32px 5%;display:flex;align-ite
     <a href="#pricing">Pricing</a>
   </div>
   <div class="nav-cta">
-    <a href="/app" class="btn-ghost">Sign in</a>
-    <a href="/app" class="btn-primary">Start free →</a>
+    <a href="/login" class="btn-ghost">Sign in</a>
+    <a href="/login" class="btn-primary">Start free →</a>
   </div>
 </nav>
 
@@ -519,7 +536,7 @@ footer{border-top:1px solid var(--border);padding:32px 5%;display:flex;align-ite
             <span style="font-size:56px;font-weight:800;font-family:'Space Grotesk',sans-serif;color:#0F172A;line-height:1">Free</span>
           </div>
           <div style="font-size:13px;color:#94A3B8;margin-bottom:28px">Free forever</div>
-          <a href="/app" style="display:block;text-align:center;padding:13px;border-radius:10px;font-size:14px;font-weight:700;color:#0F172A;border:1.5px solid #E2E8F0;text-decoration:none;margin-bottom:28px;transition:all .2s"
+          <a href="/login" style="display:block;text-align:center;padding:13px;border-radius:10px;font-size:14px;font-weight:700;color:#0F172A;border:1.5px solid #E2E8F0;text-decoration:none;margin-bottom:28px;transition:all .2s"
             onmouseover="this.style.borderColor='#F97316';this.style.color='#F97316'"
             onmouseout="this.style.borderColor='#E2E8F0';this.style.color='#0F172A'">
             Start Free
@@ -635,7 +652,7 @@ footer{border-top:1px solid var(--border);padding:32px 5%;display:flex;align-ite
   <div class="footer-links">
     <a href="mailto:sales@ioweb3.io">sales@ioweb3.io</a>
     <a href="/app">Dashboard</a>
-    <a href="/app">Login</a>
+    <a href="/login">Login</a>
   </div>
   <div style="font-size:11px;color:#94A3B8">© 2026 IOWEB3 Technologies. All rights reserved.</div>
 </footer>
@@ -707,5 +724,40 @@ bentoCads.forEach((card, i) => {
   cardObs.observe(card)
 })
 </script>
+
+<script>
+// If user is logged in, swap nav buttons to show their name + Dashboard
+(function() {
+  try {
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    if (!token || !userData) return;
+    
+    const user = JSON.parse(userData);
+    if (!user || !user.name) return;
+    
+    // Format name: remove trailing numbers, add spaces before capitals
+    let name = (user.name || user.email || '').replace(/\d+$/g, '').replace(/([a-z])([A-Z])/g, '$1 $2').trim();
+    if (!name) name = user.email ? user.email.split('@')[0] : 'User';
+    
+    // Replace nav CTA buttons
+    const navCta = document.querySelector('.nav-cta');
+    if (navCta) {
+      navCta.innerHTML = '<a href="/app" class="btn-ghost" style="display:flex;align-items:center;gap:8px">' +
+        '<span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#F97316,#EA580C);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">' + name.charAt(0).toUpperCase() + '</span>' +
+        name + '</a>' +
+        '<a href="/app" class="btn-primary">Dashboard →</a>';
+    }
+    
+    // Update hero CTA button
+    const heroCta = document.querySelector('.hero-ctas .btn-primary');
+    if (heroCta) {
+      heroCta.href = '/app';
+      heroCta.textContent = 'Go to Dashboard →';
+    }
+  } catch(e) {}
+})();
+</script>
+
 </body>
 </html>
