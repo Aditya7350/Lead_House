@@ -27,7 +27,7 @@ function Root() {
   return (
     <div style={{
       position:'fixed', inset:0, zIndex:9999,
-      background:'#F5F6F8',
+      background:'#F7F7F7',
       display:'flex', alignItems:'center', justifyContent:'center',
       flexDirection:'column',
       opacity: fadeOut ? 0 : 1,
@@ -41,15 +41,15 @@ function Root() {
       {/* Orange glow */}
       <div style={{position:'absolute',top:'28%',left:'50%',transform:'translateX(-50%)',
         width:480,height:280,pointerEvents:'none',
-        background:'radial-gradient(ellipse,rgba(249,115,22,.08) 0%,transparent 70%)'}}/>
+        background:'radial-gradient(ellipse,rgba(80,0,179,.08) 0%,transparent 70%)'}}/>
 
       <div style={{position:'relative',zIndex:1,textAlign:'center'}}>
         {/* Logo */}
         <div style={{
           width:72,height:72,borderRadius:20,margin:'0 auto 20px',
-          background:'linear-gradient(135deg,#F97316,#EA580C)',
+          background:'linear-gradient(135deg,#5000B3,#3D008A)',
           display:'flex',alignItems:'center',justifyContent:'center',
-          boxShadow:'0 8px 32px rgba(249,115,22,.28)',
+          boxShadow:'0 8px 32px rgba(80,0,179,.28)',
           animation:'lhPop .5s cubic-bezier(.34,1.56,.64,1) both',
         }}>
           <img src="/ai-lead-machine-logo.svg" alt="L"
@@ -73,14 +73,14 @@ function Root() {
         <div style={{width:200,height:4,background:'#E2E8F0',borderRadius:99,
           overflow:'hidden',margin:'0 auto 14px',animation:'lhUp .4s ease .3s both'}}>
           <div style={{height:'100%',borderRadius:99,
-            background:'linear-gradient(90deg,#F97316,#EA580C)',
+            background:'linear-gradient(90deg,#5000B3,#3D008A)',
             width:progress+'%',transition:'width .45s ease'}}/>
         </div>
 
         {/* Dots */}
         <div style={{display:'flex',gap:6,justifyContent:'center',animation:'lhUp .4s ease .35s both'}}>
           {[0,1,2].map(i=>(
-            <div key={i} style={{width:6,height:6,borderRadius:'50%',background:'#F97316',
+            <div key={i} style={{width:6,height:6,borderRadius:'50%',background:'#5000B3',
               opacity:.3,animation:`lhDot 1.2s ease ${i*.2}s infinite`}}/>
           ))}
         </div>

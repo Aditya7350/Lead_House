@@ -39,7 +39,7 @@ const COUNTRIES = [
 const STATUS = {
   new:{color:"#64748B",bg:"#F1F5F9",label:"NEW",icon:""},
   qualified:{color:"#0EA5E9",bg:"#E0F2FE",label:"SCORED",icon:""},
-  demo_built:{color:"#F97316",bg:"#FFF7ED",label:"DEMO READY",icon:""},
+  demo_built:{color:"#5000B3",bg:"#F3E8FF",label:"DEMO READY",icon:""},
   contacted:{color:"#8B5CF6",bg:"#F5F3FF",label:"CONTACTED",icon:""},
   replied:{color:"#10B981",bg:"#D1FAE5",label:"REPLIED",icon:""},
   archived:{color:"#94A3B8",bg:"#F8FAFC",label:"ARCHIVED",icon:""},
@@ -92,8 +92,8 @@ function LoginPage({ onLogin }) {
     const iv = setInterval(() => { const n = nodes[Math.floor(Math.random()*nodes.length)]; n.pulse=1; n.ps=0.015 }, 2000)
     const draw = () => {
       ctx.clearRect(0,0,W,H)
-      for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++) { const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,dist=Math.sqrt(dx*dx+dy*dy); if(dist<150){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(249,115,22,${(1-dist/150)*.12})`;ctx.lineWidth=.5;ctx.stroke()}}
-      for(const n of nodes){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;if(n.pulse>0){n.pulse-=n.ps;ctx.beginPath();ctx.arc(n.x,n.y,n.r+n.pulse*16,0,Math.PI*2);ctx.fillStyle=`rgba(234,88,12,${n.pulse*.25})`;ctx.fill()}ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=n.pulse>.5?'#EA580C':'#F97316';ctx.fill()}
+      for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++) { const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,dist=Math.sqrt(dx*dx+dy*dy); if(dist<150){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(80,0,179,${(1-dist/150)*.12})`;ctx.lineWidth=.5;ctx.stroke()}}
+      for(const n of nodes){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;if(n.pulse>0){n.pulse-=n.ps;ctx.beginPath();ctx.arc(n.x,n.y,n.r+n.pulse*16,0,Math.PI*2);ctx.fillStyle=`rgba(61,0,138,${n.pulse*.25})`;ctx.fill()}ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=n.pulse>.5?'#3D008A':'#5000B3';ctx.fill()}
       animId = requestAnimationFrame(draw)
     }
     draw()
@@ -152,10 +152,10 @@ function LoginPage({ onLogin }) {
         <canvas ref={canvasRef} style={{position:'absolute',inset:0,width:'100%',height:'100%'}} />
         <div style={{position:'relative',zIndex:2}}>
           <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:48}}>
-            <img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style={{width:48,height:48,borderRadius:14,boxShadow:'0 8px 32px rgba(249,115,22,.3)'}} />
+            <img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style={{width:48,height:48,borderRadius:14,boxShadow:'0 8px 32px rgba(80,0,179,.3)'}} />
             <div><h1 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:26,fontWeight:700}}>LeadEmpire</h1><span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:'#94A3B8'}}>ai-powered lead generation</span></div>
           </div>
-          <h2 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:44,fontWeight:700,lineHeight:1.15,letterSpacing:'-.03em',marginBottom:20}}>Find leads.<br/>Build demos.<br/><em style={{fontStyle:'normal',background:'linear-gradient(135deg,#F97316,#EA580C)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Close clients.</em></h2>
+          <h2 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:44,fontWeight:700,lineHeight:1.15,letterSpacing:'-.03em',marginBottom:20}}>Find leads.<br/>Build demos.<br/><em style={{fontStyle:'normal',background:'linear-gradient(135deg,#5000B3,#3D008A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Close clients.</em></h2>
           <p style={{fontSize:16,color:'#CBD5E1',lineHeight:1.7,maxWidth:440}}>LeadEmpire discovers businesses, qualifies them, builds demo websites, and sends personalized outreach — all on autopilot.</p>
         </div>
       </div>
@@ -180,7 +180,7 @@ function LoginPage({ onLogin }) {
           <button className="login-btn" onClick={handleSubmit} disabled={loading}>{loading ? (isSignUp ? 'Creating account...' : 'Signing in...') : (isSignUp ? 'Create Account' : 'Sign in')}</button>
           <div style={{textAlign:'center',marginTop:24,fontSize:13,color:'#475569'}}>
             {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
-            <span onClick={()=>{setIsSignUp(!isSignUp);setErr('')}} style={{color:'#F97316',cursor:'pointer',fontWeight:600}}>{isSignUp ? 'Sign in' : 'Sign up free'}</span>
+            <span onClick={()=>{setIsSignUp(!isSignUp);setErr('')}} style={{color:'#5000B3',cursor:'pointer',fontWeight:600}}>{isSignUp ? 'Sign in' : 'Sign up free'}</span>
           </div>
         </div>
       </div>
@@ -282,25 +282,25 @@ function LeadCard({ lead, onAction, loading }) {
             <div><div style={{fontSize:12,fontWeight:600,color:'#94A3B8'}}>Not scored yet</div><div style={{fontSize:10,color:'#CBD5E1'}}>Run AI Analysis to get a lead score</div></div>
           </div>
         )}
-        {lead.ai_analysis && <div style={{marginTop:8,padding:'8px 10px',borderRadius:8,background:'#F8FAFC',fontSize:11,color:'#475569',lineHeight:1.5,borderLeft:'3px solid #F97316'}}>{lead.ai_analysis}</div>}
+        {lead.ai_analysis && <div style={{marginTop:8,padding:'8px 10px',borderRadius:8,background:'#F8FAFC',fontSize:11,color:'#475569',lineHeight:1.5,borderLeft:'3px solid #5000B3'}}>{lead.ai_analysis}</div>}
       </div>
 
       {/* Demo site link */}
-      {lead.demo_site_url && <div style={{padding:'0 18px 10px'}}><a href={lead.demo_site_url} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:8,padding:'10px 14px',borderRadius:8,background:'linear-gradient(135deg,rgba(249,115,22,.06),rgba(234,88,12,.06))',border:'1px solid rgba(249,115,22,.15)',textDecoration:'none'}}><span style={{fontSize:14,color:'#F97316',fontWeight:700}}>DEMO</span><div><div style={{fontSize:12,fontWeight:600,color:'#F97316'}}>Demo Site Ready</div><div style={{fontSize:10,color:'#64748B'}}>Click to preview</div></div><span style={{marginLeft:'auto',color:'#F97316',fontSize:16}}>↗</span></a></div>}
+      {lead.demo_site_url && <div style={{padding:'0 18px 10px'}}><a href={lead.demo_site_url} target="_blank" rel="noreferrer" style={{display:'flex',alignItems:'center',gap:8,padding:'10px 14px',borderRadius:8,background:'linear-gradient(135deg,rgba(80,0,179,.06),rgba(61,0,138,.06))',border:'1px solid rgba(80,0,179,.15)',textDecoration:'none'}}><span style={{fontSize:14,color:'#5000B3',fontWeight:700}}>DEMO</span><div><div style={{fontSize:12,fontWeight:600,color:'#5000B3'}}>Demo Site Ready</div><div style={{fontSize:10,color:'#64748B'}}>Click to preview</div></div><span style={{marginLeft:'auto',color:'#5000B3',fontSize:16}}>↗</span></a></div>}
 
       {/* Action buttons */}
       <div className="lead-actions" style={{marginTop:'auto'}}>
         {isNew && <button className="btn btn-sm" onClick={()=>onAction(lead.id,'qualify')} disabled={loading[lead.id+'qualify']} style={{background:'linear-gradient(135deg,#0EA5E9,#0284C7)',color:'#fff',border:'none',flex:1,fontWeight:600,fontSize:11}}>
           {loading[lead.id+'qualify']?<span className="spinner"/>:'AI Analyze'}
         </button>}
-        {isQ && !hasD && <button className="btn btn-sm" onClick={()=>onAction(lead.id,'build-demo')} disabled={loading[lead.id+'build-demo']} style={{background:'linear-gradient(135deg,#F97316,#EA580C)',color:'#fff',border:'none',flex:1,fontWeight:600,fontSize:11}}>
+        {isQ && !hasD && <button className="btn btn-sm" onClick={()=>onAction(lead.id,'build-demo')} disabled={loading[lead.id+'build-demo']} style={{background:'linear-gradient(135deg,#5000B3,#3D008A)',color:'#fff',border:'none',flex:1,fontWeight:600,fontSize:11}}>
           {loading[lead.id+'build-demo']?<span className="spinner"/>:'Build Demo'}
         </button>}
         {canE && <button className="btn btn-sm" onClick={()=>onAction(lead.id,'send-email')} disabled={loading[lead.id+'send-email']} style={{background:'linear-gradient(135deg,#8B5CF6,#7C3AED)',color:'#fff',border:'none',flex:1,fontWeight:600,fontSize:11}}>
           {loading[lead.id+'send-email']?<span className="spinner"/>:'Outreach'}
         </button>}
         {score != null && <a href={API+'/report/'+lead.id} target="_blank" rel="noreferrer" className="btn btn-sm" style={{background:'#0F172A',color:'#fff',border:'none',flex:1,textDecoration:'none',justifyContent:'center',fontWeight:600,fontSize:11}}>Report</a>}
-        {lead.demo_site_url && <a href={API+'/portal/'+lead.id} target="_blank" rel="noreferrer" className="btn btn-sm" style={{color:'#F97316',background:'#FFF7ED',border:'1px solid #FED7AA',flex:1,textDecoration:'none',justifyContent:'center',fontWeight:600,fontSize:11}}>Portal</a>}
+        {lead.demo_site_url && <a href={API+'/portal/'+lead.id} target="_blank" rel="noreferrer" className="btn btn-sm" style={{color:'#5000B3',background:'#F3E8FF',border:'1px solid #D8B4FE',flex:1,textDecoration:'none',justifyContent:'center',fontWeight:600,fontSize:11}}>Portal</a>}
       </div>
     </div>
   )
@@ -347,13 +347,13 @@ function AIChatPage({ API, leads }) {
         <div style={{padding:'16px 20px',borderBottom:'1px solid #F1F5F9',fontWeight:600,display:'flex',alignItems:'center',gap:8}}>
           <img src="/ai-lead-machine-logo.svg" alt="L" style={{width:28,height:28,borderRadius:8}} />
           <span>AI Assistant</span>
-          {selectedLead && <span style={{fontSize:11,color:'#F97316',fontWeight:500,padding:'2px 8px',background:'#FFF7ED',borderRadius:6}}>Lead selected</span>}
+          {selectedLead && <span style={{fontSize:11,color:'#5000B3',fontWeight:500,padding:'2px 8px',background:'#F3E8FF',borderRadius:6}}>Lead selected</span>}
           <span style={{marginLeft:'auto',fontSize:11,color:'#94A3B8'}}>Powered by Claude</span>
         </div>
         <div style={{flex:1,overflowY:'auto',padding:20,display:'flex',flexDirection:'column',gap:12}}>
           {messages.map(function(m, i) {
             return <div key={i} style={{display:'flex',justifyContent:m.role==='user'?'flex-end':'flex-start'}}>
-              <div style={{maxWidth:'80%',padding:'12px 16px',borderRadius:m.role==='user'?'14px 14px 4px 14px':'14px 14px 14px 4px',background:m.role==='user'?'linear-gradient(135deg,#F97316,#EA580C)':'#F8FAFC',color:m.role==='user'?'#fff':'#1E293B',fontSize:13,lineHeight:1.7,border:m.role==='user'?'none':'1px solid #E2E8F0',whiteSpace:'pre-wrap'}}>
+              <div style={{maxWidth:'80%',padding:'12px 16px',borderRadius:m.role==='user'?'14px 14px 4px 14px':'14px 14px 14px 4px',background:m.role==='user'?'linear-gradient(135deg,#5000B3,#3D008A)':'#F8FAFC',color:m.role==='user'?'#fff':'#1E293B',fontSize:13,lineHeight:1.7,border:m.role==='user'?'none':'1px solid #E2E8F0',whiteSpace:'pre-wrap'}}>
                 {m.text}
               </div>
             </div>
@@ -365,7 +365,7 @@ function AIChatPage({ API, leads }) {
             <div style={{display:'flex',flexWrap:'wrap',gap:8,marginTop:8}}>
               {suggestions.map((s,i) => (
                 <button key={i} onClick={()=>send(s)} style={{padding:'8px 14px',borderRadius:10,border:'1px solid #E2E8F0',background:'#FFFFFF',fontSize:12,color:'#334155',cursor:'pointer',fontWeight:500,transition:'all .15s'}}
-                  onMouseEnter={e=>{e.target.style.background='#FFF7ED';e.target.style.borderColor='#FED7AA'}}
+                  onMouseEnter={e=>{e.target.style.background='#F3E8FF';e.target.style.borderColor='#D8B4FE'}}
                   onMouseLeave={e=>{e.target.style.background='#FFFFFF';e.target.style.borderColor='#E2E8F0'}}
                 >{s}</button>
               ))}
@@ -382,13 +382,13 @@ function AIChatPage({ API, leads }) {
       <div style={{background:'#FFFFFF',borderRadius:14,border:'1px solid #E2E8F0',overflow:'hidden',boxShadow:'0 2px 8px rgba(0,0,0,0.04)',display:'flex',flexDirection:'column'}}>
         <div style={{padding:'14px 16px',borderBottom:'1px solid #F1F5F9',fontSize:12,fontWeight:700,color:'#475569'}}>Lead Context</div>
         <div style={{overflowY:'auto',flex:1}}>
-          <div onClick={function(){setSelectedLead('')}} style={{padding:'10px 14px',cursor:'pointer',fontSize:12,display:'flex',alignItems:'center',gap:8,background:selectedLead===''?'#FFF7ED':'transparent',borderLeft:selectedLead===''?'3px solid #F97316':'3px solid transparent'}}>
+          <div onClick={function(){setSelectedLead('')}} style={{padding:'10px 14px',cursor:'pointer',fontSize:12,display:'flex',alignItems:'center',gap:8,background:selectedLead===''?'#F3E8FF':'transparent',borderLeft:selectedLead===''?'3px solid #5000B3':'3px solid transparent'}}>
             <span>●</span><span style={{fontWeight:selectedLead===''?600:400}}>All Leads (general)</span>
           </div>
           {leads.map(function(l) {
             const sc = l.website_score
             const badge = sc >= 8 ? '●' : sc >= 6 ? '●' : sc >= 4 ? '●' : sc != null ? '●' : '○'
-            return <div key={l.id} onClick={function(){setSelectedLead(l.id)}} style={{padding:'10px 14px',cursor:'pointer',fontSize:11,display:'flex',alignItems:'center',gap:8,background:selectedLead===l.id?'#FFF7ED':'transparent',borderLeft:selectedLead===l.id?'3px solid #F97316':'3px solid transparent'}}>
+            return <div key={l.id} onClick={function(){setSelectedLead(l.id)}} style={{padding:'10px 14px',cursor:'pointer',fontSize:11,display:'flex',alignItems:'center',gap:8,background:selectedLead===l.id?'#F3E8FF':'transparent',borderLeft:selectedLead===l.id?'3px solid #5000B3':'3px solid transparent'}}>
               <span>{badge}</span><span style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',fontWeight:selectedLead===l.id?600:400}}>{l.business_name}</span>
             </div>
           })}
@@ -419,10 +419,10 @@ function PricingPage({ onSelectPlan, currentPlan, trialDaysLeft }) {
   ]
 
   return (
-    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#FFF7ED 0%,#FFFFFF 50%,#FFF1E6 100%)',padding:'60px 24px'}}>
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#F3E8FF 0%,#FFFFFF 50%,#FFF1E6 100%)',padding:'60px 24px'}}>
       <div style={{maxWidth:1100,margin:'0 auto',textAlign:'center'}}>
         <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:12,marginBottom:24}}>
-          <img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style={{width:44,height:44,borderRadius:12,boxShadow:'0 8px 32px rgba(249,115,22,.25)'}} />
+          <img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style={{width:44,height:44,borderRadius:12,boxShadow:'0 8px 32px rgba(80,0,179,.25)'}} />
           <span style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:24,fontWeight:700,color:'#0F172A'}}>LeadEmpire</span>
         </div>
 
@@ -431,7 +431,7 @@ function PricingPage({ onSelectPlan, currentPlan, trialDaysLeft }) {
             Your 7-day free trial has ended. Choose a plan to continue using LeadEmpire.
           </div>
         ) : currentPlan === 'trial' ? (
-          <div style={{background:'#FFF7ED',border:'1px solid #FED7AA',borderRadius:12,padding:'16px 24px',maxWidth:500,margin:'0 auto 32px',color:'#9A3412',fontSize:14}}>
+          <div style={{background:'#F3E8FF',border:'1px solid #D8B4FE',borderRadius:12,padding:'16px 24px',maxWidth:500,margin:'0 auto 32px',color:'#9A3412',fontSize:14}}>
             {trialDaysLeft} day{trialDaysLeft !== 1 ? 's' : ''} left on your free trial. Upgrade anytime!
           </div>
         ) : null}
@@ -442,17 +442,17 @@ function PricingPage({ onSelectPlan, currentPlan, trialDaysLeft }) {
 
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',gap:24,maxWidth:1000,margin:'0 auto'}}>
           {plans.map(p => (
-            <div key={p.id} style={{background:'#fff',borderRadius:16,border:p.popular?'2px solid #F97316':'1px solid #E2E8F0',padding:32,position:'relative',boxShadow:p.popular?'0 20px 60px rgba(249,115,22,.15)':'0 4px 20px rgba(0,0,0,.04)',transform:p.popular?'scale(1.03)':'none'}}>
-              {p.popular && <div style={{position:'absolute',top:-14,left:'50%',transform:'translateX(-50%)',background:'linear-gradient(135deg,#F97316,#EA580C)',color:'#fff',fontSize:11,fontWeight:700,padding:'4px 16px',borderRadius:20,letterSpacing:'.05em'}}>MOST POPULAR</div>}
+            <div key={p.id} style={{background:'#fff',borderRadius:16,border:p.popular?'2px solid #5000B3':'1px solid #E2E8F0',padding:32,position:'relative',boxShadow:p.popular?'0 20px 60px rgba(80,0,179,.15)':'0 4px 20px rgba(0,0,0,.04)',transform:p.popular?'scale(1.03)':'none'}}>
+              {p.popular && <div style={{position:'absolute',top:-14,left:'50%',transform:'translateX(-50%)',background:'linear-gradient(135deg,#5000B3,#3D008A)',color:'#fff',fontSize:11,fontWeight:700,padding:'4px 16px',borderRadius:20,letterSpacing:'.05em'}}>MOST POPULAR</div>}
               <h3 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:22,fontWeight:700,color:'#0F172A',marginBottom:4}}>{p.name}</h3>
               <p style={{fontSize:13,color:'#64748B',marginBottom:20}}>{p.tagline}</p>
               <div style={{marginBottom:24}}><span style={{fontSize:42,fontWeight:800,fontFamily:"'Space Grotesk',sans-serif",color:'#0F172A'}}>{p.currency}{p.price}</span><span style={{fontSize:14,color:'#64748B'}}>{p.period}</span></div>
-              <button onClick={() => onSelectPlan(p.id)} style={{width:'100%',padding:'14px 0',borderRadius:10,border:'none',fontSize:14,fontWeight:600,cursor:'pointer',marginBottom:24,background:p.popular?'linear-gradient(135deg,#F97316,#EA580C)':'#0F172A',color:'#fff',boxShadow:p.popular?'0 8px 24px rgba(249,115,22,.3)':'none'}}>
+              <button onClick={() => onSelectPlan(p.id)} style={{width:'100%',padding:'14px 0',borderRadius:10,border:'none',fontSize:14,fontWeight:600,cursor:'pointer',marginBottom:24,background:p.popular?'linear-gradient(135deg,#5000B3,#3D008A)':'#0F172A',color:'#fff',boxShadow:p.popular?'0 8px 24px rgba(80,0,179,.3)':'none'}}>
                 Get Started
               </button>
               <div style={{textAlign:'left'}}>
                 {p.features.map((f,i) => <div key={i} style={{padding:'8px 0',fontSize:13,color:'#475569',display:'flex',alignItems:'center',gap:8,borderBottom:i < p.features.length - 1 ? '1px solid #F8FAFC' : 'none'}}>
-                  <span style={{color:'#F97316'}}>✓</span>{f}
+                  <span style={{color:'#5000B3'}}>✓</span>{f}
                 </div>)}
               </div>
             </div>
@@ -523,13 +523,13 @@ function ScrapeLoader({ city, niche, startedAt, leadsFound }) {
   }
 
   return (
-    <div style={{background:'linear-gradient(135deg,#FFF7ED,#FFFBF5)',border:'1px solid #FED7AA',borderRadius:16,padding:'28px 32px',marginBottom:24,overflow:'hidden',position:'relative'}}>
+    <div style={{background:'linear-gradient(135deg,#F3E8FF,#FFFBF5)',border:'1px solid #D8B4FE',borderRadius:16,padding:'28px 32px',marginBottom:24,overflow:'hidden',position:'relative'}}>
       {/* Animated background shimmer */}
-      <div style={{position:'absolute',inset:0,background:'linear-gradient(90deg,transparent,rgba(249,115,22,.04),transparent)',animation:'shimmer 2s infinite',backgroundSize:'200% 100%'}}/>
+      <div style={{position:'absolute',inset:0,background:'linear-gradient(90deg,transparent,rgba(80,0,179,.04),transparent)',animation:'shimmer 2s infinite',backgroundSize:'200% 100%'}}/>
 
       <div style={{position:'relative',zIndex:1}}>
         <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:20}}>
-          <div style={{width:52,height:52,borderRadius:14,background:'linear-gradient(135deg,#F97316,#EA580C)',display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontSize:18,fontWeight:700,boxShadow:'0 8px 24px rgba(249,115,22,.25)',animation:'pulse 2s infinite'}}>
+          <div style={{width:52,height:52,borderRadius:14,background:'linear-gradient(135deg,#5000B3,#3D008A)',display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontSize:18,fontWeight:700,boxShadow:'0 8px 24px rgba(80,0,179,.25)',animation:'pulse 2s infinite'}}>
             {stages[stage]?.icon || '●'}
           </div>
           <div>
@@ -541,17 +541,17 @@ function ScrapeLoader({ city, niche, startedAt, leadsFound }) {
         </div>
 
         {/* Progress bar */}
-        <div style={{background:'#FED7AA',borderRadius:8,height:6,overflow:'hidden',marginBottom:12}}>
-          <div style={{height:'100%',borderRadius:8,background:'linear-gradient(90deg,#F97316,#EA580C)',transition:'width 2s ease',width:progress+'%'}}/>
+        <div style={{background:'#D8B4FE',borderRadius:8,height:6,overflow:'hidden',marginBottom:12}}>
+          <div style={{height:'100%',borderRadius:8,background:'linear-gradient(90deg,#5000B3,#3D008A)',transition:'width 2s ease',width:progress+'%'}}/>
         </div>
 
         {/* Stage indicators */}
         <div style={{display:'flex',gap:8,justifyContent:'center',flexWrap:'wrap'}}>
           {stages.map((s, i) => (
             <div key={i} style={{display:'flex',alignItems:'center',gap:4,padding:'3px 10px',borderRadius:6,fontSize:11,
-              background: i < stage ? '#D1FAE5' : i === stage ? '#FFF7ED' : '#F8FAFC',
+              background: i < stage ? '#D1FAE5' : i === stage ? '#F3E8FF' : '#F8FAFC',
               color: i < stage ? '#065F46' : i === stage ? '#9A3412' : '#94A3B8',
-              border: i === stage ? '1px solid #FED7AA' : '1px solid transparent',
+              border: i === stage ? '1px solid #D8B4FE' : '1px solid transparent',
               fontWeight: i === stage ? 600 : 400
             }}>
               {i < stage ? '✓' : i === stage ? s.icon : '○'} {s.icon === stages[stage]?.icon && i === stage ? 'Active' : i < stage ? 'Done' : ''}
@@ -784,13 +784,13 @@ const authHeaders = {
     const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
 
     try {
-      // Create Razorpay order
+      // Create Cashfree order
       const res = await fetch(API + '/api/payments/create-order', {
         method: 'POST', headers, body: JSON.stringify({ plan: planId })
       })
       const data = await res.json()
 
-      // If Razorpay not configured, fallback to manual
+      // If Cashfree not configured, fallback to manual
       if (data.manual) {
         const ok = window.confirm(
           `You selected ${planId.charAt(0).toUpperCase() + planId.slice(1)}.\n\nContact admin to activate your plan.\nEmail: sales@ioweb3.io`
@@ -799,55 +799,46 @@ const authHeaders = {
         return
       }
 
-      // Load Razorpay script if not loaded
-      if (!window.Razorpay) {
+      // Load Cashfree SDK if not loaded
+      if (!window.Cashfree) {
         await new Promise((resolve, reject) => {
           const s = document.createElement('script')
-          s.src = 'https://checkout.razorpay.com/v1/checkout.js'
+          s.src = 'https://sdk.cashfree.com/js/v3/cashfree.js'
           s.onload = resolve; s.onerror = reject
           document.head.appendChild(s)
         })
       }
 
-      // Open Razorpay checkout
-      const rzp = new window.Razorpay({
-        key: data.key_id,
-        amount: data.amount,
-        currency: data.currency,
-        name: 'LeadEmpire',
-        description: data.plan_name,
-        order_id: data.order_id,
-        prefill: { email: user?.email || '', contact: '' },
-        theme: { color: '#F97316' },
-        modal: { ondismiss: function() {} },
-        method: { upi: true, card: true, netbanking: true, wallet: true },
-        handler: async function(response) {
-          // Verify payment
-          try {
-            const vRes = await fetch(API + '/api/payments/verify', {
-              method: 'POST', headers,
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                plan: planId
-              })
-            })
-            const vData = await vRes.json()
-            if (vData.success) {
-              alert('Payment successful! Welcome to ' + planId.charAt(0).toUpperCase() + planId.slice(1) + ' plan!')
-              setShowPricing(false)
-              fetchAll()
-            } else {
-              alert('Payment verification failed. Contact support.')
-            }
-          } catch(e) {
-            alert('Verification error. Your payment was received — contact support if plan is not activated.')
-          }
-        }
+      // Initialize Cashfree
+      const cashfree = window.Cashfree({ mode: data.cf_env === 'production' ? 'production' : 'sandbox' })
+
+      // Open Cashfree checkout
+      const result = await cashfree.checkout({
+        paymentSessionId: data.payment_session_id,
+        redirectTarget: '_modal',
       })
-      rzp.open()
+
+      // After checkout closes, verify payment
+      if (result.error) {
+        console.log('Payment cancelled or failed:', result.error)
+        return
+      }
+
+      // Verify payment with backend
+      const vRes = await fetch(API + '/api/payments/verify', {
+        method: 'POST', headers,
+        body: JSON.stringify({ order_id: data.order_id, plan: planId })
+      })
+      const vData = await vRes.json()
+      if (vData.success) {
+        alert('Payment successful! Welcome to ' + planId.charAt(0).toUpperCase() + planId.slice(1) + ' plan!')
+        setShowPricing(false)
+        fetchAll()
+      } else {
+        alert(vData.message || 'Payment not completed. Try again or contact support.')
+      }
     } catch(e) {
+      console.error('Payment error:', e)
       alert('Error creating payment. Please try again or contact support.')
     }
   }
@@ -1017,7 +1008,7 @@ const authHeaders = {
       </button>
       {sidebarOpen && <div className="sidebar-overlay show" onClick={()=>setSidebarOpen(false)} />}
       <aside className={`sidebar${collapsed?' collapsed':''}${sidebarOpen?' open':''}`}>
-        <div className="sidebar-logo"><img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style={{width:38,height:38,borderRadius:10,boxShadow:'0 4px 12px rgba(249,115,22,.25)'}} /><div><h1>LeadEmpire</h1><span className="sub">Build Your Empire, One Lead at a Time</span></div></div>
+        <div className="sidebar-logo"><img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style={{width:38,height:38,borderRadius:10,boxShadow:'0 4px 12px rgba(80,0,179,.25)'}} /><div><h1>LeadEmpire</h1><span className="sub">Build Your Empire, One Lead at a Time</span></div></div>
         <nav className="sidebar-nav">
           {NAV.map(group => (
             <div key={group.section} className="nav-group">
@@ -1053,8 +1044,8 @@ const authHeaders = {
           <h2>{pageTitle[page]||'Dashboard'}</h2>
           <div style={{display:'flex',alignItems:'center',gap:10}}>
             {usageSummary && usageSummary.plan === 'trial' && (
-              <div onClick={()=>setShowPricing(true)} style={{display:'flex',alignItems:'center',gap:6,padding:'5px 12px',borderRadius:8,background:'#FFF7ED',border:'1px solid #FED7AA',cursor:'pointer',fontSize:11,color:'#9A3412',fontWeight:600}}>
-                {usageSummary.trial_days_left}d left · <span style={{color:'#F97316'}}>Upgrade</span>
+              <div onClick={()=>setShowPricing(true)} style={{display:'flex',alignItems:'center',gap:6,padding:'5px 12px',borderRadius:8,background:'#F3E8FF',border:'1px solid #D8B4FE',cursor:'pointer',fontSize:11,color:'#9A3412',fontWeight:600}}>
+                {usageSummary.trial_days_left}d left · <span style={{color:'#5000B3'}}>Upgrade</span>
               </div>
             )}
             <div style={{display:'flex',gap:6}}>
@@ -1111,14 +1102,14 @@ const authHeaders = {
         {(page==='scrape'||page==='custom_search') && <div key={pageKey} className="page-content" style={{maxWidth:780}}>
 
           {/* Hero banner */}
-          <div style={{background:'linear-gradient(135deg,#FFF7ED 0%,#FFFFFF 60%,#FEF3C7 100%)',borderRadius:16,padding:'28px 32px',marginBottom:28,border:'1px solid #FED7AA',position:'relative',overflow:'hidden'}}>
-            <div style={{position:'absolute',top:-20,right:-20,width:120,height:120,borderRadius:'50%',background:'rgba(249,115,22,.08)'}} />
-            <div style={{position:'absolute',bottom:-30,right:40,width:80,height:80,borderRadius:'50%',background:'rgba(249,115,22,.05)'}} />
+          <div style={{background:'linear-gradient(135deg,#F3E8FF 0%,#FFFFFF 60%,#EDE9FE 100%)',borderRadius:16,padding:'28px 32px',marginBottom:28,border:'1px solid #D8B4FE',position:'relative',overflow:'hidden'}}>
+            <div style={{position:'absolute',top:-20,right:-20,width:120,height:120,borderRadius:'50%',background:'rgba(80,0,179,.08)'}} />
+            <div style={{position:'absolute',bottom:-30,right:40,width:80,height:80,borderRadius:'50%',background:'rgba(80,0,179,.05)'}} />
             <div style={{position:'relative',zIndex:1}}>
               <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:8}}>
                 {page==='custom_search'
-                  ? <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F97316" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                  : <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F97316" strokeWidth="2" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  ? <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5000B3" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  : <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5000B3" strokeWidth="2" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 }
                 <h2 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:22,fontWeight:700,color:'#0F172A',margin:0}}>
                   {page==='custom_search' ? 'Custom Business Search' : 'Google Maps Lead Finder'}
@@ -1135,14 +1126,14 @@ const authHeaders = {
           {/* How it works steps */}
           <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12,marginBottom:28}}>
             {[
-              {icon:'1',label:'Find',desc:'Scrape leads',color:'#F97316'},
+              {icon:'1',label:'Find',desc:'Scrape leads',color:'#5000B3'},
               {icon:'2',label:'Score',desc:'AI qualifies',color:'#0EA5E9'},
               {icon:'3',label:'Demo',desc:'Build sites',color:'#8B5CF6'},
               {icon:'4',label:'Outreach',desc:'Send emails',color:'#10B981'},
             ].map((s,i)=>(
-              <div key={i} style={{textAlign:'center',padding:'14px 8px',borderRadius:12,background:i===0?'#FFF7ED':'#F8FAFC',border:i===0?'1.5px solid #FED7AA':'1px solid #E2E8F0',transition:'all .2s'}}>
-                <div style={{width:28,height:28,borderRadius:'50%',background:i===0?'#F97316':s.color||'#94A3B8',color:'#fff',fontSize:12,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 6px'}}>{s.icon}</div>
-                <div style={{fontSize:12,fontWeight:700,color:i===0?'#EA580C':'#0F172A'}}>{s.label}</div>
+              <div key={i} style={{textAlign:'center',padding:'14px 8px',borderRadius:12,background:i===0?'#F3E8FF':'#F8FAFC',border:i===0?'1.5px solid #D8B4FE':'1px solid #E2E8F0',transition:'all .2s'}}>
+                <div style={{width:28,height:28,borderRadius:'50%',background:i===0?'#5000B3':s.color||'#94A3B8',color:'#fff',fontSize:12,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 6px'}}>{s.icon}</div>
+                <div style={{fontSize:12,fontWeight:700,color:i===0?'#3D008A':'#0F172A'}}>{s.label}</div>
                 <div style={{fontSize:10,color:'#94A3B8'}}>{s.desc}</div>
               </div>
             ))}
@@ -1151,7 +1142,7 @@ const authHeaders = {
           {/* Search form card */}
           <div style={{background:'#fff',borderRadius:16,border:'1px solid #E2E8F0',padding:'28px 28px 24px',boxShadow:'0 2px 12px rgba(0,0,0,.03)'}}>
             <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:20}}>
-              <div style={{width:8,height:8,borderRadius:'50%',background:'#F97316'}} />
+              <div style={{width:8,height:8,borderRadius:'50%',background:'#5000B3'}} />
               <span style={{fontSize:13,fontWeight:700,color:'#0F172A',fontFamily:"'Space Grotesk',sans-serif"}}>Search Configuration</span>
             </div>
 
@@ -1180,7 +1171,7 @@ const authHeaders = {
               <div>
                 <label style={{fontSize:11,fontWeight:600,color:'#64748B',display:'block',marginBottom:6,letterSpacing:'.03em'}}>RADIUS: {radius}km</label>
                 <div style={{padding:'0 4px',marginTop:4}}>
-                  <input type="range" min="5" max="50" value={radius} onChange={e=>setRadius(+e.target.value)} style={{width:'100%',accentColor:'#F97316'}} />
+                  <input type="range" min="5" max="50" value={radius} onChange={e=>setRadius(+e.target.value)} style={{width:'100%',accentColor:'#5000B3'}} />
                   <div style={{display:'flex',justifyContent:'space-between',fontSize:10,color:'#94A3B8',marginTop:2}}><span>5km</span><span>25km</span><span>50km</span></div>
                 </div>
               </div>
@@ -1190,7 +1181,7 @@ const authHeaders = {
               <label style={{fontSize:11,fontWeight:600,color:'#64748B',display:'block',marginBottom:6,letterSpacing:'.03em'}}>KEYWORDS</label>
               <input className="input" placeholder={nd?nd.keywords.join(', '):''} value={customKw} onChange={e=>setCustomKw(e.target.value)} />
               {!customKw&&nd&&nd.keywords.length>0&&<div style={{display:'flex',gap:6,marginTop:8,flexWrap:'wrap'}}>
-                {nd.keywords.map(k=><span key={k} onClick={()=>setCustomKw(k)} style={{padding:'4px 10px',borderRadius:6,background:'#FFF7ED',border:'1px solid #FED7AA',fontSize:11,color:'#EA580C',fontWeight:500,cursor:'pointer',transition:'all .15s'}}>{k}</span>)}
+                {nd.keywords.map(k=><span key={k} onClick={()=>setCustomKw(k)} style={{padding:'4px 10px',borderRadius:6,background:'#F3E8FF',border:'1px solid #D8B4FE',fontSize:11,color:'#3D008A',fontWeight:500,cursor:'pointer',transition:'all .15s'}}>{k}</span>)}
               </div>}
             </div>}
 
@@ -1211,7 +1202,7 @@ const authHeaders = {
             <div style={{fontSize:11,fontWeight:600,color:'#94A3B8',letterSpacing:'.05em',marginBottom:10}}>POPULAR NICHES</div>
             <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
               {NICHES.filter(n=>n.value!=='custom').slice(0,10).map(n=>(
-                <button key={n.value} onClick={()=>setNiche(n.value)} style={{padding:'6px 14px',borderRadius:8,border:niche===n.value?'1.5px solid #F97316':'1px solid #E2E8F0',background:niche===n.value?'#FFF7ED':'#fff',color:niche===n.value?'#EA580C':'#475569',fontSize:12,fontWeight:500,cursor:'pointer',transition:'all .15s',fontFamily:'inherit'}}>
+                <button key={n.value} onClick={()=>setNiche(n.value)} style={{padding:'6px 14px',borderRadius:8,border:niche===n.value?'1.5px solid #5000B3':'1px solid #E2E8F0',background:niche===n.value?'#F3E8FF':'#fff',color:niche===n.value?'#3D008A':'#475569',fontSize:12,fontWeight:500,cursor:'pointer',transition:'all .15s',fontFamily:'inherit'}}>
                   {n.label}
                 </button>
               ))}
@@ -1238,7 +1229,7 @@ const authHeaders = {
             </div>
             <div style={{display:'flex',gap:6}}>
               <button className="btn btn-sm" onClick={()=>bulkAction('qualify','bQ')} disabled={actionLoading.bQ} style={{background:'linear-gradient(135deg,#0EA5E9,#0284C7)',color:'#fff',border:'none',fontWeight:600}}>{actionLoading.bQ?<span className="spinner"/>:'AI Score All'}</button>
-              <button className="btn btn-sm" onClick={()=>bulkAction('build-sites','bB')} disabled={actionLoading.bB} style={{background:'linear-gradient(135deg,#F97316,#EA580C)',color:'#fff',border:'none',fontWeight:600}}>{actionLoading.bB?<span className="spinner"/>:'Build Demos'}</button>
+              <button className="btn btn-sm" onClick={()=>bulkAction('build-sites','bB')} disabled={actionLoading.bB} style={{background:'linear-gradient(135deg,#5000B3,#3D008A)',color:'#fff',border:'none',fontWeight:600}}>{actionLoading.bB?<span className="spinner"/>:'Build Demos'}</button>
               <button className="btn btn-sm" onClick={()=>bulkAction('outreach','bE')} disabled={actionLoading.bE} style={{background:'linear-gradient(135deg,#8B5CF6,#7C3AED)',color:'#fff',border:'none',fontWeight:600}}>{actionLoading.bE?<span className="spinner"/>:'Send Outreach'}</button>
             </div>
           </div>
@@ -1259,7 +1250,7 @@ const authHeaders = {
               onClick={()=>setShowFilters(!showFilters)}
               style={{height:38,padding:'0 14px',background:showFilters||activeFilterCount?'#0F172A':'#fff',color:showFilters||activeFilterCount?'#fff':'#64748B',border:'1px solid #E2E8F0',fontWeight:600,fontSize:12,display:'flex',alignItems:'center',gap:6}}
             >
-              Filters {activeFilterCount > 0 && <span style={{background:'#F97316',color:'#fff',borderRadius:10,padding:'1px 7px',fontSize:10,fontWeight:700}}>{activeFilterCount}</span>}
+              Filters {activeFilterCount > 0 && <span style={{background:'#5000B3',color:'#fff',borderRadius:10,padding:'1px 7px',fontSize:10,fontWeight:700}}>{activeFilterCount}</span>}
             </button>
             <select value={sortBy} onChange={e=>setSortBy(e.target.value)} style={{height:38,padding:'0 12px',borderRadius:8,border:'1px solid #E2E8F0',fontSize:12,color:'#334155',background:'#fff',cursor:'pointer'}}>
               <option value="newest">Newest First</option>
@@ -1335,7 +1326,7 @@ const authHeaders = {
         {page==='demos' && <div>
           <p style={{fontSize:13,color:'#64748B',marginBottom:20}}>All generated demo websites for your leads.</p>
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(340px,1fr))',gap:16}}>
-            {demoLeads.map((l,i)=><div key={l.id||i} className="card"><div style={{padding:18,display:'flex',alignItems:'center',gap:14}}><div style={{width:44,height:44,borderRadius:10,background:'linear-gradient(135deg,rgba(249,115,22,.15),rgba(234,88,12,.15))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,fontWeight:700,color:'#F97316'}}>D</div><div style={{flex:1}}><div style={{fontSize:14,fontWeight:600,color:'#0F172A'}}>{l.business_name}</div><div style={{fontSize:12,color:'#64748B'}}>{l.niche} · {l.city}</div></div><a href={l.demo_site_url} target="_blank" rel="noreferrer" className="btn btn-sm btn-primary">View ↗</a></div></div>)}
+            {demoLeads.map((l,i)=><div key={l.id||i} className="card"><div style={{padding:18,display:'flex',alignItems:'center',gap:14}}><div style={{width:44,height:44,borderRadius:10,background:'linear-gradient(135deg,rgba(80,0,179,.15),rgba(61,0,138,.15))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,fontWeight:700,color:'#5000B3'}}>D</div><div style={{flex:1}}><div style={{fontSize:14,fontWeight:600,color:'#0F172A'}}>{l.business_name}</div><div style={{fontSize:12,color:'#64748B'}}>{l.niche} · {l.city}</div></div><a href={l.demo_site_url} target="_blank" rel="noreferrer" className="btn btn-sm btn-primary">View ↗</a></div></div>)}
           </div>
           {demoLeads.length===0&&<div style={{padding:60,textAlign:'center',color:'#64748B'}}>No demo sites yet. Qualify leads and build demos.</div>}
         </div>}
@@ -1423,7 +1414,7 @@ const authHeaders = {
 
           {/* ── Profile ── */}
           <div className="settings-card">
-            <h3><span style={{display:'inline-block',width:8,height:8,borderRadius:'50%',background:'#F97316',marginRight:8,verticalAlign:'middle'}} />Profile</h3>
+            <h3><span style={{display:'inline-block',width:8,height:8,borderRadius:'50%',background:'#5000B3',marginRight:8,verticalAlign:'middle'}} />Profile</h3>
             <div className="settings-form">
               <div>
                 <label>Name</label>
@@ -1444,9 +1435,9 @@ const authHeaders = {
           {/* ── Usage & Limits ── */}
           <div className="settings-card">
             <h3><span style={{display:'inline-block',width:8,height:8,borderRadius:'50%',background:'#0EA5E9',marginRight:8,verticalAlign:'middle'}} />Usage & Limits</h3>
-            <div style={{marginBottom:18,padding:'10px 14px',borderRadius:10,background:usageSummary?.plan==='admin'?'#D1FAE5':usageSummary?.plan==='trial'?'#FFF7ED':'#EFF6FF',border:'1px solid',borderColor:usageSummary?.plan==='admin'?'#6EE7B7':usageSummary?.plan==='trial'?'#FED7AA':'#BFDBFE',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+            <div style={{marginBottom:18,padding:'10px 14px',borderRadius:10,background:usageSummary?.plan==='admin'?'#D1FAE5':usageSummary?.plan==='trial'?'#F3E8FF':'#EFF6FF',border:'1px solid',borderColor:usageSummary?.plan==='admin'?'#6EE7B7':usageSummary?.plan==='trial'?'#D8B4FE':'#BFDBFE',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
               <span style={{fontSize:13,fontWeight:700,color:'#0F172A'}}>Plan: {usageSummary?.plan_label||'Free Trial'}</span>
-              {usageSummary?.plan==='trial' && <span style={{fontSize:11,fontWeight:600,color:'#9A3412',background:'#FED7AA',padding:'2px 8px',borderRadius:6}}>{usageSummary?.trial_days_left||0} days left</span>}
+              {usageSummary?.plan==='trial' && <span style={{fontSize:11,fontWeight:600,color:'#9A3412',background:'#D8B4FE',padding:'2px 8px',borderRadius:6}}>{usageSummary?.trial_days_left||0} days left</span>}
             </div>
             {[
               {label:'Leads',used:usageSummary?.leads?.used||0,limit:usageSummary?.leads?.limit||15},
@@ -1460,7 +1451,7 @@ const authHeaders = {
                   <span style={{color:'#94A3B8'}}>{item.used.toLocaleString()} / {item.limit.toLocaleString()}</span>
                 </div>
                 <div style={{height:6,borderRadius:3,background:'#F1F5F9',overflow:'hidden'}}>
-                  <div style={{height:'100%',borderRadius:3,background:item.used/item.limit>0.8?'#EF4444':'#F97316',width:Math.min(100,(item.used/item.limit)*100)+'%',transition:'width .3s ease'}} />
+                  <div style={{height:'100%',borderRadius:3,background:item.used/item.limit>0.8?'#EF4444':'#5000B3',width:Math.min(100,(item.used/item.limit)*100)+'%',transition:'width .3s ease'}} />
                 </div>
               </div>
             ))}

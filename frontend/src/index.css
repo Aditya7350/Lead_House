@@ -13,10 +13,10 @@
   --bg4:       #E2E8F0;
   --border:    #E2E8F0;
   --border2:   #CBD5E1;
-  --orange:    #F97316;
-  --orange2:   #EA580C;
-  --orange-dim: rgba(249,115,22,.08);
-  --orange-glow: rgba(249,115,22,.20);
+  --orange:    #5000B3;
+  --orange2:   #3D008A;
+  --orange-dim: rgba(80,0,179,.08);
+  --orange-glow: rgba(80,0,179,.20);
   --text:      #0F172A;
   --text2:     #475569;
   --text3:     #94A3B8;
@@ -151,7 +151,7 @@ input, select, textarea { font-family: inherit; }
 }
 
 .nav-item.active {
-  background: rgba(249,115,22,.10);
+  background: rgba(80,0,179,.10);
   color: var(--orange);
   font-weight: 600;
 }
@@ -512,8 +512,8 @@ input, select, textarea { font-family: inherit; }
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 22px rgba(249,115,22,.35);
-  background: linear-gradient(135deg, #fb923c, var(--orange));
+  box-shadow: 0 6px 22px rgba(80,0,179,.35);
+  background: linear-gradient(135deg, #7C3AED, var(--orange));
   color: #fff !important;
 }
 
@@ -768,7 +768,7 @@ input, select, textarea { font-family: inherit; }
   flex-direction: column;
   justify-content: center;
   padding: 60px 80px;
-  background: linear-gradient(160deg, #FFF7ED 0%, #fff 60%);
+  background: linear-gradient(160deg, #F3E8FF 0%, #fff 60%);
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 22px;
   font-weight: 800;
@@ -793,7 +793,7 @@ input, select, textarea { font-family: inherit; }
 
 .login-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 28px rgba(249,115,22,.4);
+  box-shadow: 0 8px 28px rgba(80,0,179,.4);
 }
 
 /* ═══════════════════════════════════════════
@@ -974,8 +974,8 @@ progress::-webkit-progress-value { background: var(--orange); border-radius: 3px
 
 /* ── Topbar upgrade trial pill ── */
 .trial-pill {
-  background: rgba(249,115,22,.15);
-  border: 1px solid rgba(249,115,22,.3);
+  background: rgba(80,0,179,.15);
+  border: 1px solid rgba(80,0,179,.3);
   color: var(--orange);
   font-size: 11px;
   font-weight: 600;
@@ -984,7 +984,7 @@ progress::-webkit-progress-value { background: var(--orange); border-radius: 3px
   cursor: pointer;
   transition: all .15s;
 }
-.trial-pill:hover { background: rgba(249,115,22,.25); }
+.trial-pill:hover { background: rgba(80,0,179,.25); }
 
 /* ── Reports row hover ── */
 .report-row {

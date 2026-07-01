@@ -7,17 +7,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:#F5F6F8;color:#0F172A;min-height:100vh;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:#F7F7F7;color:#0F172A;min-height:100vh;overflow:hidden}
 .split{display:flex;min-height:100vh}
-.brand-side{flex:0 0 55%;position:relative;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;overflow:hidden;background:linear-gradient(160deg,#FFF7ED 0%,#fff 60%)}
+.brand-side{flex:0 0 55%;position:relative;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;overflow:hidden;background:linear-gradient(160deg,#F3E8FF 0%,#fff 60%)}
 .brand-side canvas{position:absolute;inset:0;width:100%;height:100%}
 .brand-content{position:relative;z-index:2}
 .brand-logo{display:flex;align-items:center;gap:14px;margin-bottom:48px}
-.brand-logo .icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#F97316,#EA580C);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(249,115,22,.28)}
+.brand-logo .icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#5000B3,#3D008A);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(80,0,179,.28)}
 .brand-logo h1{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.02em;color:#0F172A}
 .brand-logo span{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#94A3B8;margin-top:2px}
 .brand-headline{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:700;line-height:1.15;letter-spacing:-.03em;margin-bottom:20px;color:#0F172A}
-.brand-headline em{font-style:normal;background:linear-gradient(135deg,#F97316,#EA580C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.brand-headline em{font-style:normal;background:linear-gradient(135deg,#5000B3,#3D008A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .brand-sub{font-size:16px;color:#64748B;line-height:1.7;max-width:440px;margin-bottom:48px}
 .brand-stats{display:flex;gap:40px}
 .brand-stat .num{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:#0F172A}
@@ -29,17 +29,17 @@ body{font-family:'Inter',sans-serif;background:#F5F6F8;color:#0F172A;min-height:
 .field{position:relative;margin-bottom:22px}
 .field label{display:block;font-size:12px;font-weight:500;color:#64748B;margin-bottom:6px;letter-spacing:.02em}
 .field input{width:100%;padding:14px 16px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;color:#0F172A;font-size:14px;font-family:inherit;outline:none;transition:border .2s,box-shadow .2s}
-.field input:focus{border-color:#F97316;box-shadow:0 0 0 3px rgba(249,115,22,.15);background:#fff}
+.field input:focus{border-color:#5000B3;box-shadow:0 0 0 3px rgba(80,0,179,.15);background:#fff}
 .field input::placeholder{color:#94A3B8}
 .field .toggle-pw{position:absolute;right:14px;top:34px;background:none;border:none;color:#94A3B8;cursor:pointer;font-size:13px;font-family:inherit}
 .field .toggle-pw:hover{color:#64748B}
 .options{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
 .remember{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#64748B}
-.remember input{width:16px;height:16px;accent-color:#F97316}
-.forgot{font-size:13px;color:#F97316;text-decoration:none;transition:color .2s}
-.forgot:hover{color:#EA580C}
-.login-btn{width:100%;padding:15px;background:linear-gradient(135deg,#F97316,#EA580C);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s}
-.login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(249,115,22,.3)}
+.remember input{width:16px;height:16px;accent-color:#5000B3}
+.forgot{font-size:13px;color:#5000B3;text-decoration:none;transition:color .2s}
+.forgot:hover{color:#3D008A}
+.login-btn{width:100%;padding:15px;background:linear-gradient(135deg,#5000B3,#3D008A);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(80,0,179,.3)}
 .login-btn:active{transform:translateY(0)}
 .login-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .error-msg{background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:16px;display:none}
@@ -48,8 +48,8 @@ body{font-family:'Inter',sans-serif;background:#F5F6F8;color:#0F172A;min-height:
 .divider::before{left:0}.divider::after{right:0}
 .divider span{font-size:12px;color:#94A3B8;padding:0 12px;background:#fff}
 .alt-action{text-align:center;font-size:13px;color:#64748B}
-.alt-action a{color:#F97316;text-decoration:none;font-weight:500}
-.alt-action a:hover{color:#EA580C}
+.alt-action a{color:#5000B3;text-decoration:none;font-weight:500}
+.alt-action a:hover{color:#3D008A}
 @media(max-width:900px){
   .split{flex-direction:column}
   .brand-side{flex:none;padding:40px 28px 32px;min-height:auto}
@@ -110,7 +110,7 @@ function resize(){W=canvas.width=canvas.parentElement.offsetWidth;H=canvas.heigh
 resize();window.addEventListener('resize',resize);
 for(let i=0;i<18;i++)nodes.push({x:Math.random()*2000,y:Math.random()*1200,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*2+1.5,pulse:0,pulseSpeed:0});
 setInterval(()=>{const n=nodes[Math.floor(Math.random()*nodes.length)];n.pulse=1;n.pulseSpeed=.015},2000);
-function draw(){ctx.clearRect(0,0,W,H);for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<150){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(249,115,22,${(1-d/150)*.18})`;ctx.lineWidth=.5;ctx.stroke()}}for(const n of nodes){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;if(n.pulse>0){n.pulse-=n.pulseSpeed;ctx.beginPath();ctx.arc(n.x,n.y,n.r+n.pulse*16,0,Math.PI*2);ctx.fillStyle=`rgba(234,88,12,${n.pulse*.22})`;ctx.fill()}ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=n.pulse>.5?'#EA580C':'#F97316';ctx.fill()}requestAnimationFrame(draw)}draw();
+function draw(){ctx.clearRect(0,0,W,H);for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<150){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(80,0,179,${(1-d/150)*.18})`;ctx.lineWidth=.5;ctx.stroke()}}for(const n of nodes){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;if(n.pulse>0){n.pulse-=n.pulseSpeed;ctx.beginPath();ctx.arc(n.x,n.y,n.r+n.pulse*16,0,Math.PI*2);ctx.fillStyle=`rgba(61,0,138,${n.pulse*.22})`;ctx.fill()}ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=n.pulse>.5?'#3D008A':'#5000B3';ctx.fill()}requestAnimationFrame(draw)}draw();
 const API=window.location.origin;
 function togglePw(){const i=document.getElementById('password'),b=document.querySelector('.toggle-pw');if(i.type==='password'){i.type='text';b.textContent='Hide'}else{i.type='password';b.textContent='Show'}}
 async function handleLogin(){const email=document.getElementById('email').value.trim(),pass=document.getElementById('password').value,err=document.getElementById('error'),btn=document.getElementById('loginBtn');if(!email||!pass){err.style.display='block';err.textContent='Please enter your email and password.';return}btn.disabled=true;btn.textContent='Signing in...';err.style.display='none';try{const res=await fetch(API+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});const data=await res.json();if(data.token){localStorage.setItem('token',data.token);localStorage.setItem('user',JSON.stringify(data.user));window.location.href='/app'}else{err.style.display='block';err.textContent=data.detail||'Invalid credentials. Please try again.'}}catch(e){err.style.display='block';err.textContent='Cannot connect to server.'}btn.disabled=false;btn.textContent='Sign in'}

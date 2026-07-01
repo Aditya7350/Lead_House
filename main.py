@@ -6,7 +6,7 @@ Run: uvicorn main:app --host 0.0.0.0 --port 3000 --reload
 import json
 import threading
 from fastapi import FastAPI, BackgroundTasks, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -60,10 +60,10 @@ def serve_dashboard():
     with open("public/index.html", "r", encoding="utf-8") as f:
         return f.read()
 
-@app.get("/login")
+@app.get("/login", response_class=HTMLResponse)
 def serve_login():
-    # Single login lives in the React app at /app; redirect any old /login links there.
-    return RedirectResponse(url="/app")
+    with open("public/login.html", "r", encoding="utf-8") as f:
+        return f.read()
 
 @app.get("/checkout", response_class=HTMLResponse)
 def serve_checkout():
@@ -235,19 +235,22 @@ def upgrade_plan(req: UpgradePlanRequest, request: Request):
 
 
 # =============================================
-# RAZORPAY PAYMENTS
+# CASHFREE PAYMENTS
 # =============================================
 import os
 import hmac
 import hashlib
 
-RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "")
-RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "")
+CASHFREE_APP_ID = os.getenv("CASHFREE_APP_ID", "")
+CASHFREE_SECRET_KEY = os.getenv("CASHFREE_SECRET_KEY", "")
+CASHFREE_ENV = os.getenv("CASHFREE_ENV", "sandbox")  # "sandbox" or "production"
+CASHFREE_API_URL = "https://api.cashfree.com/pg" if CASHFREE_ENV == "production" else "https://sandbox.cashfree.com/pg"
+BASE_URL = os.getenv("BASE_URL", "https://leadempire.io")
 
 PLAN_PRICES = {
-    "starter": {"amount": 0, "currency": "INR", "name": "Starter Plan"},          # Free
-    "growth":  {"amount": 499900, "currency": "INR", "name": "Growth Plan"},       # ₹4,999/mo in paise
-    "agency":  {"amount": 999900, "currency": "INR", "name": "Agency Lifetime"},   # ₹9,999 one-time in paise
+    "starter": {"amount": 0, "currency": "INR", "name": "Starter Plan"},
+    "growth":  {"amount": 4999.00, "currency": "INR", "name": "Growth Plan"},
+    "agency":  {"amount": 9999.00, "currency": "INR", "name": "Agency Lifetime"},
 }
 
 class CreateOrderRequest(BaseModel):
@@ -255,101 +258,162 @@ class CreateOrderRequest(BaseModel):
 
 @app.post("/api/payments/create-order")
 def create_payment_order(req: CreateOrderRequest, request: Request):
-    """Create a Razorpay order for plan purchase."""
+    """Create a Cashfree order for plan purchase."""
     user_id = get_current_user(request)
     if req.plan not in PLAN_PRICES:
         raise HTTPException(400, "Invalid plan")
 
     plan = PLAN_PRICES[req.plan]
 
-    if not RAZORPAY_KEY_ID or not RAZORPAY_KEY_SECRET:
-        # Fallback: no Razorpay configured, return manual upgrade info
+    if not CASHFREE_APP_ID or not CASHFREE_SECRET_KEY:
         return {"manual": True, "message": "Contact admin to activate your plan."}
 
+    # Get user details for Cashfree (requires email + phone)
+    user = query("SELECT * FROM users WHERE id=%s", (user_id,))
+    if not user:
+        raise HTTPException(401, "User not found")
+    user = user[0]
+
     import requests as rq
+    import uuid
+
+    order_id = f"order_{uuid.uuid4().hex[:16]}"
+
     try:
-        order = rq.post(
-            "https://api.razorpay.com/v1/orders",
-            auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET),
+        resp = rq.post(
+            f"{CASHFREE_API_URL}/orders",
+            headers={
+                "x-client-id": CASHFREE_APP_ID,
+                "x-client-secret": CASHFREE_SECRET_KEY,
+                "x-api-version": "2023-08-01",
+                "Content-Type": "application/json",
+            },
             json={
-                "amount": plan["amount"],
-                "currency": plan["currency"],
-                "receipt": f"{user_id}_{req.plan}",
-                "notes": {"user_id": user_id, "plan": req.plan}
+                "order_id": order_id,
+                "order_amount": plan["amount"],
+                "order_currency": plan["currency"],
+                "customer_details": {
+                    "customer_id": str(user_id),
+                    "customer_email": user.get("email", ""),
+                    "customer_phone": user.get("phone", "9999999999"),
+                },
+                "order_meta": {
+                    "return_url": f"{BASE_URL}/app?order_id={order_id}&plan={req.plan}",
+                },
+                "order_note": f"LeadEmpire {plan['name']} - {user.get('email', '')}",
             }
-        ).json()
+        )
+        data = resp.json()
+
+        if resp.status_code not in (200, 201) or "payment_session_id" not in data:
+            print(f"Cashfree error: {data}")
+            raise HTTPException(500, f"Payment error: {data.get('message', 'Order creation failed')}")
+
+        # Store order in DB for verification later
+        execute("""
+            INSERT INTO activity_log (type, user_id, message, metadata)
+            VALUES ('order_created', %s, %s, %s)
+        """, (user_id, f"Order {order_id} for {req.plan}",
+              json.dumps({"order_id": order_id, "plan": req.plan, "amount": plan["amount"]})))
+
         return {
-            "order_id": order["id"],
+            "payment_session_id": data["payment_session_id"],
+            "order_id": order_id,
             "amount": plan["amount"],
             "currency": plan["currency"],
-            "key_id": RAZORPAY_KEY_ID,
             "plan": req.plan,
             "plan_name": plan["name"],
+            "cf_env": CASHFREE_ENV,
         }
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(500, f"Payment error: {str(e)}")
 
 
 class VerifyPaymentRequest(BaseModel):
-    razorpay_order_id: str
-    razorpay_payment_id: str
-    razorpay_signature: str
+    order_id: str
     plan: str
 
 @app.post("/api/payments/verify")
 def verify_payment(req: VerifyPaymentRequest, request: Request):
-    """Verify Razorpay payment and upgrade user plan."""
+    """Verify Cashfree payment status and upgrade user plan."""
     user_id = get_current_user(request)
 
-    # Verify signature
-    message = f"{req.razorpay_order_id}|{req.razorpay_payment_id}"
-    expected = hmac.new(
-        RAZORPAY_KEY_SECRET.encode(),
-        message.encode(),
-        hashlib.sha256
-    ).hexdigest()
+    import requests as rq
+    try:
+        resp = rq.get(
+            f"{CASHFREE_API_URL}/orders/{req.order_id}",
+            headers={
+                "x-client-id": CASHFREE_APP_ID,
+                "x-client-secret": CASHFREE_SECRET_KEY,
+                "x-api-version": "2023-08-01",
+            }
+        )
+        data = resp.json()
+        order_status = data.get("order_status", "")
 
-    if expected != req.razorpay_signature:
-        raise HTTPException(400, "Payment verification failed")
-
-    # Upgrade user
-    execute("UPDATE users SET plan=%s WHERE id=%s", (req.plan, user_id))
-
-    # Log activity
-    execute(
-        "INSERT INTO activity_log (type, user_id, message, metadata) VALUES ('payment', %s, %s, %s)",
-        (user_id, f"Upgraded to {req.plan} plan",
-         json.dumps({"payment_id": req.razorpay_payment_id, "order_id": req.razorpay_order_id}))
-    )
-
-    return {"success": True, "plan": req.plan, "message": f"Payment verified! Upgraded to {req.plan}!"}
+        if order_status == "PAID":
+            # Upgrade user plan
+            execute("UPDATE users SET plan=%s WHERE id=%s", (req.plan, user_id))
+            execute(
+                "INSERT INTO activity_log (type, user_id, message, metadata) VALUES ('payment', %s, %s, %s)",
+                (user_id, f"Upgraded to {req.plan} plan",
+                 json.dumps({"order_id": req.order_id, "cf_order_status": order_status}))
+            )
+            return {"success": True, "plan": req.plan, "message": f"Payment verified! Upgraded to {req.plan}!"}
+        else:
+            return {"success": False, "status": order_status, "message": f"Payment not completed. Status: {order_status}"}
+    except Exception as e:
+        raise HTTPException(500, f"Verification error: {str(e)}")
 
 
 @app.post("/api/payments/webhook")
-async def razorpay_webhook(request: Request):
-    """Razorpay webhook — auto-upgrade on successful payment."""
+async def cashfree_webhook(request: Request):
+    """Cashfree webhook — auto-upgrade on successful payment."""
     body = await request.body()
-    sig = request.headers.get("X-Razorpay-Signature", "")
+    timestamp = request.headers.get("x-webhook-timestamp", "")
+    signature = request.headers.get("x-webhook-signature", "")
 
-    if RAZORPAY_KEY_SECRET:
-        expected = hmac.new(RAZORPAY_KEY_SECRET.encode(), body, hashlib.sha256).hexdigest()
-        if expected != sig:
+    # Verify webhook signature
+    if CASHFREE_SECRET_KEY and signature:
+        message = timestamp + body.decode()
+        expected = hmac.new(
+            CASHFREE_SECRET_KEY.encode(),
+            message.encode(),
+            hashlib.sha256
+        ).digest()
+        import base64
+        expected_b64 = base64.b64encode(expected).decode()
+        if expected_b64 != signature:
             raise HTTPException(400, "Invalid webhook signature")
 
     data = json.loads(body)
-    event = data.get("event", "")
+    event_type = data.get("type", "")
 
-    if event == "payment.captured":
-        payment = data.get("payload", {}).get("payment", {}).get("entity", {})
-        notes = payment.get("notes", {})
-        user_id = notes.get("user_id")
-        plan = notes.get("plan")
-        if user_id and plan:
-            execute("UPDATE users SET plan=%s WHERE id=%s", (plan, user_id))
-            execute(
-                "INSERT INTO activity_log (type, user_id, message) VALUES ('payment', %s, %s)",
-                (user_id, f"Webhook: Upgraded to {plan}")
-            )
+    if event_type == "PAYMENT_SUCCESS_WEBHOOK":
+        order = data.get("data", {}).get("order", {})
+        order_id = order.get("order_id", "")
+        # Extract plan from order_note or order_tags
+        order_note = order.get("order_note", "")
+        customer = data.get("data", {}).get("customer_details", {})
+        customer_id = customer.get("customer_id", "")
+
+        # Find plan from activity_log
+        log = query(
+            "SELECT metadata FROM activity_log WHERE message LIKE %s ORDER BY created_at DESC LIMIT 1",
+            (f"Order {order_id}%",)
+        )
+        if log:
+            meta = json.loads(log[0].get("metadata", "{}"))
+            plan = meta.get("plan", "growth")
+            if customer_id:
+                execute("UPDATE users SET plan=%s WHERE id=%s", (plan, customer_id))
+                execute(
+                    "INSERT INTO activity_log (type, user_id, message) VALUES ('payment', %s, %s)",
+                    (customer_id, f"Webhook: Upgraded to {plan}")
+                )
+
     return {"status": "ok"}
 
 
@@ -936,7 +1000,7 @@ h1,h2,h3{{font-family:'Space Grotesk',sans-serif}}
 .card{{padding:14px 16px;border-radius:10px;border:1px solid #E2E8F0;background:#FAFAFA}}
 .card .lbl{{font-size:10px;color:#64748B;margin-bottom:2px}}.card .v{{font-size:14px;font-weight:600;color:#0F172A;word-break:break-all}}
 .cta-box{{background:linear-gradient(135deg,#0F172A,#1E293B);color:#fff;padding:32px;border-radius:14px;text-align:center;margin-top:20px}}
-.btn-cta{{display:inline-block;padding:12px 28px;border-radius:8px;background:#F97316;color:#fff;font-weight:700;text-decoration:none;font-size:14px}}
+.btn-cta{{display:inline-block;padding:12px 28px;border-radius:8px;background:#5000B3;color:#fff;font-weight:700;text-decoration:none;font-size:14px}}
 .print-btn{{position:fixed;bottom:24px;right:24px;padding:12px 24px;border-radius:10px;background:#0F172A;color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:100;display:flex;align-items:center;gap:6px}}
 @media print{{
   .print-btn{{display:none!important}}
@@ -958,7 +1022,7 @@ h1,h2,h3{{font-family:'Space Grotesk',sans-serif}}
 
 <!-- HERO -->
 <div style="background:linear-gradient(135deg,#0F172A 0%,#1E293B 60%,#0F172A 100%);border-radius:20px;padding:48px 40px;margin-bottom:24px;position:relative;overflow:hidden;color:#fff">
-  <div style="position:absolute;top:-80px;right:-40px;width:280px;height:280px;border-radius:50%;background:rgba(249,115,22,.08)"></div>
+  <div style="position:absolute;top:-80px;right:-40px;width:280px;height:280px;border-radius:50%;background:rgba(80,0,179,.08)"></div>
   <div style="position:absolute;bottom:-100px;right:80px;width:200px;height:200px;border-radius:50%;background:rgba(100,116,139,.06)"></div>
   <div style="position:relative;z-index:1">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">
@@ -1052,7 +1116,7 @@ h1,h2,h3{{font-family:'Space Grotesk',sans-serif}}
 <!-- AI ANALYSIS -->
 <div class="sec">
   <div class="sec-title">AI Analysis</div>
-  <div style="padding:18px;border-radius:10px;background:#FAFAFA;border-left:4px solid #F97316;font-size:14px;line-height:1.7;color:#334155">{ai_analysis}</div>
+  <div style="padding:18px;border-radius:10px;background:#FAFAFA;border-left:4px solid #5000B3;font-size:14px;line-height:1.7;color:#334155">{ai_analysis}</div>
 </div>
 
 {'<div class="sec"><div class="sec-title">Demo Site Preview</div><p style="font-size:13px;color:#64748B;margin-bottom:12px">We built a modern demo website to show what an upgraded online presence could look like:</p><a href="' + demo_url + '" target="_blank" class="btn-cta">View Demo Site &rarr;</a></div>' if demo_url else ''}
