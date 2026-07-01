@@ -249,7 +249,7 @@ BASE_URL = os.getenv("BASE_URL", "https://leadempire.io")
 
 PLAN_PRICES = {
     "starter": {"amount": 0, "currency": "INR", "name": "Starter Plan"},
-    "growth":  {"amount": 4999.00, "currency": "INR", "name": "Growth Plan"},
+    "growth":  {"amount": 4.00, "currency": "INR", "name": "Growth Plan"},
     "agency":  {"amount": 9999.00, "currency": "INR", "name": "Agency Lifetime"},
 }
 
