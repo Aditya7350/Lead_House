@@ -52,7 +52,7 @@ function Root() {
           boxShadow:'0 8px 32px rgba(80,0,179,.28)',
           animation:'lhPop .5s cubic-bezier(.34,1.56,.64,1) both',
         }}>
-          <img src="/ai-lead-machine-logo.svg" alt="L"
+          <img src="/ai-logo.svg" alt="L"
             style={{width:48,height:48,objectFit:'contain'}}
             onError={e=>{e.target.style.display='none'; e.target.nextSibling.style.display='flex'}}
           />

@@ -182,3 +182,17 @@ def get_usage_summary(user_id):
         "emails":   {"used": usage["emails"],   "limit": limits["emails"]},
         "ai_chats": {"used": usage["ai_chats"], "limit": limits["ai_chats"]},
     }
+
+def get_remaining(user_id, action):
+    """How many of `action` the user has left this month. None = unlimited."""
+    plan = get_user_plan(user_id)
+    if plan == "expired":
+        return 0
+    if plan == "admin":
+        return None
+    limits = PLAN_LIMITS.get(plan, PLAN_LIMITS["trial"])
+    limit = limits.get(action)
+    if limit is None:
+        return None
+    usage = get_usage(user_id)
+    return max(0, limit - usage.get(action, 0))

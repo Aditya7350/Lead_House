@@ -19,6 +19,7 @@ from modules.site_builder import build_demo_site, build_pending_sites
 from modules.outreach import init_new_sequences, process_due_emails
 from modules.auth import get_user_by_email, create_user, verify_password, create_token, verify_token, setup_default_admin
 from modules.usage import check_limit, increment_usage, get_usage_summary, PLAN_INFO
+from modules.usage import check_limit, increment_usage, get_usage_summary, get_remaining, PLAN_INFO
 
 app = FastAPI(title="LeadEmpire", version="2.0")
 
@@ -74,11 +75,30 @@ def serve_checkout():
 app.mount("/assets", StaticFiles(directory="public/assets", html=False), name="assets")
 app.mount("/static", StaticFiles(directory="public/assets", html=False), name="static-assets")
 
-@app.get("/ai-lead-machine-logo.svg")
+@app.get("/ai-logo.svg")
 def serve_logo():
     from fastapi.responses import FileResponse
-    return FileResponse("public/ai-lead-machine-logo.svg")
+    return FileResponse("public/ai-logo.svg")
 
+@app.get("/privacy", response_class=HTMLResponse)
+def serve_privacy():
+    with open("public/privacy.html", "r", encoding="utf-8") as f:
+        return f.read()
+
+@app.get("/terms", response_class=HTMLResponse)
+def serve_terms():
+    with open("public/terms.html", "r", encoding="utf-8") as f:
+        return f.read()
+
+@app.get("/refund", response_class=HTMLResponse)
+def serve_refund():
+    with open("public/refund.html", "r", encoding="utf-8") as f:
+        return f.read()
+
+@app.get("/contact", response_class=HTMLResponse)
+def serve_contact():
+    with open("public/contact.html", "r", encoding="utf-8") as f:
+        return f.read()
 
 # =============================================
 # AUTH API
@@ -249,7 +269,7 @@ BASE_URL = os.getenv("BASE_URL", "https://leadempire.io")
 
 PLAN_PRICES = {
     "starter": {"amount": 0, "currency": "INR", "name": "Starter Plan"},
-    "growth":  {"amount": 4.00, "currency": "INR", "name": "Growth Plan"},
+    "growth":  {"amount": 4999.00, "currency": "INR", "name": "Growth Plan"},
     "agency":  {"amount": 9999.00, "currency": "INR", "name": "Agency Lifetime"},
 }
 
@@ -677,54 +697,85 @@ def list_activity(
 #     # Scrape in background so API responds immediately
 #     background.add_task(scrape_campaign, campaign)
 #     return {"success": True, "campaign": campaign, "message": f"Scraping {req.city}..."}
+# @app.post("/api/quick-scrape")
+# def quick_scrape(
+#     req: QuickScrapeRequest,
+#     background: BackgroundTasks,
+#     request: Request
+# ):
+#     # Get JWT token
+#     auth = request.headers.get("Authorization", "")
+#     token = auth.replace("Bearer ", "") if auth.startswith("Bearer ") else ""
+
+#     # Verify token
+#     payload = verify_token(token)
+#     if not payload:
+#         raise HTTPException(status_code=401, detail="Not authenticated")
+
+#     user_id = payload["user_id"]
+#     allowed,msg = check_limit(
+#     user_id,
+#     "leads"
+#     )
+
+#     if not allowed:
+#         raise HTTPException(
+#             403,
+#             msg
+#         )
+
+#     name = f"{req.niche}-{req.city}-{req.country_code}".lower()
+#     name = "".join(c if c.isalnum() or c == "-" else "-" for c in name)
+#     keywords = req.keywords or [req.niche]
+
+#     campaign = create_campaign(
+#         user_id,
+#         name,
+#         req.niche,
+#         keywords,
+#         req.city,
+#         req.country_code,
+#         radius_km=req.radius_km
+#     )
+
+#     background.add_task(scrape_campaign, campaign)
+
+#     return {
+#         "success": True,
+#         "campaign": campaign,
+#         "message": f"Scraping {req.city}..."
+#     }
+
 @app.post("/api/quick-scrape")
-def quick_scrape(
-    req: QuickScrapeRequest,
-    background: BackgroundTasks,
-    request: Request
-):
-    # Get JWT token
+def quick_scrape(req: QuickScrapeRequest, background: BackgroundTasks, request: Request):
     auth = request.headers.get("Authorization", "")
     token = auth.replace("Bearer ", "") if auth.startswith("Bearer ") else ""
-
-    # Verify token
     payload = verify_token(token)
     if not payload:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-
+        raise HTTPException(401, "Not authenticated")
     user_id = payload["user_id"]
-    allowed,msg = check_limit(
-    user_id,
-    "leads"
-    )
 
+    allowed, msg = check_limit(user_id, "leads")
     if not allowed:
-        raise HTTPException(
-            403,
-            msg
-        )
+        raise HTTPException(403, msg)
+
+    remaining = get_remaining(user_id, "leads")   # e.g. 10 left for a trial user
 
     name = f"{req.niche}-{req.city}-{req.country_code}".lower()
     name = "".join(c if c.isalnum() or c == "-" else "-" for c in name)
     keywords = req.keywords or [req.niche]
 
-    campaign = create_campaign(
-        user_id,
-        name,
-        req.niche,
-        keywords,
-        req.city,
-        req.country_code,
-        radius_km=req.radius_km
-    )
+    campaign = create_campaign(user_id, name, req.niche, keywords, req.city,
+                                req.country_code, radius_km=req.radius_km)
 
-    background.add_task(scrape_campaign, campaign)
+    def run_and_track():
+        new_count = scrape_campaign(campaign, max_new=remaining)
+        if new_count:
+            increment_usage(user_id, "leads", count=new_count)
 
-    return {
-        "success": True,
-        "campaign": campaign,
-        "message": f"Scraping {req.city}..."
-    }
+    background.add_task(run_and_track)
+    return {"success": True, "campaign": campaign,
+            "message": f"Scraping {req.city}... (up to {remaining} leads left this month)"} 
 
 # =============================================
 # API: SINGLE LEAD ACTIONS
@@ -760,18 +811,67 @@ def qualify_lead_api(lead_id: str, background: BackgroundTasks):
     return {"success": True, "message": f"Qualifying {lead['business_name']}..."}
 
 
+# @app.post("/api/leads/{lead_id}/build-demo")
+# def build_demo_api(lead_id: str, background: BackgroundTasks):
+#     lead = query_one("SELECT * FROM leads WHERE id=%s", (lead_id,))
+#     if not lead:
+#         raise HTTPException(404, "Lead not found")
+
+#     background.add_task(build_demo_site, lead)
+#     return {"success": True, "message": f"Building demo for {lead['business_name']}..."}
+
 @app.post("/api/leads/{lead_id}/build-demo")
-def build_demo_api(lead_id: str, background: BackgroundTasks):
+def build_demo_api(lead_id: str, background: BackgroundTasks, request: Request):
+    auth = request.headers.get("Authorization", "")
+    token = auth.replace("Bearer ", "") if auth.startswith("Bearer ") else ""
+    payload = verify_token(token)
+    if not payload:
+        raise HTTPException(401, "Not authenticated")
+    user_id = payload["user_id"]
+
+    allowed, msg = check_limit(user_id, "demos")
+    if not allowed:
+        raise HTTPException(403, msg)
+
     lead = query_one("SELECT * FROM leads WHERE id=%s", (lead_id,))
     if not lead:
         raise HTTPException(404, "Lead not found")
 
-    background.add_task(build_demo_site, lead)
+    def run_and_track():
+        result = build_demo_site(lead)
+        if result:
+            increment_usage(user_id, "demos")
+
+    background.add_task(run_and_track)
     return {"success": True, "message": f"Building demo for {lead['business_name']}..."}
 
+# @app.post("/api/leads/{lead_id}/send-email")
+# def send_email_api(lead_id: str, background: BackgroundTasks):
+#     lead = query_one("SELECT * FROM leads WHERE id=%s", (lead_id,))
+#     if not lead:
+#         raise HTTPException(404, "Lead not found")
+
+#     def do_send():
+#         from modules.outreach import start_sequence, process_due_emails
+#         start_sequence(lead)
+#         process_due_emails()
+
+#     background.add_task(do_send)
+#     return {"success": True, "message": f"Sending email to {lead['business_name']}..."}
 
 @app.post("/api/leads/{lead_id}/send-email")
-def send_email_api(lead_id: str, background: BackgroundTasks):
+def send_email_api(lead_id: str, background: BackgroundTasks, request: Request):
+    auth = request.headers.get("Authorization", "")
+    token = auth.replace("Bearer ", "") if auth.startswith("Bearer ") else ""
+    payload = verify_token(token)
+    if not payload:
+        raise HTTPException(401, "Not authenticated")
+    user_id = payload["user_id"]
+
+    allowed, msg = check_limit(user_id, "emails")
+    if not allowed:
+        raise HTTPException(403, msg)
+
     lead = query_one("SELECT * FROM leads WHERE id=%s", (lead_id,))
     if not lead:
         raise HTTPException(404, "Lead not found")
@@ -780,6 +880,7 @@ def send_email_api(lead_id: str, background: BackgroundTasks):
         from modules.outreach import start_sequence, process_due_emails
         start_sequence(lead)
         process_due_emails()
+        increment_usage(user_id, "emails")
 
     background.add_task(do_send)
     return {"success": True, "message": f"Sending email to {lead['business_name']}..."}
@@ -1027,7 +1128,7 @@ h1,h2,h3{{font-family:'Space Grotesk',sans-serif}}
   <div style="position:relative;z-index:1">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">
       <div style="display:flex;align-items:center;gap:12px">
-        <div style="width:40px;height:40px;border-radius:12px;overflow:hidden"><img src="/ai-lead-machine-logo.svg" style="width:40px;height:40px;border-radius:12px" /></div>
+        <div style="width:40px;height:40px;border-radius:12px;overflow:hidden"><img src="/ai-logo.png" style="width:40px;height:40px;border-radius:12px" /></div>
         <div><div style="font-size:15px;font-weight:700">LeadEmpire</div><div style="font-size:9px;color:#64748B;letter-spacing:.1em;text-transform:uppercase">Business Audit Report</div></div>
       </div>
       <div style="display:flex;align-items:center;gap:12px">

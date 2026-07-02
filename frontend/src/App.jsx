@@ -152,7 +152,7 @@ function LoginPage({ onLogin }) {
         <canvas ref={canvasRef} style={{position:'absolute',inset:0,width:'100%',height:'100%'}} />
         <div style={{position:'relative',zIndex:2}}>
           <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:48}}>
-            <img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style={{width:48,height:48,borderRadius:14,boxShadow:'0 8px 32px rgba(80,0,179,.3)'}} />
+            <img src="/ai-logo.png" alt="LeadEmpire" style={{width:48,height:48,borderRadius:14,boxShadow:'0 8px 32px rgba(80,0,179,.3)'}} />
             <div><h1 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:26,fontWeight:700}}>LeadEmpire</h1><span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:'#94A3B8'}}>ai-powered lead generation</span></div>
           </div>
           <h2 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:44,fontWeight:700,lineHeight:1.15,letterSpacing:'-.03em',marginBottom:20}}>Find leads.<br/>Build demos.<br/><em style={{fontStyle:'normal',background:'linear-gradient(135deg,#5000B3,#3D008A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Close clients.</em></h2>
@@ -345,7 +345,7 @@ function AIChatPage({ API, leads }) {
     <div style={{display:'grid',gridTemplateColumns:'1fr 280px',gap:20,height:'calc(100vh - 140px)'}}>
       <div style={{display:'flex',flexDirection:'column',background:'#FFFFFF',borderRadius:14,border:'1px solid #E2E8F0',overflow:'hidden',boxShadow:'0 2px 8px rgba(0,0,0,0.04)'}}>
         <div style={{padding:'16px 20px',borderBottom:'1px solid #F1F5F9',fontWeight:600,display:'flex',alignItems:'center',gap:8}}>
-          <img src="/ai-lead-machine-logo.svg" alt="L" style={{width:28,height:28,borderRadius:8}} />
+          <img src="/ai-lead-machine-logo.svg" alt="L" style={{width:40,height:40,borderRadius:15}} />
           <span>AI Assistant</span>
           {selectedLead && <span style={{fontSize:11,color:'#5000B3',fontWeight:500,padding:'2px 8px',background:'#F3E8FF',borderRadius:6}}>Lead selected</span>}
           <span style={{marginLeft:'auto',fontSize:11,color:'#94A3B8'}}>Powered by Claude</span>
@@ -422,7 +422,7 @@ function PricingPage({ onSelectPlan, currentPlan, trialDaysLeft }) {
     <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#F3E8FF 0%,#FFFFFF 50%,#FFF1E6 100%)',padding:'60px 24px'}}>
       <div style={{maxWidth:1100,margin:'0 auto',textAlign:'center'}}>
         <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:12,marginBottom:24}}>
-          <img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style={{width:44,height:44,borderRadius:12,boxShadow:'0 8px 32px rgba(80,0,179,.25)'}} />
+          <img src="/ai-logo.svg" alt="LeadEmpire" style={{width:44,height:44,borderRadius:12,boxShadow:'0 8px 32px rgba(80,0,179,.25)'}} />
           <span style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:24,fontWeight:700,color:'#0F172A'}}>LeadEmpire</span>
         </div>
 
@@ -1008,7 +1008,7 @@ const authHeaders = {
       </button>
       {sidebarOpen && <div className="sidebar-overlay show" onClick={()=>setSidebarOpen(false)} />}
       <aside className={`sidebar${collapsed?' collapsed':''}${sidebarOpen?' open':''}`}>
-        <div className="sidebar-logo"><img src="/ai-lead-machine-logo.svg" alt="LeadEmpire" style={{width:38,height:38,borderRadius:10,boxShadow:'0 4px 12px rgba(80,0,179,.25)'}} /><div><h1>LeadEmpire</h1><span className="sub">Build Your Empire, One Lead at a Time</span></div></div>
+        <div className="sidebar-logo"><img src="/ai-logo.svg" alt="LeadEmpire" style={{width:45,height:45,borderRadius:15,boxShadow:'0 4px 12px rgba(80,0,179,.25)'}} /><div><h1>LeadEmpire</h1><span className="sub">Build Your Empire, One Lead at a Time</span></div></div>
         <nav className="sidebar-nav">
           {NAV.map(group => (
             <div key={group.section} className="nav-group">

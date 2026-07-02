@@ -55,7 +55,74 @@ def get_place_details(place_id: str) -> dict:
     return res.get("result", {})
 
 
-def scrape_campaign(campaign: dict) -> int:
+# def scrape_campaign(campaign: dict) -> int:
+#     """Scrape leads for a single campaign. Returns count of new leads."""
+#     print(f"[Scraper] Running: {campaign['name']}")
+#     all_places = []
+#     keywords = campaign.get("keywords", [campaign["niche"]])
+
+#     for keyword in keywords:
+#         print(f"    Searching: \"{keyword}\" in {campaign['city']}, {campaign['country_code']}")
+#         places = search_places(keyword, campaign["city"], campaign["country_code"], campaign.get("radius_km", 25))
+#         all_places.extend(places)
+#         time.sleep(0.5)
+
+#     # Deduplicate by place_id
+#     unique = {}
+#     for p in all_places:
+#         pid = p.get("place_id")
+#         if pid and pid not in unique:
+#             unique[pid] = p
+
+#     print(f"    Found {len(unique)} unique businesses (from {len(all_places)} total)")
+
+#     new_count = 0
+#     for place_id, place in unique.items():
+#         try:
+#             existing = query("SELECT id FROM leads WHERE google_place_id = %s", (place_id,))
+#             if existing:
+#                 continue
+
+#             details = get_place_details(place_id)
+#             if not details or details.get("business_status") == "CLOSED_PERMANENTLY":
+#                 continue
+
+#             geo = details.get("geometry", {}).get("location", {})
+
+#             # FIX 1: Was 13 columns but only 12 values — campaign_id was listed but
+#             # the tuple started with user_id then skipped straight to place_id.
+#             # Corrected column order and all 13 matching values:
+#             execute("""
+#                 INSERT INTO leads (user_id, campaign_id, google_place_id, business_name, niche, phone,
+#                     website_url, address, city, country_code, latitude, longitude,
+#                     google_rating, review_count, status)
+#                 VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'new')
+#                 ON CONFLICT (google_place_id) DO NOTHING
+#             """, (
+#                 campaign.get("user_id"), campaign["id"], place_id, details.get("name", "Unknown"),
+#                 campaign["niche"], details.get("formatted_phone_number"),
+#                 details.get("website"), details.get("formatted_address"),
+#                 campaign["city"], campaign["country_code"],
+#                 geo.get("lat"), geo.get("lng"),
+#                 details.get("rating"), details.get("user_ratings_total", 0),
+#             ))
+
+#             execute("""
+#                 INSERT INTO activity_log (type, campaign_id, user_id, message, metadata)
+#                 VALUES ('scrape', %s, %s, %s, %s)
+#             """, (campaign["id"], campaign.get("user_id"), f"Found: {details.get('name', 'Unknown')}",
+#                   json.dumps({"place_id": place_id})))
+
+#             new_count += 1
+#             time.sleep(0.2)
+#         except Exception as e:
+#             print(f"    Error: {e}")
+
+#     execute("UPDATE campaigns SET last_run_at = now() WHERE id = %s", (campaign["id"],))
+#     print(f"    Stored {new_count} new leads")
+#     return new_count
+
+def scrape_campaign(campaign: dict, max_new: int = None) -> int:
     """Scrape leads for a single campaign. Returns count of new leads."""
     print(f"[Scraper] Running: {campaign['name']}")
     all_places = []
@@ -78,6 +145,9 @@ def scrape_campaign(campaign: dict) -> int:
 
     new_count = 0
     for place_id, place in unique.items():
+        if max_new is not None and new_count >= max_new:
+            print(f"    Reached plan limit ({max_new}) — stopping scrape.")
+            break
         try:
             existing = query("SELECT id FROM leads WHERE google_place_id = %s", (place_id,))
             if existing:
@@ -89,9 +159,6 @@ def scrape_campaign(campaign: dict) -> int:
 
             geo = details.get("geometry", {}).get("location", {})
 
-            # FIX 1: Was 13 columns but only 12 values — campaign_id was listed but
-            # the tuple started with user_id then skipped straight to place_id.
-            # Corrected column order and all 13 matching values:
             execute("""
                 INSERT INTO leads (user_id, campaign_id, google_place_id, business_name, niche, phone,
                     website_url, address, city, country_code, latitude, longitude,
