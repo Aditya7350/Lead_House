@@ -263,7 +263,7 @@ import hashlib
 
 CASHFREE_APP_ID = os.getenv("CASHFREE_APP_ID", "")
 CASHFREE_SECRET_KEY = os.getenv("CASHFREE_SECRET_KEY", "")
-CASHFREE_ENV = os.getenv("CASHFREE_ENV", "sandbox")  # "sandbox" or "production"
+CASHFREE_ENV = os.getenv("CASHFREE_ENV", "production")  # "sandbox" or "production"
 CASHFREE_API_URL = "https://api.cashfree.com/pg" if CASHFREE_ENV == "production" else "https://sandbox.cashfree.com/pg"
 BASE_URL = os.getenv("BASE_URL", "https://leadempire.io")
 
