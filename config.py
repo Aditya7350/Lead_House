@@ -21,7 +21,7 @@ DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "30"))
 # --- Database Pool ---
 # db_pool = pool.ThreadedConnectionPool(1, 10, DATABASE_URL)
 
-# db_pool = None
+db_pool = None
  
 def init_db():
     global db_pool
