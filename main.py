@@ -2,7 +2,7 @@
 AI Lead Machine — FastAPI Backend
 Run: uvicorn main:app --host 0.0.0.0 --port 3000 --reload
 """
-
+import os
 import json
 import threading
 from fastapi import FastAPI, BackgroundTasks, HTTPException, Request
