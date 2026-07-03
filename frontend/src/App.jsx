@@ -671,6 +671,7 @@ export default function App({ onReady }) {
   const [page, setPage] = useState('dashboard')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [pageKey, setPageKey] = useState(0)
+  const [navLoading, setNavLoading] = useState(false)
   const [stats, setStats] = useState({total_leads:0,qualified:0,demos_built:0,contacted:0,replied:0,emails_today:0})
   const [leads, setLeads] = useState([])
   const [activity, setActivity] = useState([])
@@ -763,7 +764,12 @@ const authHeaders = {
     }
   }, [leads.length, scrapeActive, scrapeInfo.prevCount])
 
-  const navigateTo = (id) => { setPage(id); setPageKey(k => k + 1); setSidebarOpen(false) }
+  // const navigateTo = (id) => { setPage(id); setPageKey(k => k + 1); setSidebarOpen(false) }
+  const navigateTo = (id) => {
+  setNavLoading(true)
+  setPage(id); setPageKey(k => k + 1); setSidebarOpen(false)
+  setTimeout(() => setNavLoading(false), 280)
+  }
 
   // if (!token || !user) return <LoginPage onLogin={setUser} />
   if (!token || !user) return <LoginPage onLogin={setUser} />
@@ -1056,7 +1062,14 @@ const authHeaders = {
         </div>
 
         <main style={{padding:'24px 28px'}}>
-
+      <div style={{
+        position: 'fixed', top: 0, left: 0, right: 0, height: 3, zIndex: 9999,
+        background: 'linear-gradient(90deg,#5000B3,#3D008A)',
+        width: navLoading ? '70%' : '0%',
+        opacity: navLoading ? 1 : 0,
+        transition: navLoading ? 'width .28s ease' : 'width .15s ease, opacity .3s ease .15s',
+        boxShadow: '0 0 8px rgba(80,0,179,.5)',
+      }} />      
         {/* DASHBOARD */}
         {page==='dashboard' && <div key={pageKey} className="page-content">
           {dataLoading ? <SkeletonStatCards /> : (
