@@ -72,8 +72,13 @@ def serve_checkout():
         return f.read()
 
 # Serve static files (images, CSS, JS) - AFTER route handlers
-app.mount("/assets", StaticFiles(directory="public/assets", html=False), name="assets")
-app.mount("/static", StaticFiles(directory="public/assets", html=False), name="static-assets")
+# app.mount("/assets", StaticFiles(directory="public/assets", html=False), name="assets")
+# app.mount("/static", StaticFiles(directory="public/assets", html=False), name="static-assets")
+
+if os.path.isdir("public/assets"):
+    app.mount("/assets", StaticFiles(directory="public/assets", html=False), name="assets")
+if os.path.isdir("public/assets"):
+    app.mount("/static", StaticFiles(directory="public/assets", html=False), name="static-assets")
 
 @app.get("/ai-logo.svg")
 def serve_logo():
