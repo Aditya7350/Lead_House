@@ -90,10 +90,10 @@ def serve_new_logo():
     from fastapi.responses import FileResponse
     return FileResponse("public/new-logo.png")
 
-@app.get("/page-loader.js")
-def serve_page_loader():
-    from fastapi.responses import FileResponse
-    return FileResponse("public\page-loader.js", media_type="application/javascript")
+# @app.get("/page-loader.js")
+# def serve_page_loader():
+#     from fastapi.responses import FileResponse
+#     return FileResponse("public/page-loader.js", media_type="application/javascript")
 
 @app.get("/privacy", response_class=HTMLResponse)
 def serve_privacy():
