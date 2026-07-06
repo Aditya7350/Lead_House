@@ -2,6 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MWS4PW6W');
+  </script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LeadEmpire — Turn Local Businesses Into Paying Clients</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +38,7 @@ a{text-decoration:none;color:inherit}
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);background:rgba(245,246,248,.88);border-bottom:1px solid var(--border)}
 .nav-logo{display:flex;align-items:center;gap:10px}
-.nav-logo-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--orange),var(--orange2));display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:15px;color:#fff;box-shadow:0 0 20px rgba(80,0,179,.3)}
+.nav-logo-mark{width:34px;height:42px;border-radius:9px;background:linear-gradient(135deg,var(--orange),var(--orange2));display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:15px;color:#fff;box-shadow:0 0 20px rgba(80,0,179,.3)}
 .nav-brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;color:#0F172A;letter-spacing:-.01em}
 .nav-links{display:flex;gap:28px;font-size:13px;color:var(--muted)}
 .nav-links a:hover{color:#0F172A;transition:.2s}
@@ -123,7 +130,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 5%;display:flex
 .step:last-child{border-radius:0 14px 14px 0}
 .step:hover{background:#F3E8FF;border-color:rgba(80,0,179,.3);z-index:1;transform:translateY(-4px);box-shadow:0 12px 32px rgba(80,0,179,.1)}
 .step-num{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--orange);letter-spacing:.1em;margin-bottom:16px}
-.step-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.step-icon{width:42px;height:52px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
 .step-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15px;color:#0F172A;margin-bottom:6px}
 .step-desc{font-size:12px;color:var(--muted);line-height:1.6}
 .step-connector{position:absolute;right:-2px;top:50%;transform:translateY(-50%);width:4px;height:4px;border-radius:50%;background:var(--orange);z-index:2}
@@ -210,14 +217,15 @@ footer{border-top:1px solid var(--border);padding:32px 5%;display:flex;align-ite
 }
 </style>
 </head>
-<!-- <script src="/page-loader.js"></script> -->
+<script src="/page-loader.js"></script>
 <body>
-
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MWS4PW6W"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-logo">
-    <img src="/ai-logo.svg" alt="LeadEmpire" style="width:40px;height:40px;border-radius:15px;object-fit:contain;">
-    <span class="nav-brand">LeadEmpire</span>
+    <img src="/new-logo.png" alt="LeadEmpire" style="height:45px;width:auto;display:block;">
   </div>
   <div class="nav-links">
     <a href="#how">How it works</a>
@@ -634,7 +642,8 @@ footer{border-top:1px solid var(--border);padding:32px 5%;display:flex;align-ite
   <div class="cta-blob"></div>
   <div style="position:relative;z-index:1">
     <div class="section-eyebrow" style="display:flex;justify-content:center;margin-bottom:16px">No credit card required</div>
-    <h2 class="cta-h2">Your next client is<br>already on Google Maps.</h2>
+    <h2 class="cta-h2">Your next client is<br>already on Google Map'
+      .</h2>
     <p class="cta-sub">Stop searching manually. Start in 60 seconds pick a niche, pick a city, and let LeadEmpire do the rest.</p>
     <div class="cta-actions">
       <a href="/app" class="hero-cta-main" style="font-size:15px;padding:16px 36px">
@@ -649,8 +658,7 @@ footer{border-top:1px solid var(--border);padding:32px 5%;display:flex;align-ite
 <!-- FOOTER -->
 <footer>
   <div class="footer-left">
-    <img src="/ai-logo.svg" alt="LeadEmpire" style="width:40px;height:40px;border-radius:15px;object-fit:contain;">
-    <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;color:#0F172A">LeadEmpire</span>
+    <img src="/new-logo.png" alt="LeadEmpire" style="height:30px;width:auto;display:block;">
     <span style="font-size:12px;color:#94A3B8">by IOWEB3 Technologies</span>
   </div>
   <div class="footer-links">
@@ -753,7 +761,7 @@ bentoCads.forEach((card, i) => {
     const navCta = document.querySelector('.nav-cta');
     if (navCta) {
       navCta.innerHTML = '<a href="/app" class="btn-ghost" style="display:flex;align-items:center;gap:8px">' +
-        '<span style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#5000B3,#3D008A);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">' + name.charAt(0).toUpperCase() + '</span>' +
+        '<span style="width:28px;height:32px;border-radius:50%;background:linear-gradient(135deg,#5000B3,#3D008A);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">' + name.charAt(0).toUpperCase() + '</span>' +
         name + '</a>' +
         '<a href="/app" class="btn-primary">Dashboard →</a>';
     }

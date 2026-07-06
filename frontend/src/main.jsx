@@ -46,24 +46,14 @@ function Root() {
       <div style={{position:'relative',zIndex:1,textAlign:'center'}}>
         {/* Logo */}
         <div style={{
-          width:72,height:72,borderRadius:20,margin:'0 auto 20px',
-          background:'linear-gradient(135deg,#5000B3,#3D008A)',
-          display:'flex',alignItems:'center',justifyContent:'center',
-          boxShadow:'0 8px 32px rgba(80,0,179,.28)',
+          margin:'0 auto 20px',
           animation:'lhPop .5s cubic-bezier(.34,1.56,.64,1) both',
         }}>
-          <img src="/ai-logo.svg" alt="L"
-            style={{width:48,height:48,objectFit:'contain'}}
-            onError={e=>{e.target.style.display='none'; e.target.nextSibling.style.display='flex'}}
+          <img src="/new-logo.png" alt="LeadEmpire"
+            style={{height:100,width:'auto',objectFit:'contain',display:'block'}}
           />
-          <span style={{display:'none',color:'#fff',fontSize:28,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif"}}>L</span>
         </div>
 
-        <div style={{fontFamily:"'Plus Jakarta Sans','Inter',sans-serif",fontSize:26,
-          fontWeight:800,color:'#0F172A',letterSpacing:'-.02em',marginBottom:5,
-          animation:'lhUp .4s ease .15s both'}}>
-          LeadEmpire
-        </div>
         <div style={{fontSize:13,color:'#94A3B8',marginBottom:32,
           animation:'lhUp .4s ease .25s both'}}>
           Build Your Empire, One Lead at a Time

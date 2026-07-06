@@ -80,10 +80,20 @@ if os.path.isdir("public/assets"):
 if os.path.isdir("public/assets"):
     app.mount("/static", StaticFiles(directory="public/assets", html=False), name="static-assets")
 
-@app.get("/ai-logo.svg")
-def serve_logo():
+# @app.get("/ai-logo.svg")
+# def serve_logo():
+#     from fastapi.responses import FileResponse
+#     return FileResponse("public/ai-logo.svg")\
+
+@app.get("/new-logo.png")
+def serve_new_logo():
     from fastapi.responses import FileResponse
-    return FileResponse("public/ai-logo.svg")
+    return FileResponse("public/new-logo.png")
+
+@app.get("/page-loader.js")
+def serve_page_loader():
+    from fastapi.responses import FileResponse
+    return FileResponse("public\page-loader.js", media_type="application/javascript")
 
 @app.get("/privacy", response_class=HTMLResponse)
 def serve_privacy():
@@ -1133,7 +1143,7 @@ h1,h2,h3{{font-family:'Space Grotesk',sans-serif}}
   <div style="position:relative;z-index:1">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">
       <div style="display:flex;align-items:center;gap:12px">
-        <div style="width:40px;height:40px;border-radius:12px;overflow:hidden"><img src="/ai-logo.png" style="width:40px;height:40px;border-radius:12px" /></div>
+        <div style="width:40px;height:40px;border-radius:12px;overflow:hidden"><img src="/new-logo.png" style="width:40px;height:40px;border-radius:12px" /></div>
         <div><div style="font-size:15px;font-weight:700">LeadEmpire</div><div style="font-size:9px;color:#64748B;letter-spacing:.1em;text-transform:uppercase">Business Audit Report</div></div>
       </div>
       <div style="display:flex;align-items:center;gap:12px">

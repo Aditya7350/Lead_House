@@ -152,8 +152,7 @@ function LoginPage({ onLogin }) {
         <canvas ref={canvasRef} style={{position:'absolute',inset:0,width:'100%',height:'100%'}} />
         <div style={{position:'relative',zIndex:2}}>
           <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:48}}>
-            <img src="/ai-logo.png" alt="LeadEmpire" style={{width:48,height:48,borderRadius:14,boxShadow:'0 8px 32px rgba(80,0,179,.3)'}} />
-            <div><h1 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:26,fontWeight:700}}>LeadEmpire</h1><span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:'#94A3B8'}}>ai-powered lead generation</span></div>
+            <img src="/new-logo.png" alt="LeadEmpire" style={{height:52,width:'auto',objectFit:'contain',display:'block'}} />
           </div>
           <h2 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:44,fontWeight:700,lineHeight:1.15,letterSpacing:'-.03em',marginBottom:20}}>Find leads.<br/>Build demos.<br/><em style={{fontStyle:'normal',background:'linear-gradient(135deg,#5000B3,#3D008A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Close clients.</em></h2>
           <p style={{fontSize:16,color:'#CBD5E1',lineHeight:1.7,maxWidth:440}}>LeadEmpire discovers businesses, qualifies them, builds demo websites, and sends personalized outreach — all on autopilot.</p>
@@ -257,7 +256,7 @@ function LeadCard({ lead, onAction, loading }) {
         {pct != null ? (
           <div style={{display:'flex',alignItems:'center',gap:14}}>
             {/* Circular score */}
-            <div style={{position:'relative',width:48,height:48,flexShrink:0}}>
+            <div style={{position:'relative',width:48,height:52,flexShrink:0}}>
               <svg width="48" height="48" viewBox="0 0 48 48">
                 <circle cx="24" cy="24" r="20" fill="none" stroke="#F1F5F9" strokeWidth="4"/>
                 <circle cx="24" cy="24" r="20" fill="none" stroke={badge.color} strokeWidth="4" strokeLinecap="round"
@@ -278,7 +277,7 @@ function LeadCard({ lead, onAction, loading }) {
           </div>
         ) : (
           <div style={{display:'flex',alignItems:'center',gap:10}}>
-            <div style={{width:48,height:48,borderRadius:'50%',border:'3px dashed #E2E8F0',display:'flex',alignItems:'center',justifyContent:'center',fontSize:16,color:'#CBD5E1',flexShrink:0}}>?</div>
+            <div style={{width:48,height:52,borderRadius:'50%',border:'3px dashed #E2E8F0',display:'flex',alignItems:'center',justifyContent:'center',fontSize:16,color:'#CBD5E1',flexShrink:0}}>?</div>
             <div><div style={{fontSize:12,fontWeight:600,color:'#94A3B8'}}>Not scored yet</div><div style={{fontSize:10,color:'#CBD5E1'}}>Run AI Analysis to get a lead score</div></div>
           </div>
         )}
@@ -345,7 +344,7 @@ function AIChatPage({ API, leads }) {
     <div style={{display:'grid',gridTemplateColumns:'1fr 280px',gap:20,height:'calc(100vh - 140px)'}}>
       <div style={{display:'flex',flexDirection:'column',background:'#FFFFFF',borderRadius:14,border:'1px solid #E2E8F0',overflow:'hidden',boxShadow:'0 2px 8px rgba(0,0,0,0.04)'}}>
         <div style={{padding:'16px 20px',borderBottom:'1px solid #F1F5F9',fontWeight:600,display:'flex',alignItems:'center',gap:8}}>
-          <img src="/ai-lead-machine-logo.svg" alt="L" style={{width:40,height:40,borderRadius:15}} />
+          <img src="/new-logo.png" alt="LeadEmpire" style={{height:32,width:'auto',objectFit:'contain',display:'block'}} />
           <span>AI Assistant</span>
           {selectedLead && <span style={{fontSize:11,color:'#5000B3',fontWeight:500,padding:'2px 8px',background:'#F3E8FF',borderRadius:6}}>Lead selected</span>}
           <span style={{marginLeft:'auto',fontSize:11,color:'#94A3B8'}}>Powered by Claude</span>
@@ -422,7 +421,7 @@ function PricingPage({ onSelectPlan, currentPlan, trialDaysLeft }) {
     <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#F3E8FF 0%,#FFFFFF 50%,#FFF1E6 100%)',padding:'60px 24px'}}>
       <div style={{maxWidth:1100,margin:'0 auto',textAlign:'center'}}>
         <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:12,marginBottom:24}}>
-          <img src="/ai-logo.svg" alt="LeadEmpire" style={{width:44,height:44,borderRadius:12,boxShadow:'0 8px 32px rgba(80,0,179,.25)'}} />
+          <img src="/new-logo.png" alt="LeadEmpire" style={{height:48,width:'auto',objectFit:'contain',display:'block'}} />
           <span style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:24,fontWeight:700,color:'#0F172A'}}>LeadEmpire</span>
         </div>
 
@@ -1014,7 +1013,7 @@ const authHeaders = {
       </button>
       {sidebarOpen && <div className="sidebar-overlay show" onClick={()=>setSidebarOpen(false)} />}
       <aside className={`sidebar${collapsed?' collapsed':''}${sidebarOpen?' open':''}`}>
-        <div className="sidebar-logo"><img src="/ai-logo.svg" alt="LeadEmpire" style={{width:45,height:45,borderRadius:15,boxShadow:'0 4px 12px rgba(80,0,179,.25)'}} /><div><h1>LeadEmpire</h1><span className="sub">Build Your Empire, One Lead at a Time</span></div></div>
+        <div className="sidebar-logo"><img src="/new-logo.png" alt="LeadEmpire" style={{height:46,width:'auto',objectFit:'contain',display:'block'}} /></div>
         <nav className="sidebar-nav">
           {NAV.map(group => (
             <div key={group.section} className="nav-group">
@@ -1091,7 +1090,7 @@ const authHeaders = {
               <div key={s.l} className="stat-card">
                 <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:10}}>
                   <span style={{fontSize:12,color:'#475569',fontWeight:500}}>{s.l}</span>
-                  <span style={{color:s.c,width:28,height:28,borderRadius:6,display:'flex',alignItems:'center',justifyContent:'center',background:s.bg}}>{s.ico}</span>
+                  <span style={{color:s.c,width:28,height:32,borderRadius:6,display:'flex',alignItems:'center',justifyContent:'center',background:s.bg}}>{s.ico}</span>
                 </div>
                 <div className="stat-value" style={{color:'#0F172A'}}>{s.v}</div>
               </div>
@@ -1145,7 +1144,7 @@ const authHeaders = {
               {icon:'4',label:'Outreach',desc:'Send emails',color:'#10B981'},
             ].map((s,i)=>(
               <div key={i} style={{textAlign:'center',padding:'14px 8px',borderRadius:12,background:i===0?'#F3E8FF':'#F8FAFC',border:i===0?'1.5px solid #D8B4FE':'1px solid #E2E8F0',transition:'all .2s'}}>
-                <div style={{width:28,height:28,borderRadius:'50%',background:i===0?'#5000B3':s.color||'#94A3B8',color:'#fff',fontSize:12,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 6px'}}>{s.icon}</div>
+                <div style={{width:28,height:32,borderRadius:'50%',background:i===0?'#5000B3':s.color||'#94A3B8',color:'#fff',fontSize:12,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 6px'}}>{s.icon}</div>
                 <div style={{fontSize:12,fontWeight:700,color:i===0?'#3D008A':'#0F172A'}}>{s.label}</div>
                 <div style={{fontSize:10,color:'#94A3B8'}}>{s.desc}</div>
               </div>
@@ -1261,11 +1260,11 @@ const authHeaders = {
             <button
               className="btn btn-sm"
               onClick={()=>setShowFilters(!showFilters)}
-              style={{height:38,padding:'0 14px',background:showFilters||activeFilterCount?'#0F172A':'#fff',color:showFilters||activeFilterCount?'#fff':'#64748B',border:'1px solid #E2E8F0',fontWeight:600,fontSize:12,display:'flex',alignItems:'center',gap:6}}
+              style={{height:46,padding:'0 14px',background:showFilters||activeFilterCount?'#0F172A':'#fff',color:showFilters||activeFilterCount?'#fff':'#64748B',border:'1px solid #E2E8F0',fontWeight:600,fontSize:12,display:'flex',alignItems:'center',gap:6}}
             >
               Filters {activeFilterCount > 0 && <span style={{background:'#5000B3',color:'#fff',borderRadius:10,padding:'1px 7px',fontSize:10,fontWeight:700}}>{activeFilterCount}</span>}
             </button>
-            <select value={sortBy} onChange={e=>setSortBy(e.target.value)} style={{height:38,padding:'0 12px',borderRadius:8,border:'1px solid #E2E8F0',fontSize:12,color:'#334155',background:'#fff',cursor:'pointer'}}>
+            <select value={sortBy} onChange={e=>setSortBy(e.target.value)} style={{height:46,padding:'0 12px',borderRadius:8,border:'1px solid #E2E8F0',fontSize:12,color:'#334155',background:'#fff',cursor:'pointer'}}>
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
               <option value="score">Highest Score</option>
@@ -1339,7 +1338,7 @@ const authHeaders = {
         {page==='demos' && <div>
           <p style={{fontSize:13,color:'#64748B',marginBottom:20}}>All generated demo websites for your leads.</p>
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(340px,1fr))',gap:16}}>
-            {demoLeads.map((l,i)=><div key={l.id||i} className="card"><div style={{padding:18,display:'flex',alignItems:'center',gap:14}}><div style={{width:44,height:44,borderRadius:10,background:'linear-gradient(135deg,rgba(80,0,179,.15),rgba(61,0,138,.15))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,fontWeight:700,color:'#5000B3'}}>D</div><div style={{flex:1}}><div style={{fontSize:14,fontWeight:600,color:'#0F172A'}}>{l.business_name}</div><div style={{fontSize:12,color:'#64748B'}}>{l.niche} · {l.city}</div></div><a href={l.demo_site_url} target="_blank" rel="noreferrer" className="btn btn-sm btn-primary">View ↗</a></div></div>)}
+            {demoLeads.map((l,i)=><div key={l.id||i} className="card"><div style={{padding:18,display:'flex',alignItems:'center',gap:14}}><div style={{width:44,height:48,borderRadius:10,background:'linear-gradient(135deg,rgba(80,0,179,.15),rgba(61,0,138,.15))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,fontWeight:700,color:'#5000B3'}}>D</div><div style={{flex:1}}><div style={{fontSize:14,fontWeight:600,color:'#0F172A'}}>{l.business_name}</div><div style={{fontSize:12,color:'#64748B'}}>{l.niche} · {l.city}</div></div><a href={l.demo_site_url} target="_blank" rel="noreferrer" className="btn btn-sm btn-primary">View ↗</a></div></div>)}
           </div>
           {demoLeads.length===0&&<div style={{padding:60,textAlign:'center',color:'#64748B'}}>No demo sites yet. Qualify leads and build demos.</div>}
         </div>}
@@ -1384,7 +1383,7 @@ const authHeaders = {
                 return (
                   <div key={l.id} style={{display:'flex',alignItems:'center',gap:16,padding:'16px 20px',background:'#fff',borderRadius:12,border:'1px solid #E2E8F0'}}>
                     {/* Score circle */}
-                    <div style={{position:'relative',width:44,height:44,flexShrink:0}}>
+                    <div style={{position:'relative',width:44,height:48,flexShrink:0}}>
                       <svg width="44" height="44" viewBox="0 0 44 44">
                         <circle cx="22" cy="22" r="18" fill="none" stroke="#F1F5F9" strokeWidth="4"/>
                         <circle cx="22" cy="22" r="18" fill="none" stroke={badge.color} strokeWidth="4" strokeLinecap="round"
