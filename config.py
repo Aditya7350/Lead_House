@@ -7,8 +7,8 @@ from contextlib import contextmanager
 
 load_dotenv()
 # --- Environment ---
-# DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/ai_lead_machine")
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/ai_lead_machine")
+# DATABASE_URL = os.getenv("DATABASE_URL")
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY", "")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
@@ -19,43 +19,43 @@ PORT = int(os.getenv("PORT", "3000"))
 DAILY_EMAIL_LIMIT = int(os.getenv("DAILY_EMAIL_LIMIT", "30"))
 
 # --- Database Pool ---
-# db_pool = pool.ThreadedConnectionPool(1, 10, DATABASE_URL)
+db_pool = pool.ThreadedConnectionPool(1, 10, DATABASE_URL)
 
-db_pool = None
+# db_pool = None
  
-def init_db():
-    global db_pool
-    if db_pool is None:
-        db_pool = pool.ThreadedConnectionPool(
-            minconn=1,
-            maxconn=10,
-            dsn=DATABASE_URL
-        )
-@contextmanager
-def get_db():
-    global db_pool
- 
-    if db_pool is None:
-        init_db()
- 
-    conn = db_pool.getconn()
-    conn.autocommit = True
- 
-    try:
-        yield conn
-    finally:
-        db_pool.putconn(conn)
-
-
+# def init_db():
+#     global db_pool
+#     if db_pool is None:
+#         db_pool = pool.ThreadedConnectionPool(
+#             minconn=1,
+#             maxconn=10,
+#             dsn=DATABASE_URL
+#         )
 # @contextmanager
 # def get_db():
-#     """Get a database connection from the pool."""
+#     global db_pool
+ 
+#     if db_pool is None:
+#         init_db()
+ 
 #     conn = db_pool.getconn()
 #     conn.autocommit = True
+ 
 #     try:
 #         yield conn
 #     finally:
 #         db_pool.putconn(conn)
+
+
+@contextmanager
+def get_db():
+    """Get a database connection from the pool."""
+    conn = db_pool.getconn()
+    conn.autocommit = True
+    try:
+        yield conn
+    finally:
+        db_pool.putconn(conn)
 
 
 def query(sql, params=None):

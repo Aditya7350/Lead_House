@@ -155,7 +155,7 @@ function LoginPage({ onLogin }) {
             <img src="/new-logo.png" alt="LeadEmpire" style={{height:52,width:'auto',objectFit:'contain',display:'block'}} />
           </div>
           <h2 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:44,fontWeight:700,lineHeight:1.15,letterSpacing:'-.03em',marginBottom:20}}>Find leads.<br/>Build demos.<br/><em style={{fontStyle:'normal',background:'linear-gradient(135deg,#5000B3,#3D008A)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Close clients.</em></h2>
-          <p style={{fontSize:16,color:'#CBD5E1',lineHeight:1.7,maxWidth:440}}>LeadEmpire discovers businesses, qualifies them, builds demo websites, and sends personalized outreach — all on autopilot.</p>
+          <p style={{fontSize:16,color:'#CBD5E1',lineHeight:1.7,maxWidth:440}}>LeadEmpire discovers businesses, qualifies them, builds demo websites, and sends personalized outreach all on autopilot.</p>
         </div>
       </div>
       <div className="login-form-side">
@@ -700,7 +700,17 @@ export default function App({ onReady }) {
 
   // Dismiss splash as soon as component mounts
   useEffect(() => { if (onReady) onReady() }, [])
-
+  useEffect(() => {
+    const handlePopState = (e) => {
+      if (e.state && e.state.page) {
+        setPage(e.state.page)
+        setPageKey(k => k + 1)
+      }
+    }
+    window.addEventListener('popstate', handlePopState)
+    window.history.replaceState({ page: 'dashboard' }, '', '/app?p=dashboard')
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])  
   // const fetchAll = useCallback(async () => {
   //   try {
   //     const [s,l,a,c] = await Promise.all([
@@ -765,9 +775,8 @@ const authHeaders = {
 
   // const navigateTo = (id) => { setPage(id); setPageKey(k => k + 1); setSidebarOpen(false) }
   const navigateTo = (id) => {
-  setNavLoading(true)
   setPage(id); setPageKey(k => k + 1); setSidebarOpen(false)
-  setTimeout(() => setNavLoading(false), 280)
+  window.history.pushState({ page: id }, '', '/app?p=' + id)
   }
 
   // if (!token || !user) return <LoginPage onLogin={setUser} />
@@ -1352,7 +1361,7 @@ const authHeaders = {
 
         {/* CAMPAIGNS */}
         {page==='campaigns' && <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))',gap:14}}>
-          {campaigns.map((c,i)=><div key={c.id||i} className="card"><div className="card-body"><div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}><div style={{display:'flex',alignItems:'center',gap:8}}><span style={{width:8,height:8,borderRadius:'50%',background:c.status==='active'?'#10b981':'#475569',display:'inline-block'}}/><span style={{fontSize:14,fontWeight:600,fontFamily:"'Space Grotesk',sans-serif"}}>{c.name}</span></div><span className="badge" style={{color:c.status==='active'?'#10b981':'#64748b',background:c.status==='active'?'#0a3d2e':'#1e293b'}}>{c.status}</span></div><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,fontSize:12,color:'#64748B'}}><div><span style={{color:'#64748B'}}>Niche:</span> {c.niche}</div><div><span style={{color:'#64748B'}}>City:</span> {c.city}</div><div><span style={{color:'#64748B'}}>Country:</span> {c.country_code}</div><div><span style={{color:'#64748B'}}>Keywords:</span> {(c.keywords||[]).length}</div></div></div></div>)}
+          {campaigns.map((c,i)=><div key={c.id||i} className="card" style={{background:c.status==='active'?'#0F172A':'#fff',color:c.status==='active'?'#fff':'#0F172A',border:c.status==='active'?'1px solid #1E293B':'1px solid #E2E8F0'}}><div className="card-body"><div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}><div style={{display:'flex',alignItems:'center',gap:8}}><span style={{width:8,height:8,borderRadius:'50%',background:c.status==='active'?'#10B981':'#475569',display:'inline-block'}}/><span style={{fontSize:14,fontWeight:600,fontFamily:"'Space Grotesk',sans-serif"}}>{c.name}</span></div><span className="badge" style={{color:'#fff',background:c.status==='active'?'#10B981':'#475569',fontSize:11,padding:'3px 10px',borderRadius:6}}>{c.status}</span></div><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,fontSize:12,color:c.status==='active'?'#CBD5E1':'#64748B'}}><div><span style={{color:c.status==='active'?'#94A3B8':'#64748B'}}>Niche:</span> {c.niche}</div><div><span style={{color:c.status==='active'?'#94A3B8':'#64748B'}}>City:</span> {c.city}</div><div><span style={{color:c.status==='active'?'#94A3B8':'#64748B'}}>Country:</span> {c.country_code}</div><div><span style={{color:c.status==='active'?'#94A3B8':'#64748B'}}>Keywords:</span> {(c.keywords||[]).length}</div></div></div></div>)}
           {campaigns.length===0&&<div style={{padding:48,textAlign:'center',color:'#64748B'}}>No campaigns yet. Search for leads to create one.</div>}
         </div>}
 

@@ -65,6 +65,10 @@ def serve_dashboard():
 def serve_login():
     with open("public/login.html", "r", encoding="utf-8") as f:
         return f.read()
+@app.get("/page-loader.js")
+def serve_page_loader():
+    from fastapi.responses import FileResponse
+    return FileResponse("public/page-loader.js", media_type="application/javascript")
 
 @app.get("/checkout", response_class=HTMLResponse)
 def serve_checkout():
@@ -74,11 +78,6 @@ def serve_checkout():
 # Serve static files (images, CSS, JS) - AFTER route handlers
 app.mount("/assets", StaticFiles(directory="public/assets", html=False), name="assets")
 app.mount("/static", StaticFiles(directory="public/assets", html=False), name="static-assets")
-
-# if os.path.isdir("public/assets"):
-#     app.mount("/assets", StaticFiles(directory="public/assets", html=False), name="assets")
-# if os.path.isdir("public/assets"):
-#     app.mount("/static", StaticFiles(directory="public/assets", html=False), name="static-assets")
 
 # @app.get("/ai-logo.svg")
 # def serve_logo():
@@ -90,10 +89,10 @@ def serve_new_logo():
     from fastapi.responses import FileResponse
     return FileResponse("public/new-logo.png")
 
-# @app.get("/page-loader.js")
-# def serve_page_loader():
-#     from fastapi.responses import FileResponse
-#     return FileResponse("public/page-loader.js", media_type="application/javascript")
+@app.get("/page-loader.js")
+def serve_page_loader():
+    from fastapi.responses import FileResponse
+    return FileResponse("public/page-loader.js", media_type="application/javascript")
 
 @app.get("/privacy", response_class=HTMLResponse)
 def serve_privacy():
@@ -114,6 +113,21 @@ def serve_refund():
 def serve_contact():
     with open("public/contact.html", "r", encoding="utf-8") as f:
         return f.read()
+    
+@app.get("/faq", response_class=HTMLResponse)
+def serve_faq():
+    with open("public/faq.html", "r", encoding="utf-8") as f:
+        return f.read()
+    
+@app.get("/robots.txt")
+def serve_robots():
+    from fastapi.responses import FileResponse
+    return FileResponse("public/robots.txt", media_type="text/plain")
+
+@app.get("/sitemap.xml")
+def serve_sitemap():
+    from fastapi.responses import FileResponse
+    return FileResponse("public/sitemap.xml", media_type="application/xml")
 
 # =============================================
 # AUTH API
@@ -127,15 +141,6 @@ class RegisterRequest(BaseModel):
     email: str
     password: str
     name: str = ""
-
-# def get_current_user(request: Request):
-#     auth = request.headers.get("Authorization", "")
-#     token = auth.replace("Bearer ", "") if auth.startswith("Bearer ") else ""
-
-#     payload = verify_token(token)
-
-#     if not payload:
-#         raise HTTPException(401, "Unauthorized")
 
 #     return payload["user_id"]
 def get_current_user(request: Request):
