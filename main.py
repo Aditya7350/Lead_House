@@ -114,10 +114,10 @@ def serve_contact():
     with open("public/contact.html", "r", encoding="utf-8") as f:
         return f.read()
     
-@app.get("/faq", response_class=HTMLResponse)
-def serve_faq():
-    with open("public/FAQ.html", "r", encoding="utf-8") as f:
-        return f.read()
+# @app.get("/faq", response_class=HTMLResponse)
+# def serve_faq():
+#     with open("public/FAQ.html", "r", encoding="utf-8") as f:
+#         return f.read()
     
 @app.get("/robots.txt")
 def serve_robots():
