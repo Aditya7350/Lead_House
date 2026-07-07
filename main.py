@@ -116,7 +116,7 @@ def serve_contact():
     
 @app.get("/faq", response_class=HTMLResponse)
 def serve_faq():
-    with open("public/faq.html", "r", encoding="utf-8") as f:
+    with open("public/FAQ.html", "r", encoding="utf-8") as f:
         return f.read()
     
 @app.get("/robots.txt")
