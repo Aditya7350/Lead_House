@@ -70,6 +70,70 @@ function timeAgo(iso) {
 function getEmail(l) { if(l.email) return l.email; try { return "info@" + new URL(l.website_url).hostname.replace("www.","") } catch(e) { return "" } }
 function getHost(u) { try { return new URL(u).hostname } catch(e) { return "" } }
 
+
+function EmailQuickAdd({ leadId, onSaved }) {
+  const [val, setVal] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [focused, setFocused] = useState(false)
+
+  const save = async () => {
+    if (!val.trim()) return
+    setSaving(true)
+    try {
+      await fetch(API+'/api/leads/'+leadId+'/email', {
+        method:'PATCH',
+        headers:{'Content-Type':'application/json', Authorization:`Bearer ${localStorage.getItem('token')}`},
+        body: JSON.stringify({ email: val.trim() })
+      })
+      if (onSaved) onSaved()
+    } finally { setSaving(false) }
+  }
+
+  return (
+    <div style={{
+      marginTop:12, padding:'12px 14px', borderRadius:12,
+      background:'#FAF5FF', border:'1px solid #E9D5FF',
+      display:'flex', alignItems:'center', gap:10,
+    }}>
+      <span style={{fontSize:16, flexShrink:0, color:'#7C3AED'}}>✉</span>
+      <div style={{flex:1, minWidth:0}}>
+        <div style={{fontSize:11, fontWeight:600, color:'#7C3AED', marginBottom:4}}>
+          No email on file — add one to enable outreach
+        </div>
+        <div style={{display:'flex', gap:8}}>
+          <input
+            value={val}
+            onChange={e=>setVal(e.target.value)}
+            onFocus={()=>setFocused(true)}
+            onBlur={()=>setFocused(false)}
+            onKeyDown={e=>{ if(e.key==='Enter') save() }}
+            placeholder="name@business.com"
+            style={{
+              flex:1, fontSize:12.5, padding:'8px 10px', borderRadius:8,
+              border: focused ? '1px solid #7C3AED' : '1px solid #E2E8F0',
+              boxShadow: focused ? '0 0 0 3px rgba(124,58,237,.12)' : 'none',
+              outline:'none', background:'#fff', color:'#0F172A',
+              transition:'border .15s, box-shadow .15s',
+            }}
+          />
+          <button
+            onClick={save}
+            disabled={saving || !val.trim()}
+            style={{
+              padding:'8px 16px', borderRadius:8, border:'none',
+              background: saving || !val.trim() ? '#D8B4FE' : 'linear-gradient(135deg,#8B5CF6,#7C3AED)',
+              color:'#fff', fontSize:12, fontWeight:600, cursor: val.trim() ? 'pointer' : 'default',
+              flexShrink:0, transition:'background .15s',
+            }}
+          >
+            {saving ? <span className="spinner" /> : 'Save'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ============ LOGIN PAGE ============
 function LoginPage({ onLogin }) {
   const [email, setEmail] = useState('')
@@ -301,6 +365,10 @@ function LeadCard({ lead, onAction, loading }) {
         {score != null && <a href={API+'/report/'+lead.id} target="_blank" rel="noreferrer" className="btn btn-sm" style={{background:'#0F172A',color:'#fff',border:'none',flex:1,textDecoration:'none',justifyContent:'center',fontWeight:600,fontSize:11}}>Report</a>}
         {lead.demo_site_url && <a href={API+'/portal/'+lead.id} target="_blank" rel="noreferrer" className="btn btn-sm" style={{color:'#5000B3',background:'#F3E8FF',border:'1px solid #D8B4FE',flex:1,textDecoration:'none',justifyContent:'center',fontWeight:600,fontSize:11}}>Portal</a>}
       </div>
+      {/* Missing email — inline quick-add, only when outreach is otherwise available */}
+      {canE && !lead.email && (
+        <EmailQuickAdd leadId={lead.id} onSaved={onAction ? () => onAction(lead.id, 'refresh') : undefined} />
+      )}
     </div>
   )
 }
@@ -345,9 +413,9 @@ function AIChatPage({ API, leads }) {
       <div style={{display:'flex',flexDirection:'column',background:'#FFFFFF',borderRadius:14,border:'1px solid #E2E8F0',overflow:'hidden',boxShadow:'0 2px 8px rgba(0,0,0,0.04)'}}>
         <div style={{padding:'16px 20px',borderBottom:'1px solid #F1F5F9',fontWeight:600,display:'flex',alignItems:'center',gap:8}}>
           <img src="/new-logo.png" alt="LeadEmpire" style={{height:32,width:'auto',objectFit:'contain',display:'block'}} />
-          <span>AI Assistant</span>
+          <span></span>
           {selectedLead && <span style={{fontSize:11,color:'#5000B3',fontWeight:500,padding:'2px 8px',background:'#F3E8FF',borderRadius:6}}>Lead selected</span>}
-          <span style={{marginLeft:'auto',fontSize:11,color:'#94A3B8'}}>Powered by Claude</span>
+          <span style={{marginLeft:'auto',fontSize:11,color:'#94A3B8'}}>SCOUT</span>
         </div>
         <div style={{flex:1,overflowY:'auto',padding:20,display:'flex',flexDirection:'column',gap:12}}>
           {messages.map(function(m, i) {
@@ -731,18 +799,30 @@ const fetchAll = useCallback(async () => {
   const headers = { Authorization: `Bearer ${token}` };
 
   try {
-    const [sRes,lRes,aRes,cRes] = await Promise.all([
-      fetch(API+"/api/stats",{headers}),
-      fetch(API+"/api/leads?limit=100",{headers}),
-      fetch(API+"/api/activity?limit=30",{headers}),
-      fetch(API+"/api/campaigns",{headers}),
-    ]);
+  const [sRes,lRes,aRes,cRes] = await Promise.all([
+    fetch(API+"/api/stats",{headers}),
+    fetch(API+"/api/leads?limit=100",{headers}),
+    fetch(API+"/api/activity?limit=30",{headers}),
+    fetch(API+"/api/campaigns",{headers}),
+  ]);
 
-    setStats(await sRes.json());
-    setLeads(await lRes.json());
-    setActivity(await aRes.json());
-    setCampaigns(await cRes.json());
-    setConnected(true);
+  // If the session is invalid/expired, bounce to login instead of crashing
+  if ([sRes, lRes, aRes, cRes].some(r => r.status === 401)) {
+    localStorage.removeItem('token');
+    setUser(null);
+    return;
+  }
+
+  const statsData = await sRes.json();
+  const leadsData = await lRes.json();
+  const activityData = await aRes.json();
+  const campaignsData = await cRes.json();
+
+  setStats(statsData);
+  setLeads(Array.isArray(leadsData) ? leadsData : []);
+  setActivity(Array.isArray(activityData) ? activityData : []);
+  setCampaigns(Array.isArray(campaignsData) ? campaignsData : []);
+  setConnected(true);
 
     // Fetch usage separately so it doesn't break main data loading
     try {
@@ -898,7 +978,33 @@ const authHeaders = {
     setScraping(false)
   }
 
-  const leadAction=async(id,act)=>{setActionLoading(p=>({...p,[id+act]:true}));try{const r=await fetch(API+'/api/leads/'+id+'/'+act,{method:'POST', headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}});if(r.status===403){setShowPricing(true);setActionLoading(p=>({...p,[id+act]:false}));return}setTimeout(fetchAll,3000);setTimeout(fetchAll,8000)}catch{};setTimeout(()=>setActionLoading(p=>({...p,[id+act]:false})),10000)}
+  // const leadAction=async(id,act)=>{setActionLoading(p=>({...p,[id+act]:true}));try{const r=await fetch(API+'/api/leads/'+id+'/'+act,{method:'POST', headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}});if(r.status===403){setShowPricing(true);setActionLoading(p=>({...p,[id+act]:false}));return}setTimeout(fetchAll,3000);setTimeout(fetchAll,8000)}catch{};setTimeout(()=>setActionLoading(p=>({...p,[id+act]:false})),10000)}
+  const [actionMsg, setActionMsg] = useState('')  // add near your other useState lines, e.g. after line 687
+
+  const leadAction = async (id, act) => {
+    setActionLoading(p => ({...p, [id+act]: true}))
+    try {
+      const r = await fetch(API+'/api/leads/'+id+'/'+act, {
+        method:'POST',
+        headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}
+      })
+      if (r.status === 403) {
+        setShowPricing(true); setActionLoading(p=>({...p,[id+act]:false})); return
+      }
+      if (!r.ok) {
+        const data = await r.json().catch(()=>({}))
+        setActionMsg(data.detail || 'Something went wrong — try again.')
+        setActionLoading(p=>({...p,[id+act]:false}))
+        setTimeout(()=>setActionMsg(''), 6000)
+        return
+      }
+      setTimeout(fetchAll,3000); setTimeout(fetchAll,8000)
+    } catch(e) {
+      setActionMsg('Network error: '+e.message)
+      setTimeout(()=>setActionMsg(''), 6000)
+    }
+    setTimeout(()=>setActionLoading(p=>({...p,[id+act]:false})),10000)
+  }
   const bulkAction=async(ep,lb)=>{setActionLoading(p=>({...p,[lb]:true}));try{const r=await fetch(API+'/api/run/'+ep,{method:'POST', headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}});if(r.status===403){setShowPricing(true);setActionLoading(p=>({...p,[lb]:false}));return}setTimeout(fetchAll,3000);setTimeout(fetchAll,10000)}catch{};setTimeout(()=>setActionLoading(p=>({...p,[lb]:false})),15000)}
   const logout=()=>{localStorage.clear();setUser(null)}
   const toggleNav=(id)=>setExpandedNav(p=>({...p,[id]:!p[id]}))
@@ -989,13 +1095,13 @@ const authHeaders = {
       {id:'activity',icon:Ico.activity,label:'Activity'},
     ]},
     {section:'TOOLS',items:[
-      {id:'ai_chat',icon:Ico.scout,label:'AI Assistant',badge:'New',badgeClass:'green'},
+      {id:'ai_chat',icon:Ico.scout,label:'SCOUT AI',badge:'New',badgeClass:'green'},
       {id:'reports',icon:Ico.reports,label:'Reports'},
       {id:'settings',icon:Ico.settings,label:'Settings'},
     ]},
   ]
 
-  const pageTitle = {dashboard:'Dashboard',ai_chat:'AI Assistant',scrape:'Find Leads — Google Maps',custom_search:'Find Leads — Custom Search',leads:'My Leads',demos:'Demo Sites',outreach_email:'Email Outreach',campaigns:'Campaigns',activity:'Activity Log',reports:'Reports',settings:'Settings'}
+  const pageTitle = {dashboard:'Dashboard',ai_chat:'SCOUT AI',scrape:'Find Leads — Google Maps',custom_search:'Find Leads — Custom Search',leads:'My Leads',demos:'Demo Sites',outreach_email:'Email Outreach',campaigns:'Campaigns',activity:'Activity Log',reports:'Reports',settings:'Settings'}
   // const saveProfile = async () => {
   // alert("Profile updated successfully");
   // };
@@ -1336,7 +1442,7 @@ const authHeaders = {
               {searchQ && <span> matching "<b>{searchQ}</b>"</span>}
             </div>
           )}
-
+          {actionMsg && <div style={{marginBottom:16,padding:'12px 16px',borderRadius:10,background:'#FEF2F2',color:'#991B1B',border:'1px solid #FECACA',fontSize:13,fontWeight:500}}>{actionMsg}</div>}
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(380px,1fr))',gap:18}}>
             {dataLoading ? <SkeletonLeadCards count={6} /> : filtered.map((l,i)=><LeadCard key={l.id||i} lead={l} onAction={leadAction} loading={actionLoading}/>)}
           </div>

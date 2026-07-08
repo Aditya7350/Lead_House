@@ -20,6 +20,9 @@ from modules.outreach import init_new_sequences, process_due_emails
 from modules.auth import get_user_by_email, create_user, verify_password, create_token, verify_token, setup_default_admin
 from modules.usage import check_limit, increment_usage, get_usage_summary, PLAN_INFO
 from modules.usage import check_limit, increment_usage, get_usage_summary, get_remaining, PLAN_INFO
+from modules.outreach import get_lead_email 
+from pydantic import BaseModel
+
 
 app = FastAPI(title="LeadEmpire", version="2.0")
 
@@ -878,6 +881,23 @@ def build_demo_api(lead_id: str, background: BackgroundTasks, request: Request):
 
 #     background.add_task(do_send)
 #     return {"success": True, "message": f"Sending email to {lead['business_name']}..."}
+class UpdateEmailRequest(BaseModel):
+    email: str
+
+@app.patch("/api/leads/{lead_id}/email")
+def update_lead_email(lead_id: str, req: UpdateEmailRequest, request: Request):
+    auth = request.headers.get("Authorization", "")
+    token = auth.replace("Bearer ", "") if auth.startswith("Bearer ") else ""
+    payload = verify_token(token)
+    if not payload:
+        raise HTTPException(401, "Not authenticated")
+
+    lead = query_one("SELECT * FROM leads WHERE id=%s", (lead_id,))
+    if not lead:
+        raise HTTPException(404, "Lead not found")
+
+    execute("UPDATE leads SET email=%s, updated_at=now() WHERE id=%s", (req.email, lead_id))
+    return {"success": True}
 
 @app.post("/api/leads/{lead_id}/send-email")
 def send_email_api(lead_id: str, background: BackgroundTasks, request: Request):
@@ -895,6 +915,9 @@ def send_email_api(lead_id: str, background: BackgroundTasks, request: Request):
     lead = query_one("SELECT * FROM leads WHERE id=%s", (lead_id,))
     if not lead:
         raise HTTPException(404, "Lead not found")
+
+    if not get_lead_email(lead):
+        raise HTTPException(400, f"No email found for {lead['business_name']}. Add an email address to enable outreach.")
 
     def do_send():
         from modules.outreach import start_sequence, process_due_emails
@@ -1148,8 +1171,9 @@ h1,h2,h3{{font-family:'Space Grotesk',sans-serif}}
   <div style="position:relative;z-index:1">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">
       <div style="display:flex;align-items:center;gap:12px">
-        <div style="width:40px;height:40px;border-radius:12px;overflow:hidden"><img src="/new-logo.png" style="width:40px;height:40px;border-radius:12px" /></div>
-        <div><div style="font-size:15px;font-weight:700">LeadEmpire</div><div style="font-size:9px;color:#64748B;letter-spacing:.1em;text-transform:uppercase">Business Audit Report</div></div>
+        <div style="width:160px;height:40px;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff">
+            <img src="/new-logo.png" style="width:160px;height:64px;border-radius:12px;object-fit:contain" />
+        </div>      
       </div>
       <div style="display:flex;align-items:center;gap:12px">
         <span style="padding:6px 16px;border-radius:8px;font-size:12px;font-weight:700;color:{score_color};background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(8px)">{score_label}</span>
@@ -1464,26 +1488,26 @@ def serve_demo(site_id: str):
 # WEBHOOKS
 # =============================================
 
-@app.post("/webhooks/resend")
-async def resend_webhook(request: Request):
+@app.post("/webhooks/brevo")
+async def brevo_webhook(request: Request):
     body = await request.json()
-    event_type = body.get("type", "")
-    email_id = body.get("data", {}).get("email_id")
+    event_type = body.get("event", "")          # Brevo uses "event", not "type"
+    message_id = body.get("message-id")          # Brevo uses "message-id", not data.email_id
 
-    if not email_id:
+    if not message_id:
         return {"received": True}
 
     updates = {
-        "email.opened": ("opened", "opened_at"),
-        "email.clicked": ("clicked", "clicked_at"),
-        "email.bounced": ("bounced", "bounced_at"),
+        "opened": ("opened", "opened_at"),
+        "click": ("clicked", "clicked_at"),
+        "hard_bounce": ("bounced", "bounced_at"),
+        "soft_bounce": ("bounced", "bounced_at"),
     }
     if event_type in updates:
         status, field = updates[event_type]
-        execute(f"UPDATE emails_sent SET status=%s, {field}=now() WHERE resend_id=%s", (status, email_id))
+        execute(f"UPDATE emails_sent SET status=%s, {field}=now() WHERE resend_id=%s", (status, message_id))
 
     return {"received": True}
-
 
 # =============================================
 # START

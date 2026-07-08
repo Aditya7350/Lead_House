@@ -1,101 +1,12 @@
-# ============================================================
-# robots.txt — LeadEmpire.io
-# AI-Powered B2B Lead Generation Platform
-# Last updated: 2026-07-06
-# ============================================================
-
+# robots.txt — leadempire.io
 User-agent: *
-
-# ------------------------------------------------------------
-# Public marketing pages — crawlable and indexable
-# (Allow is the default; listed explicitly for clarity)
-# ------------------------------------------------------------
-Allow: /$
-Allow: /contact
-Allow: /privacy
-Allow: /terms
-Allow: /refund
-Allow: /refund-policy
-
-# ------------------------------------------------------------
-# Authentication — no SEO value, private flows
-# ------------------------------------------------------------
+Disallow:
 Disallow: /login
-Disallow: /signup
-Disallow: /forgot-password
-Disallow: /reset-password
-
-# ------------------------------------------------------------
-# Authenticated application — private user areas
-# ------------------------------------------------------------
 Disallow: /app
-Disallow: /dashboard
-Disallow: /profile
-Disallow: /settings
-Disallow: /workspace
-Disallow: /notifications
-
-# ------------------------------------------------------------
-# Payment & checkout — never crawlable
-# ------------------------------------------------------------
 Disallow: /checkout
-Disallow: /checkout?*
-
-# ------------------------------------------------------------
-# Administration — internal only
-# ------------------------------------------------------------
-Disallow: /admin
-Disallow: /manage
-Disallow: /internal
-
-# ------------------------------------------------------------
-# Backend & API routes
-# ------------------------------------------------------------
 Disallow: /api/
-Disallow: /server/
-Disallow: /functions/
-
-# ------------------------------------------------------------
-# Temporary resources
-# ------------------------------------------------------------
-Disallow: /tmp/
-Disallow: /cache/
-Disallow: /logs/
-
-# ------------------------------------------------------------
-# Framework internals (Next.js / React builds)
-# Note: static CSS/JS/image assets remain crawlable so Google
-# can fully render pages (Google Search Central requirement)
-# ------------------------------------------------------------
-Disallow: /_next/data/
-Allow: /_next/static/
-Allow: /_next/image
-Disallow: /static/private/
-
-# ------------------------------------------------------------
-# Duplicate URLs from query parameters
-# ------------------------------------------------------------
+Disallow: /assets/
 Disallow: /*?plan=
-Disallow: /*?ref=
 Disallow: /*?token=
 Disallow: /*?session=
-Disallow: /*?sort=
-Disallow: /*?filter=
-Disallow: /*?utm_source=
-Disallow: /*?utm_medium=
-Disallow: /*?utm_campaign=
-Disallow: /*&plan=
-Disallow: /*&ref=
-Disallow: /*&token=
-Disallow: /*&session=
-Disallow: /*&sort=
-Disallow: /*&filter=
-Disallow: /*&utm_source=
-Disallow: /*&utm_medium=
-Disallow: /*&utm_campaign=
-
-# ------------------------------------------------------------
-# Sitemap & preferred host
-# ------------------------------------------------------------
-Sitemap: https://www.leadempire.io/sitemap.xml
-Host: https://www.leadempire.io
+Sitemap: https://leadempire.io/sitemap.xml

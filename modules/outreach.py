@@ -2,11 +2,10 @@ import time
 import json
 from urllib.parse import urlparse
 import anthropic
-import resend
-from config import ANTHROPIC_API_KEY, RESEND_API_KEY, FROM_EMAIL, FROM_NAME, DAILY_EMAIL_LIMIT, query, execute
+import requests
+from config import ANTHROPIC_API_KEY, BREVO_API_KEY, FROM_EMAIL, FROM_NAME, DAILY_EMAIL_LIMIT, query, execute
 
 client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-resend.api_key = RESEND_API_KEY
 
 STAGE_DELAYS_HOURS = {1: 0, 2: 72, 3: 168}
 
@@ -82,34 +81,44 @@ def generate_email(lead: dict, stage: int) -> dict:
 
 
 def send_email(lead: dict, content: dict, stage: int, sequence_id: str) -> bool:
-    """Send an email via Resend."""
+    """Send an email via Brevo."""
     to_email = get_lead_email(lead)
     if not to_email:
         print(f"    No email for {lead['business_name']}, skipping")
         return False
 
-    # Add professional footer with unsubscribe (required by CAN-SPAM / GDPR)
     footer = f"""
     <div style="margin-top:32px;padding-top:16px;border-top:1px solid #E2E8F0;font-size:11px;color:#94A3B8;line-height:1.6">
-      <p>Sent by {FROM_NAME} · Powered by <a href="https://leadhouse.io" style="color:#F97316;text-decoration:none">LeadEmpire</a></p>
+      <p>Sent by {FROM_NAME} · Powered by <a href="https://leadempire.io" style="color:#5000B3;text-decoration:none">LeadEmpire</a></p>
       <p>If you don't want to hear from us, simply reply "unsubscribe" and we'll remove you immediately.</p>
     </div>
     """
     full_html = content["body"] + footer
 
     try:
-        sent = resend.Emails.send({
-            "from": f"{FROM_NAME} <{FROM_EMAIL}>",
-            "to": [to_email],
-            "subject": content["subject"],
-            "html": full_html,
-            "reply_to": FROM_EMAIL,
-        })
+        res = requests.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={
+                "api-key": BREVO_API_KEY,
+                "Content-Type": "application/json",
+                "accept": "application/json",
+            },
+            json={
+                "sender": {"name": FROM_NAME, "email": FROM_EMAIL},
+                "to": [{"email": to_email}],
+                "subject": content["subject"],
+                "htmlContent": full_html,
+                "replyTo": {"email": FROM_EMAIL},
+            },
+            timeout=15,
+        )
+        res.raise_for_status()
+        message_id = res.json().get("messageId")
 
         execute("""
             INSERT INTO emails_sent (sequence_id, lead_id, stage, resend_id, subject, body_html, from_email, to_email)
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-        """, (sequence_id, lead["id"], stage, sent.get("id"), content["subject"], full_html, FROM_EMAIL, to_email))
+        """, (sequence_id, lead["id"], stage, message_id, content["subject"], full_html, FROM_EMAIL, to_email))
 
         print(f"    Sent email #{stage} to {to_email} ({lead['business_name']})")
         return True
@@ -118,11 +127,44 @@ def send_email(lead: dict, content: dict, stage: int, sequence_id: str) -> bool:
         return False
 
 
+# def start_sequence(lead: dict) -> str:
+#     """Start a new email sequence for a lead."""
+#     existing = query("SELECT id FROM email_sequences WHERE lead_id=%s", (lead["id"],))
+#     if existing:
+#         # return existing[0]["id"]
+#         seq = existing[0]
+#         if seq["status"] != "active":
+#             # Check whether any email in this sequence ever actually sent
+#             sent_rows = query("SELECT id FROM emails_sent WHERE sequence_id=%s LIMIT 1", (seq["id"],))
+#             reset_stage = 1 if not sent_rows else seq["current_stage"]
+#             execute("""
+#                 UPDATE email_sequences
+#                 SET status='active', current_stage=%s, next_send_at=now(), updated_at=now()
+#                 WHERE id=%s
+#             """, (reset_stage, seq["id"]))
+#         return seq["id"]
+#     execute("""
+#         INSERT INTO email_sequences (lead_id, campaign_id, current_stage, status, next_send_at)
+#         VALUES (%s, %s, 1, 'active', now())
+#     """, (lead["id"], lead.get("campaign_id")))
+
+#     result = query("SELECT id FROM email_sequences WHERE lead_id=%s", (lead["id"],))
+#     return result[0]["id"] if result else ""
+
 def start_sequence(lead: dict) -> str:
-    """Start a new email sequence for a lead."""
-    existing = query("SELECT id FROM email_sequences WHERE lead_id=%s", (lead["id"],))
+    """Start a new email sequence for a lead, or resume one that previously stalled."""
+    existing = query("SELECT id, status, current_stage FROM email_sequences WHERE lead_id=%s", (lead["id"],))
     if existing:
-        return existing[0]["id"]
+        seq = existing[0]
+        if seq["status"] != "active":
+            sent_rows = query("SELECT id FROM emails_sent WHERE sequence_id=%s LIMIT 1", (seq["id"],))
+            reset_stage = 1 if not sent_rows else seq["current_stage"]
+            execute("""
+                UPDATE email_sequences
+                SET status='active', current_stage=%s, next_send_at=now(), updated_at=now()
+                WHERE id=%s
+            """, (reset_stage, seq["id"]))
+        return seq["id"]
 
     execute("""
         INSERT INTO email_sequences (lead_id, campaign_id, current_stage, status, next_send_at)
@@ -131,7 +173,6 @@ def start_sequence(lead: dict) -> str:
 
     result = query("SELECT id FROM email_sequences WHERE lead_id=%s", (lead["id"],))
     return result[0]["id"] if result else ""
-
 
 def process_due_emails() -> int:
     """Send all due emails (respecting daily limit)."""

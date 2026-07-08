@@ -137,12 +137,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 5%;display:flex
 
 /* ── FAQ ── */
 .faq-list{max-width:820px;margin-top:32px}
-.faq-item{background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden}
-.faq-item summary{list-style:none;cursor:pointer;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15.5px;color:#0F172A}
+.faq-item{background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;transition:all .3s cubic-bezier(.4,0,.2,1);border-left:3px solid transparent;opacity:0;transform:translateY(20px)}
+.faq-item.visible{opacity:1;transform:translateY(0)}
+.faq-item:hover{border-color:#D8B4FE;box-shadow:0 4px 20px rgba(80,0,179,.06)}
+.faq-item[open]{border-left-color:var(--orange);background:linear-gradient(135deg,#FAFAFE 0%,#F8F5FF 100%);box-shadow:0 8px 32px rgba(80,0,179,.08)}
+.faq-item summary{list-style:none;cursor:pointer;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:15.5px;color:#0F172A;transition:color .2s}
+.faq-item:hover summary{color:var(--orange)}
 .faq-item summary::-webkit-details-marker{display:none}
-.faq-item summary .chev{flex-shrink:0;transition:transform .2s ease;color:var(--orange)}
-.faq-item[open] summary .chev{transform:rotate(180deg)}
-.faq-item .faq-a{padding:0 24px 22px;font-size:14.5px;line-height:1.75;color:var(--muted)}
+.faq-item summary .chev{flex-shrink:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1);color:var(--orange);width:24px;height:24px;background:rgba(80,0,179,.08);border-radius:50%;display:flex;align-items:center;justify-content:center;padding:3px}
+.faq-item[open] summary .chev{transform:rotate(180deg);background:var(--orange);color:#fff}
+.faq-item .faq-a{padding:0 24px 22px;font-size:14.5px;line-height:1.75;color:var(--muted);max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1),padding .3s,opacity .3s;opacity:0}
+.faq-item[open] .faq-a{max-height:400px;opacity:1;padding-bottom:22px}
 
 .steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:52px;position:relative}
 .step{background:#FFFFFF;padding:28px 24px;border:1px solid var(--border);position:relative;transition:all .3s;cursor:default}
@@ -697,28 +702,28 @@ footer{border-top:1px solid var(--border);padding:32px 5%;display:flex;align-ite
       <summary>How does AI lead generation actually work?
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
-      <div class="faq-a">AI lead generation automatically finds, qualifies, and contacts potential customers for you. LeadEmpire's lead generation system finds businesses via Google Maps, scores websites using AI, builds demo sites, and emails prospects automatically — complete lead generation with AI.</div>
+      <div class="faq-a">AI lead generation automatically finds, qualifies, and contacts potential customers for you. LeadEmpire's lead generation system finds businesses via Google Maps, scores websites using AI, builds demo sites, and emails prospects automatically complete lead generation with AI.</div>
     </details>
 
     <details class="faq-item">
       <summary>What is AI sales prospecting, and how is it different from traditional prospecting?
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
-      <div class="faq-a">AI sales prospecting finds and prioritizes potential buyers automatically — no manual list-building. Older prospecting tools stop at contact data; LeadEmpire's AI prospecting scores every website and ranks your pipeline, going beyond typical lead lists.</div>
+      <div class="faq-a">AI sales prospecting finds and prioritizes potential buyers automatically no manual list-building. Older prospecting tools stop at contact data; LeadEmpire's AI prospecting scores every website and ranks your pipeline, going beyond typical lead lists.</div>
     </details>
 
     <details class="faq-item">
       <summary>How can I find local business leads using Google Maps?
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
-      <div class="faq-a">Google Maps lists nearly every local business — a goldmine for local leads. LeadEmpire's Google Maps Business Search pulls businesses by niche and location, and returns AI-scored, ready-to-contact leads — smarter than basic lead sourcing tools.</div>
+      <div class="faq-a">Google Maps lists nearly every local business a goldmine for local leads. LeadEmpire's Google Maps Business Search pulls businesses by niche and location, and returns AI-scored, ready-to-contact leads smarter than basic lead sourcing tools.</div>
     </details>
 
     <details class="faq-item">
       <summary>What is local business website analysis, and why does it matter for lead qualification?
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
-      <div class="faq-a">Local business website analysis scores a company's design, SEO, and mobile responsiveness — the fastest way to qualify leads for digital services. LeadEmpire audits every business in seconds, so weak websites instantly reveal your best prospects and your outreach angle.</div>
+      <div class="faq-a">Local business website analysis scores a company's design, SEO, and mobile responsiveness the fastest way to qualify leads for digital services. LeadEmpire audits every business in seconds, so weak websites instantly reveal your best prospects and your outreach angle.</div>
     </details>
 
     <details class="faq-item">
@@ -732,7 +737,7 @@ footer{border-top:1px solid var(--border);padding:32px 5%;display:flex;align-ite
       <summary>Can AI write personalized cold emails that actually get replies?
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
-      <div class="faq-a">Yes — AI grounded in real prospect data outperforms most manual outreach. LeadEmpire references each prospect's actual website issues, links a personalized demo site, and automates follow-ups, earning replies at scale.</div>
+      <div class="faq-a">Yes, AI grounded in real prospect data outperforms most manual outreach. LeadEmpire references each prospect's actual website issues, links a personalized demo site, and automates follow-ups, earning replies at scale.</div>
     </details>
 
     <details class="faq-item">
@@ -746,35 +751,35 @@ footer{border-top:1px solid var(--border);padding:32px 5%;display:flex;align-ite
       <summary>What makes B2B lead generation software different from consumer marketing tools?
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
-      <div class="faq-a">B2B lead generation software targets businesses, not consumers — precision and relevance over mass reach. LeadEmpire finds local companies, spots website gaps, and pitches with proof, built specifically for the local market.</div>
+      <div class="faq-a">B2B lead generation software targets businesses, not consumers precision and relevance over mass reach. LeadEmpire finds local companies, spots website gaps, and pitches with proof, built specifically for the local market.</div>
     </details>
 
     <details class="faq-item">
       <summary>What is a personalized demo website, and how does it improve conversion rates?
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
-      <div class="faq-a">A personalized demo website shows a prospect their improved site before you ever talk — proof instead of promises. LeadEmpire builds one per qualified lead in about 30 seconds and links it directly in the outreach email.</div>
+      <div class="faq-a">A personalized demo website shows a prospect their improved site before you ever talk proof instead of promises. LeadEmpire builds one per qualified lead in about 30 seconds and links it directly in the outreach email.</div>
     </details>
 
     <details class="faq-item">
       <summary>How much time can agencies save by using AI for lead generation?
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
-      <div class="faq-a">Agencies using AI for lead generation typically reclaim 15–25 hours per week. LeadEmpire automates discovery, scoring, demo sites, and outreach — your pipeline fills daily on autopilot while you handle billable work.</div>
+      <div class="faq-a">Agencies using AI for lead generation typically reclaim 15–25 hours per week. LeadEmpire automates discovery, scoring, demo sites, and outreach your pipeline fills daily on autopilot while you handle billable work.</div>
     </details>
 
     <details class="faq-item">
       <summary>Will AI prospecting tools replace my sales team?
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
-      <div class="faq-a">No — AI prospecting tools automate research and admin work, not the relationships that close deals. LeadEmpire delivers qualified, already-interested prospects: AI fills the calendar, your closers close.</div>
+      <div class="faq-a">No, AI prospecting tools automate research and admin work, not the relationships that close deals. LeadEmpire delivers qualified, already-interested prospects: AI fills the calendar, your closers close.</div>
     </details>
 
     <details class="faq-item">
       <summary>Which businesses benefit most from an online lead generation platform?
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </summary>
-      <div class="faq-a">Agencies, freelancers, and consultants serving local businesses benefit most — a weak client website is both the signal and the opportunity. LeadEmpire is purpose-built for local B2B, not generic consumer marketing.</div>
+      <div class="faq-a">Agencies, freelancers, and consultants serving local businesses benefit most a weak client website is both the signal and the opportunity. LeadEmpire is purpose-built for local B2B, not generic consumer marketing.</div>
     </details>
   </div>
 </div>
@@ -918,5 +923,30 @@ bentoCads.forEach((card, i) => {
 })();
 </script>
 
+<script>
+// FAQ staggered reveal on scroll
+(function(){
+  const items = document.querySelectorAll('.faq-item');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = Array.from(items).indexOf(entry.target);
+        setTimeout(() => entry.target.classList.add('visible'), idx * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  items.forEach(item => observer.observe(item));
+
+  // Accordion: close others when one opens
+  items.forEach(item => {
+    item.addEventListener('toggle', () => {
+      if (item.open) {
+        items.forEach(other => { if (other !== item && other.open) other.open = false; });
+      }
+    });
+  });
+})();
+</script>
 </body>
 </html>
