@@ -91,6 +91,11 @@ app.mount("/static", StaticFiles(directory="public/assets", html=False), name="s
 def serve_new_logo():
     from fastapi.responses import FileResponse
     return FileResponse("public/new-logo.png")
+    
+@app.get("/report-logo.png")
+def serve_report_logo():
+    from fastapi.responses import FileResponse
+    return FileResponse("public/report-logo.png")
 
 @app.get("/page-loader.js")
 def serve_page_loader():
@@ -1170,11 +1175,11 @@ h1,h2,h3{{font-family:'Space Grotesk',sans-serif}}
   <div style="position:absolute;bottom:-100px;right:80px;width:200px;height:200px;border-radius:50%;background:rgba(100,116,139,.06)"></div>
   <div style="position:relative;z-index:1">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div style="width:160px;height:40px;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff">
-            <img src="/new-logo.png" style="width:160px;height:64px;border-radius:12px;object-fit:contain" />
-        </div>      
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <img src="/report-logo.png" alt="LeadEmpire" style="height:60px;width:auto;display:block" />
+        <div style="display:flex;align-items:center;gap:12px">
       </div>
+    </div>
       <div style="display:flex;align-items:center;gap:12px">
         <span style="padding:6px 16px;border-radius:8px;font-size:12px;font-weight:700;color:{score_color};background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(8px)">{score_label}</span>
         <span style="font-size:13px;color:#94A3B8">{report_date}</span>
